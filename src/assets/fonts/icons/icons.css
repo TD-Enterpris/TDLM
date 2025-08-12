@@ -1,0 +1,1464 @@
+@font-face {
+    font-family: icons;
+    src: url(./assets/fonts/icons/icons.eot?g2balo);
+    src: url(./assets/fonts/icons/icons.eot?g2balo#iefix) format("embedded-opentype"),url(./assets/fonts/icons/icons.woff2?g2balo) format("woff2"),url(./assets/fonts/icons/icons.ttf?g2balo) format("truetype"),url(./assets/fonts/icons/icons.woff?g2balo) format("woff"),url(./assets/fonts/icons/icons.svg?g2balo#icons) format("svg");
+    font-weight: 400;
+    font-style: normal;
+    font-display: block
+}
+
+.td-icon {
+    font-family: icons!important;
+    speak: never;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.td-icon-AccidentSickness:before {
+    content: "\e901"
+}
+
+.td-icon-FileAClaim:before {
+    content: "\e91d"
+}
+
+.td-icon-GetAQuote:before {
+    content: "\e91f"
+}
+
+.td-icon-GetAQuote02:before {
+    content: "\e91e"
+}
+
+.td-icon-IRA:before {
+    content: "\e9b7"
+}
+
+.td-icon-Login:before {
+    content: "\e92c"
+}
+
+.td-icon-MBNARewards:before {
+    content: "\e9c8"
+}
+
+.td-icon-POSSolutions:before {
+    content: "\ea37"
+}
+
+.td-icon-RDSP:before {
+    content: "\ea32"
+}
+
+.td-icon-RIF:before {
+    content: "\ea33"
+}
+
+.td-icon-TD:before {
+    content: "\e942"
+}
+
+.td-icon-TDApp:before {
+    content: "\e9ff"
+}
+
+.td-icon-TDEasyWeb:before {
+    content: "\ea00"
+}
+
+.td-icon-TDShield:before {
+    content: "\e9ed"
+}
+
+.td-icon-TDdirectInvesting:before {
+    content: "\e9ae"
+}
+
+.td-icon-TDwealth:before {
+    content: "\e9af"
+}
+
+.td-icon-X:before {
+    content: "\ea63"
+}
+
+.td-icon-accidentReports:before {
+    content: "\e900"
+}
+
+.td-icon-accounts:before {
+    content: "\e979"
+}
+
+.td-icon-activateCard:before {
+    content: "\e9ec"
+}
+
+.td-icon-aeroplan:before {
+    content: "\e9b8"
+}
+
+.td-icon-aeroplan2:before {
+    content: "\ea1e"
+}
+
+.td-icon-aeroplanRondel:before {
+    content: "\ea2d"
+}
+
+.td-icon-agriculture:before {
+    content: "\ea34"
+}
+
+.td-icon-all:before {
+    content: "\e983"
+}
+
+.td-icon-allCalculatorTools:before {
+    content: "\e9a0"
+}
+
+.td-icon-allProducts:before {
+    content: "\e981"
+}
+
+.td-icon-amazon:before {
+    content: "\ea4c"
+}
+
+.td-icon-apple:before {
+    content: "\ea3a"
+}
+
+.td-icon-applyForFunding:before {
+    content: "\e9c5"
+}
+
+.td-icon-approved:before {
+    content: "\e902"
+}
+
+.td-icon-arrowDown2:before {
+    content: "\ea29"
+}
+
+.td-icon-arrowLeft:before {
+    content: "\e903"
+}
+
+.td-icon-arrowLeft2:before {
+    content: "\ea2a"
+}
+
+.td-icon-arrowRight:before {
+    content: "\e904"
+}
+
+.td-icon-arrowRight2:before {
+    content: "\ea2b"
+}
+
+.td-icon-arrowUp2:before {
+    content: "\ea2c"
+}
+
+.td-icon-atm:before {
+    content: "\e905"
+}
+
+.td-icon-attractNewCustomers:before {
+    content: "\ea19"
+}
+
+.td-icon-atv:before {
+    content: "\ea3d"
+}
+
+.td-icon-auto:before {
+    content: "\e9ee"
+}
+
+.td-icon-avatar:before {
+    content: "\e999"
+}
+
+.td-icon-balanceTransfer:before {
+    content: "\e9f8"
+}
+
+.td-icon-banking:before {
+    content: "\e907"
+}
+
+.td-icon-bath:before {
+    content: "\e964"
+}
+
+.td-icon-bed:before {
+    content: "\e965"
+}
+
+.td-icon-bicycle:before {
+    content: "\e908"
+}
+
+.td-icon-blog:before {
+    content: "\ea51"
+}
+
+.td-icon-bookAppointment:before {
+    content: "\e909"
+}
+
+.td-icon-bookAtBranch:before {
+    content: "\e90a"
+}
+
+.td-icon-borrowing:before {
+    content: "\e90b"
+}
+
+.td-icon-borrowingSolutions:before {
+    content: "\e9e4"
+}
+
+.td-icon-branch:before {
+    content: "\e90c"
+}
+
+.td-icon-branchATM:before {
+    content: "\e90d"
+}
+
+.td-icon-business:before {
+    content: "\e99a"
+}
+
+.td-icon-businessChecklist:before {
+    content: "\ea0a"
+}
+
+.td-icon-businessOwner:before {
+    content: "\e90e"
+}
+
+.td-icon-calendarAlt:before {
+    content: "\e906"
+}
+
+.td-icon-cantFindTopic:before {
+    content: "\e90f"
+}
+
+.td-icon-car:before {
+    content: "\e910"
+}
+
+.td-icon-careers:before {
+    content: "\e9c9"
+}
+
+.td-icon-cargoTrailer:before {
+    content: "\ea59"
+}
+
+.td-icon-cashBack:before {
+    content: "\e9b9"
+}
+
+.td-icon-cashFinances:before {
+    content: "\e9e5"
+}
+
+.td-icon-cashflow:before {
+    content: "\ea0b"
+}
+
+.td-icon-cashflowImprovement:before {
+    content: "\ea0c"
+}
+
+.td-icon-certificateDeposit:before {
+    content: "\e9d0"
+}
+
+.td-icon-chat:before {
+    content: "\e911"
+}
+
+.td-icon-chatbot:before {
+    content: "\ea67"
+}
+
+.td-icon-checkMark:before {
+    content: "\e912"
+}
+
+.td-icon-chequeing:before {
+    content: "\e98e"
+}
+
+.td-icon-chequeing2:before {
+    content: "\e9ef"
+}
+
+.td-icon-circle:before {
+    content: "\e913"
+}
+
+.td-icon-claims:before {
+    content: "\e914"
+}
+
+.td-icon-clearButton:before {
+    content: "\ea2e"
+}
+
+.td-icon-clock:before {
+    content: "\ea4a"
+}
+
+.td-icon-close:before {
+    content: "\e915"
+}
+
+.td-icon-coinsHigh:before {
+    content: "\e966"
+}
+
+.td-icon-coinsLow:before {
+    content: "\e967"
+}
+
+.td-icon-coinsMiddle:before {
+    content: "\e968"
+}
+
+.td-icon-collapse:before {
+    content: "\e969"
+}
+
+.td-icon-commonTrailer:before {
+    content: "\ea5a"
+}
+
+.td-icon-communityNonprofit:before {
+    content: "\e9fe"
+}
+
+.td-icon-condo:before {
+    content: "\e916"
+}
+
+.td-icon-contactUs:before {
+    content: "\e917"
+}
+
+.td-icon-converterDolly:before {
+    content: "\ea5b"
+}
+
+.td-icon-corporateResponsibility:before {
+    content: "\e9ca"
+}
+
+.td-icon-corporation:before {
+    content: "\ea28"
+}
+
+.td-icon-coverage:before {
+    content: "\e918"
+}
+
+.td-icon-coverageExtra:before {
+    content: "\e919"
+}
+
+.td-icon-coverageMandatory:before {
+    content: "\e91a"
+}
+
+.td-icon-coverageModify:before {
+    content: "\e91b"
+}
+
+.td-icon-coverageSpecial:before {
+    content: "\e91c"
+}
+
+.td-icon-creditProtection:before {
+    content: "\e920"
+}
+
+.td-icon-creditcards:before {
+    content: "\e921"
+}
+
+.td-icon-cryptoETF:before {
+    content: "\ea66"
+}
+
+.td-icon-customers:before {
+    content: "\e9cb"
+}
+
+.td-icon-dashboard:before {
+    content: "\e9b0"
+}
+
+.td-icon-debt-en:before {
+    content: "\e9f1"
+}
+
+.td-icon-debt-fr:before {
+    content: "\e9f3"
+}
+
+.td-icon-debtConsolidation:before {
+    content: "\e988"
+}
+
+.td-icon-delete:before {
+    content: "\e9a1"
+}
+
+.td-icon-discount:before {
+    content: "\e922"
+}
+
+.td-icon-distributionGuide:before {
+    content: "\e923"
+}
+
+.td-icon-downCaret:before {
+    content: "\e924"
+}
+
+.td-icon-download:before {
+    content: "\e98f"
+}
+
+.td-icon-download2:before {
+    content: "\ea64"
+}
+
+.td-icon-downloadBusinessPlanTemplate:before {
+    content: "\ea0d"
+}
+
+.td-icon-downloadCertificate:before {
+    content: "\e925"
+}
+
+.td-icon-dumpTrailer:before {
+    content: "\ea5c"
+}
+
+.td-icon-earthquake:before {
+    content: "\e926"
+}
+
+.td-icon-economics:before {
+    content: "\e9cc"
+}
+
+.td-icon-edit2:before {
+    content: "\e978"
+}
+
+.td-icon-edits:before {
+    content: "\e990"
+}
+
+.td-icon-email:before {
+    content: "\e9b6"
+}
+
+.td-icon-employees:before {
+    content: "\ea04"
+}
+
+.td-icon-ensureCompliance:before {
+    content: "\ea0e"
+}
+
+.td-icon-equipmentFinance:before {
+    content: "\ea48"
+}
+
+.td-icon-equities:before {
+    content: "\ea1f"
+}
+
+.td-icon-error:before {
+    content: "\e927"
+}
+
+.td-icon-etf:before {
+    content: "\ea20"
+}
+
+.td-icon-etf-fr:before {
+    content: "\ea21"
+}
+
+.td-icon-excel:before {
+    content: "\ea52"
+}
+
+.td-icon-exchangeRateForCash:before {
+    content: "\e96a"
+}
+
+.td-icon-exchangeRateForNonCash:before {
+    content: "\e96b"
+}
+
+.td-icon-expand:before {
+    content: "\e96c"
+}
+
+.td-icon-expandedBusinessServices:before {
+    content: "\ea24"
+}
+
+.td-icon-expedia:before {
+    content: "\ea4d"
+}
+
+.td-icon-facebook:before {
+    content: "\e928"
+}
+
+.td-icon-faqs:before {
+    content: "\e929"
+}
+
+.td-icon-feedback:before {
+    content: "\e92a"
+}
+
+.td-icon-filter:before {
+    content: "\e9a5"
+}
+
+.td-icon-financeSmallBusiness:before {
+    content: "\ea0f"
+}
+
+.td-icon-financialPlanning:before {
+    content: "\ea3c"
+}
+
+.td-icon-findAcreditcard:before {
+    content: "\e97b"
+}
+
+.td-icon-findTaxEfficiencies:before {
+    content: "\e9a9"
+}
+
+.td-icon-firstVehicle:before {
+    content: "\e9f5"
+}
+
+.td-icon-fixedIncome:before {
+    content: "\ea22"
+}
+
+.td-icon-flexibleMortgageFeatures:before {
+    content: "\e9a2"
+}
+
+.td-icon-forms:before {
+    content: "\e9f9"
+}
+
+.td-icon-franchise:before {
+    content: "\ea35"
+}
+
+.td-icon-fraud:before {
+    content: "\e9f0"
+}
+
+.td-icon-generateIncome:before {
+    content: "\e9aa"
+}
+
+.td-icon-geolocation:before {
+    content: "\e92b"
+}
+
+.td-icon-gicTermDeposits:before {
+    content: "\e9c1"
+}
+
+.td-icon-giftcardLoyalty:before {
+    content: "\ea38"
+}
+
+.td-icon-globeOutlined:before {
+    content: "\e93a"
+}
+
+.td-icon-gooseneckTrailer:before {
+    content: "\ea5d"
+}
+
+.td-icon-government:before {
+    content: "\ea05"
+}
+
+.td-icon-graduationCap:before {
+    content: "\ea3b"
+}
+
+.td-icon-growMyMoney:before {
+    content: "\e97c"
+}
+
+.td-icon-growYourBusiness:before {
+    content: "\e9e6"
+}
+
+.td-icon-growingFamily:before {
+    content: "\e92d"
+}
+
+.td-icon-growingFamily2:before {
+    content: "\ea40"
+}
+
+.td-icon-hamburger:before {
+    content: "\e92e"
+}
+
+.td-icon-handicap:before {
+    content: "\e92f"
+}
+
+.td-icon-healthCarePractitioners:before {
+    content: "\ea1a"
+}
+
+.td-icon-help:before {
+    content: "\e930"
+}
+
+.td-icon-home:before {
+    content: "\e931"
+}
+
+.td-icon-home2:before {
+    content: "\ea41"
+}
+
+.td-icon-homeEquityFlexline:before {
+    content: "\e9a3"
+}
+
+.td-icon-homepage:before {
+    content: "\e932"
+}
+
+.td-icon-hours:before {
+    content: "\e933"
+}
+
+.td-icon-house:before {
+    content: "\e96d"
+}
+
+.td-icon-howTo:before {
+    content: "\e984"
+}
+
+.td-icon-idea:before {
+    content: "\ea10"
+}
+
+.td-icon-identityTheft:before {
+    content: "\e934"
+}
+
+.td-icon-improveSales:before {
+    content: "\ea1b"
+}
+
+.td-icon-inbox:before {
+    content: "\e935"
+}
+
+.td-icon-increaseBusinessProductivity:before {
+    content: "\ea25"
+}
+
+.td-icon-indigenousBanking:before {
+    content: "\ea49"
+}
+
+.td-icon-info:before {
+    content: "\ea65"
+}
+
+.td-icon-information:before {
+    content: "\e936"
+}
+
+.td-icon-insights:before {
+    content: "\e9a6"
+}
+
+.td-icon-instagram:before {
+    content: "\e985"
+}
+
+.td-icon-insurance:before {
+    content: "\e986"
+}
+
+.td-icon-international:before {
+    content: "\e991"
+}
+
+.td-icon-investTradeOnline:before {
+    content: "\e9e3"
+}
+
+.td-icon-investing:before {
+    content: "\e937"
+}
+
+.td-icon-investingPlatforms:before {
+    content: "\e9fa"
+}
+
+.td-icon-investmentTransfers:before {
+    content: "\e9b1"
+}
+
+.td-icon-investmentTypes:before {
+    content: "\ea2f"
+}
+
+.td-icon-investorRelations:before {
+    content: "\e9cd"
+}
+
+.td-icon-languagesSpoken:before {
+    content: "\e938"
+}
+
+.td-icon-leftCaret:before {
+    content: "\e939"
+}
+
+.td-icon-life:before {
+    content: "\ea3f"
+}
+
+.td-icon-lineOfCredit:before {
+    content: "\e9ba"
+}
+
+.td-icon-linkedin:before {
+    content: "\e987"
+}
+
+.td-icon-liveAgent:before {
+    content: "\ea68"
+}
+
+.td-icon-loanCalculator:before {
+    content: "\ea11"
+}
+
+.td-icon-location:before {
+    content: "\e93b"
+}
+
+.td-icon-location-coverage:before {
+    content: "\e93c"
+}
+
+.td-icon-locationFeatures:before {
+    content: "\e93d"
+}
+
+.td-icon-logout:before {
+    content: "\e93e"
+}
+
+.td-icon-lowBedFloatTrailer:before {
+    content: "\ea5e"
+}
+
+.td-icon-lowInterest:before {
+    content: "\e9bb"
+}
+
+.td-icon-maintenance:before {
+    content: "\e93f"
+}
+
+.td-icon-makeAMajorPurchase:before {
+    content: "\e9ab"
+}
+
+.td-icon-manageBusiness:before {
+    content: "\ea06"
+}
+
+.td-icon-manageMoney:before {
+    content: "\e9fb"
+}
+
+.td-icon-managingEmployees:before {
+    content: "\ea26"
+}
+
+.td-icon-mapMarker:before {
+    content: "\e940"
+}
+
+.td-icon-mapMarkerFilled:before {
+    content: "\e941"
+}
+
+.td-icon-marine:before {
+    content: "\e9bc"
+}
+
+.td-icon-mobilePhone:before {
+    content: "\ea30"
+}
+
+.td-icon-mortgages:before {
+    content: "\e943"
+}
+
+.td-icon-motorHome:before {
+    content: "\e944"
+}
+
+.td-icon-motorcycle:before {
+    content: "\e945"
+}
+
+.td-icon-mutualFunds:before {
+    content: "\e9c2"
+}
+
+.td-icon-myAdvantage:before {
+    content: "\ea44"
+}
+
+.td-icon-myPolicies:before {
+    content: "\e947"
+}
+
+.td-icon-myTD:before {
+    content: "\e989"
+}
+
+.td-icon-navigateVolatility:before {
+    content: "\e9ac"
+}
+
+.td-icon-newCouple:before {
+    content: "\e948"
+}
+
+.td-icon-newCouple2:before {
+    content: "\ea42"
+}
+
+.td-icon-newHome:before {
+    content: "\e949"
+}
+
+.td-icon-newPage:before {
+    content: "\e9f7"
+}
+
+.td-icon-newRevenueStreams:before {
+    content: "\ea1c"
+}
+
+.td-icon-newToCanada:before {
+    content: "\e9c0"
+}
+
+.td-icon-noFee:before {
+    content: "\e9bd"
+}
+
+.td-icon-nonCargoTrailer:before {
+    content: "\ea5f"
+}
+
+.td-icon-notifications:before {
+    content: "\ea4b"
+}
+
+.td-icon-offers:before {
+    content: "\e9c4"
+}
+
+.td-icon-oilDamage:before {
+    content: "\e94a"
+}
+
+.td-icon-onlinePreapproval:before {
+    content: "\e9cf"
+}
+
+.td-icon-onlineSalesSolutions:before {
+    content: "\ea39"
+}
+
+.td-icon-options:before {
+    content: "\ea23"
+}
+
+.td-icon-orderByPhone:before {
+    content: "\e96e"
+}
+
+.td-icon-orderCashOnline:before {
+    content: "\e96f"
+}
+
+.td-icon-orderStatus:before {
+    content: "\e99b"
+}
+
+.td-icon-otherServices:before {
+    content: "\ea36"
+}
+
+.td-icon-outlinedCircleClose:before {
+    content: "\ea31"
+}
+
+.td-icon-overlayLink:before {
+    content: "\e997"
+}
+
+.td-icon-payBillOnline:before {
+    content: "\ea07"
+}
+
+.td-icon-payBills:before {
+    content: "\e97d"
+}
+
+.td-icon-payUSBill:before {
+    content: "\e970"
+}
+
+.td-icon-paymentsTransfers:before {
+    content: "\ea01"
+}
+
+.td-icon-pdf:before {
+    content: "\ea53"
+}
+
+.td-icon-pending:before {
+    content: "\e992"
+}
+
+.td-icon-person:before {
+    content: "\ea08"
+}
+
+.td-icon-personal:before {
+    content: "\e94b"
+}
+
+.td-icon-pinterest:before {
+    content: "\e998"
+}
+
+.td-icon-podcast:before {
+    content: "\ea54"
+}
+
+.td-icon-powerpoint:before {
+    content: "\ea55"
+}
+
+.td-icon-preciousMetals:before {
+    content: "\e9c3"
+}
+
+.td-icon-preferredAutoVendors:before {
+    content: "\e94c"
+}
+
+.td-icon-prepaidCard:before {
+    content: "\e9be"
+}
+
+.td-icon-priceTag:before {
+    content: "\e9fc"
+}
+
+.td-icon-printer:before {
+    content: "\e975"
+}
+
+.td-icon-privacyCommitment:before {
+    content: "\e946"
+}
+
+.td-icon-products:before {
+    content: "\e94d"
+}
+
+.td-icon-productsAndServices:before {
+    content: "\ea12"
+}
+
+.td-icon-profitIncrease:before {
+    content: "\ea13"
+}
+
+.td-icon-protectOnlineData:before {
+    content: "\e94f"
+}
+
+.td-icon-pupTrailer:before {
+    content: "\ea60"
+}
+
+.td-icon-question:before {
+    content: "\e94e"
+}
+
+.td-icon-quote:before {
+    content: "\e9b2"
+}
+
+.td-icon-readyCommitment:before {
+    content: "\e9c6"
+}
+
+.td-icon-registeredAccounts:before {
+    content: "\e9b3"
+}
+
+.td-icon-registrationPasswords:before {
+    content: "\ea02"
+}
+
+.td-icon-renters:before {
+    content: "\ea3e"
+}
+
+.td-icon-renters-fr:before {
+    content: "\e9e7"
+}
+
+.td-icon-replacementCard:before {
+    content: "\e9eb"
+}
+
+.td-icon-reportFraud:before {
+    content: "\ea46"
+}
+
+.td-icon-requestCertificate:before {
+    content: "\e950"
+}
+
+.td-icon-resourceCentre:before {
+    content: "\ea14"
+}
+
+.td-icon-retirementPlanning:before {
+    content: "\e98d"
+}
+
+.td-icon-rightCaret:before {
+    content: "\e951"
+}
+
+.td-icon-saveForSchool:before {
+    content: "\e9ad"
+}
+
+.td-icon-savingAndInvesting:before {
+    content: "\e98a"
+}
+
+.td-icon-savings:before {
+    content: "\e952"
+}
+
+.td-icon-search:before {
+    content: "\e953"
+}
+
+.td-icon-secondVehicle:before {
+    content: "\e9f6"
+}
+
+.td-icon-secureBtn:before {
+    content: "\e954"
+}
+
+.td-icon-security:before {
+    content: "\ea27"
+}
+
+.td-icon-selectADate:before {
+    content: "\e993"
+}
+
+.td-icon-semiTrailer:before {
+    content: "\ea61"
+}
+
+.td-icon-sendFeedback:before {
+    content: "\e982"
+}
+
+.td-icon-sendMoney:before {
+    content: "\e97e"
+}
+
+.td-icon-sendMoneyInternationally:before {
+    content: "\e971"
+}
+
+.td-icon-share:before {
+    content: "\e976"
+}
+
+.td-icon-shopping:before {
+    content: "\e99c"
+}
+
+.td-icon-smallBusiness:before {
+    content: "\e955"
+}
+
+.td-icon-snowmobile:before {
+    content: "\e956"
+}
+
+.td-icon-solutions:before {
+    content: "\e98c"
+}
+
+.td-icon-star:before {
+    content: "\e957"
+}
+
+.td-icon-starbucks:before {
+    content: "\ea4e"
+}
+
+.td-icon-startClaim:before {
+    content: "\e958"
+}
+
+.td-icon-startOver:before {
+    content: "\e977"
+}
+
+.td-icon-startingUp:before {
+    content: "\e9e8"
+}
+
+.td-icon-startingUp-fr:before {
+    content: "\e9e9"
+}
+
+.td-icon-startup:before {
+    content: "\ea15"
+}
+
+.td-icon-student:before {
+    content: "\e98b"
+}
+
+.td-icon-successionPlanning:before {
+    content: "\e9ea"
+}
+
+.td-icon-superlock:before {
+    content: "\e9a7"
+}
+
+.td-icon-swapLocations:before {
+    content: "\e959"
+}
+
+.td-icon-switchToTDMortgage:before {
+    content: "\e9a4"
+}
+
+.td-icon-takeAPhoto:before {
+    content: "\e994"
+}
+
+.td-icon-takeAPhotoOutlined:before {
+    content: "\ea43"
+}
+
+.td-icon-taxFreeAccounts:before {
+    content: "\e9b4"
+}
+
+.td-icon-tdInsuranceCard:before {
+    content: "\e95a"
+}
+
+.td-icon-tdRewards:before {
+    content: "\e97a"
+}
+
+.td-icon-theftBurglary:before {
+    content: "\ea47"
+}
+
+.td-icon-toOurCustomers:before {
+    content: "\e9ce"
+}
+
+.td-icon-todaysRates:before {
+    content: "\e97f"
+}
+
+.td-icon-tools:before {
+    content: "\e9a8"
+}
+
+.td-icon-tooltip:before {
+    content: "\e972"
+}
+
+.td-icon-tractorTrailerTrain:before {
+    content: "\ea62"
+}
+
+.td-icon-trade:before {
+    content: "\e980"
+}
+
+.td-icon-tradingAccounts:before {
+    content: "\e9b5"
+}
+
+.td-icon-transfer:before {
+    content: "\e973"
+}
+
+.td-icon-transit:before {
+    content: "\e95b"
+}
+
+.td-icon-travel:before {
+    content: "\e95c"
+}
+
+.td-icon-travelRewards:before {
+    content: "\e9bf"
+}
+
+.td-icon-truck:before {
+    content: "\e9f2"
+}
+
+.td-icon-tutorials:before {
+    content: "\ea03"
+}
+
+.td-icon-twitter:before {
+    content: "\e95d"
+}
+
+.td-icon-unexpectedExpenses:before {
+    content: "\e9f4"
+}
+
+.td-icon-unsureHome:before {
+    content: "\e974"
+}
+
+.td-icon-upCaret:before {
+    content: "\e95e"
+}
+
+.td-icon-usDollar:before {
+    content: "\e995"
+}
+
+.td-icon-vacation:before {
+    content: "\e99d"
+}
+
+.td-icon-vendor:before {
+    content: "\ea09"
+}
+
+.td-icon-video:before {
+    content: "\ea56"
+}
+
+.td-icon-videoPauseButton:before {
+    content: "\ea4f"
+}
+
+.td-icon-videoPauseButtonCircle:before {
+    content: "\ea50"
+}
+
+.td-icon-videoPlayButton:before {
+    content: "\ea16"
+}
+
+.td-icon-videoPlayButtonCircle:before {
+    content: "\ea17"
+}
+
+.td-icon-walking:before {
+    content: "\e95f"
+}
+
+.td-icon-wallet:before {
+    content: "\ea45"
+}
+
+.td-icon-warning:before {
+    content: "\e960"
+}
+
+.td-icon-watchlists:before {
+    content: "\e99e"
+}
+
+.td-icon-waterDamage:before {
+    content: "\e961"
+}
+
+.td-icon-wealthAdvise:before {
+    content: "\e9e2"
+}
+
+.td-icon-webBroker:before {
+    content: "\e9fd"
+}
+
+.td-icon-whatsNew:before {
+    content: "\e9e1"
+}
+
+.td-icon-whitepaper:before {
+    content: "\ea57"
+}
+
+.td-icon-wifi:before {
+    content: "\e99f"
+}
+
+.td-icon-womenAndHealth:before {
+    content: "\ea1d"
+}
+
+.td-icon-word:before {
+    content: "\ea58"
+}
+
+.td-icon-workplace:before {
+    content: "\e9c7"
+}
+
+.td-icon-writeBusinessPlan:before {
+    content: "\ea18"
+}
+
+.td-icon-youngAndSingle:before {
+    content: "\e962"
+}
+
+.td-icon-youthAccount:before {
+    content: "\e996"
+}
+
+.td-icon-youtube:before {
+    content: "\e963"
+}
+
+.td-icon-balance:before {
+    content: "\e9d1"
+}
+
+.td-icon-dayFinances:before {
+    content: "\e9d2"
+}
+
+.td-icon-dynamicPreformance:before {
+    content: "\e9d3"
+}
+
+.td-icon-easySafety:before {
+    content: "\e9d4"
+}
+
+.td-icon-exit:before {
+    content: "\e9de"
+}
+
+.td-icon-growth:before {
+    content: "\e9d5"
+}
+
+.td-icon-growthIncome:before {
+    content: "\e9d6"
+}
+
+.td-icon-income:before {
+    content: "\e9d7"
+}
+
+.td-icon-incomeGrowth:before {
+    content: "\e9d8"
+}
+
+.td-icon-mixedPortfolio:before {
+    content: "\e9e0"
+}
+
+.td-icon-na:before {
+    content: "\e9d9"
+}
+
+.td-icon-noSaving:before {
+    content: "\e9da"
+}
+
+.td-icon-overdraftProtection:before {
+    content: "\e9df"
+}
+
+.td-icon-savePortion:before {
+    content: "\e9db"
+}
+
+.td-icon-saveWhenever:before {
+    content: "\e9dc"
+}
+
+.td-icon-slowSteady:before {
+    content: "\e9dd"
+}

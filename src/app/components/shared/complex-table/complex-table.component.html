@@ -1,0 +1,372 @@
+<app-popover #textPopover>{{ fullTextForPopover }}</app-popover>
+
+<div class="row justify-content-between align-items-center mt-20 mb-20">
+
+  <div class="col-auto">
+    <ng-container *ngIf="title" [ngSwitch]="titleLevel">
+      <h1 *ngSwitchCase="'h1'" [ngClass]="titleClass" class="mb-0">{{ title }}</h1>
+      <h2 *ngSwitchCase="'h2'" [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
+      <h3 *ngSwitchCase="'h3'" [ngClass]="titleClass" class="mb-0">{{ title }}</h3>
+      <h2 *ngSwitchDefault [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
+    </ng-container>
+  </div>
+
+  <div class="col-auto d-flex align-items-center gap-3">
+
+    <div class="td-table-complex-pagination td-table-complex-fixed-col-on mb-0 d-flex align-items-center" role="region"
+      aria-label="Table controls">
+
+      <div #dropdownContainer *ngIf="showFilterColumns" class="td-multi-select-dropdown dropdown">
+        <button #dropdownMenuToggle class="btn td-btn-tertiary btn-sm" type="button" (click)="toggleDropdown(0, $event)"
+          aria-haspopup="true" [attr.aria-expanded]="openDropdownIndex !== null">
+          <span class="td-icon-18x18 pe-1 td-icon-18x18-view-columns"></span>
+          Columns
+        </button>
+        <div #dropdownMenu class="dropdown-menu" [class.show]="openDropdownIndex !== null" role="menu">
+          <div class="dropdown-content-wrapper">
+            <ul class="list-unstyled mb-0" role="group" aria-label="Select columns to display">
+              <li *ngFor="let option of checkboxOptions; let i = index; trackBy: trackByOption">
+                <div class="form-check dropdown-item">
+                  <input type="checkbox" class="form-check-input" [id]="'col-vis-' + i" [checked]="option.checked"
+                    (change)="toggleOption(i)">
+                  <label class="form-check-label" [for]="'col-vis-' + i">{{ getFormattedHeader(option.label) }}</label>
+                </div>
+              </li>
+            </ul>
+            <div class="dropdown-footer d-flex justify-content-center border-top z-3">
+              <div class="row w-100 gap-2">
+                <div class="col">
+                  <button type="button" class="td-chips w-100 justify-content-center rounded-0 td-chips-selected"
+                    (click)="selectAll()">
+                    <span>Select All</span>
+                  </button>
+                </div>
+                <div class="col">
+                  <button type="button" class="td-chips w-100 justify-content-center rounded-0" (click)="resetFilter()">
+                    <span>Reset</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showDropdownFilter" class="ms-3">
+        <app-select-dropdown id="static-filter-select" [label]="'Filter by Type'" [placeholder]="'Select type'"
+          [options]="dropdownOptions" [selectedValue]="selectedDropdownValue"
+          (selectedValueChange)="dropdownValueChange.emit($event)" [disabled]="false" [customClass]="'custom-class'">
+        </app-select-dropdown>
+      </div>
+
+      <div *ngIf="isScrollVisible" class="d-inline-flex align-items-center ms-3">
+        <button type="button" class="td-table-complex-pagination-btn-left" (click)="scrollPrevColumn()"
+          (mousedown)="startScrollHold('left')" (mouseup)="stopScrollHold()" (mouseleave)="stopScrollHold()"
+          (keydown)="onButtonKeyDown($event, 'left')" (keyup)="onButtonKeyUp($event)"
+          aria-label="Scroll table left"></button>
+        <button type="button" class="td-table-complex-pagination-btn-right" (click)="scrollNextColumn()"
+          (mousedown)="startScrollHold('right')" (mouseup)="stopScrollHold()" (mouseleave)="stopScrollHold()"
+          (keydown)="onButtonKeyDown($event, 'right')" (keyup)="onButtonKeyUp($event)"
+          aria-label="Scroll table right"></button>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <button *ngIf="showAddButton" class="btn btn-sm td-btn-primary-light"
+        (click)="isAddingMode ? onSearchClicked() : onAddClicked()"
+        (keydown.enter)="isAddingMode ? onSearchClicked() : onAddClicked()"
+        (keydown.space)="isAddingMode ? onSearchClicked() : onAddClicked()">
+        <span class="td-icon-18x18 pe-10" [ngClass]="{
+          'td-icon-18x18-add': !isAddingMode,
+          'td-icon-18x18-search': isAddingMode
+        }"></span>
+        {{ isAddingMode ? 'Search' : 'Add' }}
+      </button>
+      <button class="btn td-btn-tertiary btn-sm" aria-label="Reload Data" (click)="reload()" (keydown.enter)="reload()"
+        (keydown.space)="reload()">
+        <span class="td-icon-18x18 td-icon-colour-primary td-icon-18x18-reload"></span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive" #tableContainer>
+      <table
+        class="table td-table-complex td-table-complex-fixed-col-on table-bordered td-table-border-row-colour-1 td-table-border-col-clear"
+        aria-label="Data table with sortable columns and selectable rows">
+        <thead>
+          <tr>
+            <th *ngIf="enableCheckbox || showExpandCollapse" class="sticky sticky-checkbox">
+              <div class="d-flex align-items-center justify-content-center gap-1">
+                <div *ngIf="enableCheckbox" class="form-check p-0">
+                  <input #selectAllCheckbox type="checkbox" class="form-check-input" aria-label="Select all rows"
+                    [checked]="allRowsSelected()" [indeterminate]="someRowsSelected()"
+                    (change)="toggleSelectAllRows($event)" />
+                </div>
+              </div>
+            </th>
+
+            <th scope="col" class="text-start" *ngFor="let col of visibleColumns; let i = index; trackBy: trackByColumn"
+              [attr.id]="i === 0 && !enableCheckbox ? 'firstColumnCell' : null" [attr.aria-sort]="
+    col !== 'Action' && sortState.column === col
+      ? sortState.direction === 'asc'
+        ? 'ascending'
+        : 'descending'
+      : 'none'
+  ">
+
+              <div class="d-flex align-items-center justify-content-between w-100 flex-column"
+                [ngClass]="{'mt-10': (columnConfig[col].currentFilterValues || []).length}">
+
+                <div class="d-flex align-items-center justify-content-between w-100">
+                  <ng-container *ngIf="col.trim().toLowerCase() !== 'actions'; else nonSortableColumn">
+
+                    <button class="td-table-complex-sort text-start" (click)="onSort(col)"
+                      [attr.aria-label]="'Sort by ' + getFormattedHeader(col)">
+
+                      {{ getFormattedHeader(col) }}
+
+                      <span class="td-icon" [ngClass]="{
+      'td-icon-sort': true,
+      'td-icon-sort-asc': sortState.column === col && sortState.direction === 'asc',
+      'td-icon-sort-desc': sortState.column === col && sortState.direction === 'desc'
+    }"></span>
+                    </button>
+                  </ng-container>
+
+                  <ng-template #nonSortableColumn>
+                    <span class="pe-2">{{ getFormattedHeader(col) }}</span>
+                  </ng-template>
+
+                  <div class="td-multi-select-dropdown dropdown" *ngIf="columnConfig[col]?.filterable">
+                    <button class="td-chips td-chips-icon" [class.show]="openColumnDataFilterDropdownCol === col"
+                      id="dropdownMenuMultiSelect-{{ col }}"
+                      [attr.aria-expanded]="openColumnDataFilterDropdownCol === col"
+                      (click)="toggleColumnDataFilterDropdown(col, $event)">
+                      <span class="td-icon-18x18 td-icon-colour-primary td-icon-18x18-filter"></span>
+                    </button>
+
+                    <div class="dropdown-menu" #columnDataFilterDropdownMenu
+                      [class.show]="openColumnDataFilterDropdownCol === col"
+                      [attr.aria-labelledby]="'dropdownMenuMultiSelect-' + col" role="menu">
+
+                      <div class="dropdown-content-wrapper">
+                        <ul class="list-unstyled mb-0" role="group" aria-label="Filter options"
+                          aria-multiselectable="true">
+                          <li *ngIf="!(columnConfig[col].filterOptions?.length)">
+                            <span class="dropdown-item disabled">No options available</span>
+                          </li>
+
+                          <li *ngFor="let option of columnConfig[col]?.filterOptions || []">
+                            <div class="form-check dropdown-item">
+                              <input type="checkbox" class="form-check-input"
+                                [id]="'col-filter-' + col + '-' + option.value"
+                                [checked]="(columnConfig[col].currentFilterValues || []).includes(option.value)"
+                                (click)="onToggleMultiValueFilter(col, option.value, $event)" />
+                              <label class="form-check-label" [for]="'col-filter-' + col + '-' + option.value">
+                                {{ option.label }}
+                              </label>
+                            </div>
+                          </li>
+                        </ul>
+
+                        <div class="dropdown-footer d-flex justify-content-center border-top z-3"
+                          *ngIf="(columnConfig[col]?.filterOptions?.length)">
+                          <div class="row w-100 gap-2">
+                            <div class="col-12">
+                              <button type="button"
+                                class="td-chips w-100 justify-content-center rounded-0 td-chips-selected"
+                                (click)="toggleAllColumnDataFilter(col, $event)"
+                                [attr.aria-label]="isAllOptionsSelected(col) ? 'Reset filter' : 'Select all options'">
+                                <span>
+                                  {{ isAllOptionsSelected(col) ? 'Reset Filter' : 'Select All' }}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </th>
+
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="
+              let row of pagedData || [];
+              let i = index;
+              trackBy: trackByRow
+            ">
+            <tr class="align-middle" [style.cursor]="rowClickable ? 'pointer' : 'default'"
+              [attr.tabindex]="rowClickable ? 0 : null" [attr.role]="rowClickable ? 'button' : null"
+              (click)="rowClickable && onRowClick(row)" (keydown)="onRowKeydown($event, row)">
+              <td *ngIf="enableCheckbox || showExpandCollapse" class="text-center sticky sticky-checkbox">
+                <div class="d-flex align-items-center justify-content-center gap-1">
+                  <div *ngIf="enableCheckbox" class="form-check p-0">
+                    <input type="checkbox" attr.aria-label="Select row {{ i + 1 }}" [checked]="isRowSelected(row)"
+                      (click)="$event.stopPropagation()" (change)="toggleRowSelection(row)" />
+                  </div>
+                  <button *ngIf="showExpandCollapse" class="btn td-btn-tertiary"
+                    (click)="toggleRow(i); $event.stopPropagation()"
+                    (keydown.enter)="toggleRow(i); $event.stopPropagation()"
+                    (keydown.space)="toggleRow(i); $event.stopPropagation()" title="Toggle row details">
+                    <ng-container *ngIf="useIcons; else textExpandCollapse">
+                      <span *ngIf="!row.expanded"
+                        class="td-icon td-icon-colour-primary icon-regular td-icon-expand"></span>
+                      <span *ngIf="row.expanded"
+                        class="td-icon td-icon-colour-primary icon-regular td-icon-collapse"></span>
+                    </ng-container>
+                    <ng-template #textExpandCollapse>
+                      <span>{{ toggleText }}</span>
+                    </ng-template>
+                  </button>
+                </div>
+              </td>
+
+              <td *ngFor="let col of visibleColumns; trackBy: trackByColumn" class="text-start">
+
+                <ng-container
+                  *ngIf="editableColumns.includes(col) && editableRowIds.has(row[idProperty]) && columnConfig[col]?.type !== 'button' && columnConfig[col]?.type !== 'buttons'; else normalCell">
+                  <ng-container *ngIf="columnConfig[col] as config">
+                    <ng-container [ngSwitch]="config.type">
+                      <ng-container *ngSwitchCase="'select'">
+                        <app-dropdown-legacy [id]="col + '-' + row[idProperty]"
+                          [placeholder]="'Select ' + getFormattedHeader(col)" [label]="col"
+                          [options]="config.options || []" [selectedValue]="getCellValue(row[idProperty], col)"
+                          (selectedValueChange)="updateCellValue(row[idProperty], col, $event)"
+                          (click)="$event.stopPropagation()" [disabled]="false" [errorMessage]="''"
+                          [customClass]="getError(row[idProperty], col)"
+                          (mouseover)="showPopoverIfOverflow($event, getPrecomputedOptionLabel(col, getCellValue(row[idProperty], col)))"
+                          (mouseleave)="hidePopover()">
+                        </app-dropdown-legacy>
+                      </ng-container>
+
+                      <ng-container *ngSwitchDefault>
+                        <div class="position-relative">
+                          <app-input-legacy #editableInput [id]="col + '-' + row[idProperty]" [label]="col"
+                            [placeholder]="'Enter ' + getFormattedHeader(col)" type="text"
+                            [inputClass]="getError(row[idProperty], col)"
+                            [model]="formatValue(getCellValue(row[idProperty], col))"
+                            (modelChange)="updateCellValue(row[idProperty], col, $event)"
+                            (click)="$event.stopPropagation()" [disabled]="false" [error]="''"
+                            [autofocus]="isFocusedCell(row[idProperty], col)"
+                            (mouseover)="showPopoverIfOverflow($event, formatValue(getCellValue(row[idProperty], col)))"
+                            (mouseleave)="hidePopover()" />
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+
+                <ng-template #normalCell>
+                  <ng-container *ngIf="columnConfig[col] as config">
+                    <ng-container [ngSwitch]="config.type || 'text'">
+                      <ng-container *ngSwitchCase="'button'">
+                        <button type="button" class="btn btn-sm td-btn-tertiary" [attr.data-bs-toggle]="
+        config.modalTarget ? 'td-modal' : null
+      " [attr.data-bs-target]="
+        config.modalTarget
+          ? '#' + config.modalTarget
+          : null
+      " [attr.aria-label]="
+        config.title || config.label || 'Action'
+      " [attr.title]="config.title || config.label || 'Action'" (click)="
+        onActionClick(config.action || col, row);
+        $event.stopPropagation()
+      ">
+                          <span *ngIf="
+          config.showSpanIcon !== false && config.spanIcon
+        " [ngClass]="config.spanIcon" class="me-1 align-text-bottom" aria-hidden="true"></span>
+                          <img *ngIf="
+          config.showImageIcon !== false &&
+          (config.imageIcon || config.icon)
+        " [src]="config.imageIcon || config.icon" width="18" height="18" class="me-1 align-text-bottom" alt="icon" />
+                          <span *ngIf="config.showLabel !== false && config.label">{{ config.label }}</span>
+                        </button>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'buttons'">
+                        <ng-container *ngIf="resolveButtons(config, row, i) as resolvedButtons">
+                          <ng-container *ngFor="
+              let btn of resolvedButtons;
+              trackBy: trackByButton
+            ">
+                            <button type="button" class="btn btn-sm td-btn-tertiary"
+                              [attr.aria-label]="btn.title || btn.label || 'Action'"
+                              [attr.title]="btn.title || btn.label || 'Action'" [attr.tabindex]="btn.tabindex"
+                              (click)="onActionClick(btn.action, row); $event.stopPropagation()"
+                              (keydown.enter)="onActionClick(btn.action, row); $event.stopPropagation()"
+                              (keydown.space)="onActionClick(btn.action, row); $event.stopPropagation()">
+                              <span *ngIf="btn.showSpanIcon !== false && btn.spanIcon" [ngClass]="btn.spanIcon"
+                                class="me-1 align-text-bottom" aria-hidden="true"></span>
+                              <img *ngIf="btn.showImageIcon !== false && (btn.imageIcon || btn.icon)"
+                                [src]="btn.imageIcon || btn.icon" width="18" height="18" class="me-1 align-text-bottom"
+                                alt="icon" />
+                              <span *ngIf="btn.showLabel !== false && btn.label">{{ btn.label }}</span>
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'select'">
+                        <div class="td-truncate-text"
+                          (mouseover)="showPopoverIfOverflow($event, getPrecomputedOptionLabel(col, row[col]))"
+                          (mouseleave)="hidePopover()">
+                          {{ getPrecomputedOptionLabel(col, row[col]) }}
+                        </div>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'chip'">
+                        <app-chip [customClass]="config.classFn ? config.classFn(row) : ''">{{ row[col] }}</app-chip>
+                      </ng-container>
+
+                      <ng-container *ngSwitchDefault>
+                        <div class="td-truncate-text" (mouseover)="showPopoverIfOverflow($event, row[col])"
+                          (mouseleave)="hidePopover()">
+                          {{ row[col] }}
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+
+                  <ng-container *ngIf="!columnConfig[col]">
+                    <div class="td-truncate-text" (mouseover)="showPopoverIfOverflow($event, row[col])"
+                      (mouseleave)="hidePopover()">
+                      {{ row[col] }}
+                    </div>
+                  </ng-container>
+                </ng-template>
+
+              </td>
+            </tr>
+
+            <tr *ngIf="showExpandCollapse && row.visibleExpanded">
+              <td [attr.colspan]="visibleColumns.length + (enableCheckbox || showExpandCollapse ? 1 : 0)">
+                <div #expandedRow class="expanded-wrapper" [style.display]="'block'">
+                  <ng-container *ngTemplateOutlet="expandedRowTemplate; context: { $implicit: row }"></ng-container>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="pagedData.length === 0">
+            <td [attr.colspan]="visibleColumns.length + (enableCheckbox || showExpandCollapse ? 1 : 0)"
+              class="text-center" role="alert">
+              {{ validationErrorMessages.noDataAvailable }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

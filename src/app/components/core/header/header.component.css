@@ -1,0 +1,22 @@
+.container {
+  max-width: 100% !important;
+}
+
+/* Default active style for top-level navigation items */
+.active-nav {
+  box-shadow: inset 0 -4px #038203;
+}
+
+/* Override for active sub-menu items */
+/* This removes the box-shadow from the sub-menu's <li> tag */
+.td-header-nav-dropdown-items .active-nav,
+.submenu .active-nav {
+  box-shadow: none;
+}
+
+/* This adds a background color to the <a> tag within the active sub-menu <li> */
+.td-header-nav-dropdown-items .active-nav > a,
+.submenu .active-nav > a {
+  background-color: rgba(0, 0, 0, 0.05); /* A subtle background highlight */
+  border-radius: 4px;
+}

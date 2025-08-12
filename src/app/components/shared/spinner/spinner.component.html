@@ -1,0 +1,17 @@
+<div class="td-spinner-container" *ngIf="isVisible" role="status" aria-live="polite">
+    <!-- Optional Heading -->
+    <h2 *ngIf="heading" class="td-spinner-heading">
+        {{ heading }}
+    </h2>
+
+    <!-- Spinner Image -->
+    <img class="td-spinner" src="assets/images/spinner.svg" alt="Loading..." aria-hidden="true" />
+
+    <!-- Screen Reader Only Message -->
+    <span class="visually-hidden">Loading, please wait...</span>
+
+    <!-- Optional User-Facing Message -->
+    <p *ngIf="message" class="td-spinner-message">
+        {{ message }}
+    </p>
+</div>

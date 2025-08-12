@@ -1,0 +1,21 @@
+<div class="td-form-input td-textarea">
+  <label
+    *ngIf="label"
+    [for]="textAreaId"
+    class="visually-hidden">
+    {{ label }}
+  </label>
+
+  <textarea
+    class="form-control"
+    [id]="textAreaId"
+    rows="3"
+    [placeholder]="placeholder || 'Enter ' + (label || 'text')"
+    [attr.title]="title || label || placeholder || 'Text area input'"
+    [attr.aria-label]="label || title || placeholder || 'Text area input'"
+    [ngModel]="value"
+    (ngModelChange)="onValueChange($event)">
+  </textarea>
+
+  <span class="form-label" aria-hidden="true">{{ label }}</span>
+</div>

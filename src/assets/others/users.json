@@ -1,0 +1,15 @@
+[
+    {
+      "username": "viewerUser",
+      "password": "viewerPass",
+      "userID": "viewer123",
+      "userRole": "viewer"
+    },
+    {
+      "username": "adminUser",
+      "password": "adminPass",
+      "userID": "admin123",
+      "userRole": "admin"
+    }
+  ]
+  

@@ -1,0 +1,148 @@
+<header class="td-header-nav sticky-top" #headerWrapper>
+  <a class="td-skip-main td-link-inline" href="#" (click)="skipToMain(); $event.preventDefault()">Skip to main content</a>
+
+  <nav class="td-mobile-nav" [class.show]="isMenuOpen" [class.d-flex]="isMenuVisible" aria-label="Mobile Navigation" role="navigation">
+    <div class="td-header-nav-top">
+      <div class="container"></div>
+    </div>
+
+    <div class="td-header-nav-main">
+      <div class="container-fluid">
+        <div class="td-header-nav-main-start d-flex align-items-center">
+          <button #menuToggleBtn type="button" class="td-mobile-hamburgerMenu" [class.show]="isMenuOpen"
+            [attr.aria-expanded]="isMenuOpen" [attr.aria-controls]="'mobileMenuContent'" (click)="toggleMenu()"
+            aria-label="Toggle navigation menu">
+            <div class="td-mobile-hamburgerMenu-bar-1"></div>
+            <div class="td-mobile-hamburgerMenu-bar-2"></div>
+            <div class="td-mobile-hamburgerMenu-bar-3"></div>
+          </button>
+
+          <a [routerLink]="'/dashboard'" class="td-logo td-saffhire-d-none align-items-center d-flex">
+            <img src="../../../../assets/img/header/td-logo.svg" alt="TD Logo" />
+            <span class="logo-text d-flex ps-10">Auto Finance</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div #mobileMenuContent id="mobileMenuContent" class="td-mobile-nav-menu" [class.show]="isMenuOpen" [class.d-flex]="isMenuVisible"
+      [attr.aria-hidden]="!isMenuOpen" role="menu">
+      <div class="td-mobile-nav-menu-header">
+        <div class="container">
+          <div class="td-mobile-nav-menu-header-content"></div>
+        </div>
+      </div>
+
+      <div class="td-mobile-nav-menu-body">
+        <div class="td-mobile-nav-menu-body-container">
+          <div class="td-mobile-nav-menu-section">
+            <h3 class="td-mobile-nav-menu-section-heading pe-20" id="mainMenuHeading">Main Menu</h3>
+            <ul class="td-side-nav w-100 shadow-none" role="menubar" aria-labelledby="mainMenuHeading">
+              <li role="none" routerLinkActive="active-nav">
+                <a role="menuitem" [routerLink]="'/dashboard'">Dashboard</a>
+              </li>
+
+              <li class="td-mobile-nav-menu-section-accordion" [class.show]="isPolicyOpen" routerLinkActive="active-nav">
+                <a href="#" role="button" tabindex="0" class="td-mobile-nav-menu-link-accordion"
+                  [attr.aria-expanded]="isPolicyOpen" aria-controls="policyPanel"
+                  (click)="togglePolicy(); $event.preventDefault()"
+                  (keydown)="onAccordionKeydown($event, 'policy')">
+                  Policy
+                </a>
+                <ul id="policyPanel" class="submenu" role="menu" [attr.aria-hidden]="!isPolicyOpen" style="overflow: hidden">
+                  <li role="none" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a role="menuitem" [routerLink]="'/policy/dashboard'">Policy Dashboard</a></li>
+                  <li role="none" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a role="menuitem" [routerLink]="'/policy/my-apps'">Policies of my Apps</a></li>
+                  <li role="none" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a role="menuitem" [routerLink]="'/policy/add'">Add new Policy</a></li>
+                </ul>
+              </li>
+
+              <li role="none" routerLinkActive="active-nav">
+                <a role="menuitem" [routerLink]="'/holds'">Holds</a>
+              </li>
+              <li role="none" routerLinkActive="active-nav">
+                <a role="menuitem" [routerLink]="'/trackable-entities'">Trackable Entities</a>
+              </li>
+              <li role="none" routerLinkActive="active-nav">
+                <a role="menuitem" [routerLink]="'/reports'">Reports</a>
+              </li>
+              <li role="none" routerLinkActive="active-nav">
+                <a role="menuitem" [routerLink]="'/drd-admin'">DRD Admin</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="td-overlay" [class.td-overlay-show]="isMenuOpen" [class.d-block]="isOverlayVisible"
+      (click)="toggleMenu()" tabindex="-1" aria-hidden="true"></div>
+  </nav>
+
+  <nav aria-label="Desktop Main Navigation">
+    <div class="td-header-nav-top">
+      <div class="container"></div>
+    </div>
+
+    <div class="td-header-nav-main">
+      <div class="container">
+        <div class="td-header-nav-main-start d-flex align-items-center" style="flex: none">
+          <a [routerLink]="'/dashboard'" class="td-logo td-saffhire-d-none align-items-center d-flex">
+            <img src="../../../../assets/img/header/td-logo.svg" alt="TD Logo" />
+            <span class="logo-text d-flex ps-10">Auto Finance</span>
+          </a>
+
+          <ul>
+            <li routerLinkActive="active-nav">
+              <a role="button" [routerLink]="'/dashboard'" tabindex="0">Dashboard</a>
+            </li>
+
+            <li #policyDropdownContainer (focusout)="onDropdownFocusOut($event, 'policy')"
+              class="td-header-nav-dropdown td-header-nav-main-dropdown"
+              [class.td-header-nav-main-dropdown-active]="isPolicyOpen"
+              routerLinkActive="active-nav">
+              <a role="button" tabindex="0" aria-haspopup="true" [attr.aria-expanded]="isPolicyOpen"
+                (click)="togglePolicy()" (keydown)="onDropdownKeydown($event, 'policy')">
+                Policy
+              </a>
+              <ul class="td-header-nav-dropdown-items" role="menu" [class.d-flex]="isPolicyOpen">
+                <li role="menuitem" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="'/policy/dashboard'">Policy Dashboard</a></li>
+                <li role="menuitem" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="'/policy/my-apps'">Policies of my Apps</a></li>
+                <li role="menuitem" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="'/policy/add'">Add new Policy</a></li>
+              </ul>
+            </li>
+
+            <li routerLinkActive="active-nav">
+              <a role="button" [routerLink]="'/holds'" tabindex="0">Holds</a>
+            </li>
+            <li routerLinkActive="active-nav">
+              <a role="button" [routerLink]="'/trackable-entities'" tabindex="0">Trackable Entities</a>
+            </li>
+            <li routerLinkActive="active-nav">
+              <a role="button" [routerLink]="'/reports'" tabindex="0">Reports</a>
+            </li>
+            <li routerLinkActive="active-nav">
+              <a role="button" [routerLink]="'/drd-admin'" tabindex="0">DRD Admin</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="td-header-nav-main-end">
+          <ul>
+            <li #loginDropdownContainer (focusout)="onDropdownFocusOut($event, 'login')"
+              class="td-header-nav-dropdown td-header-nav-main-dropdown"
+              [class.td-header-nav-main-dropdown-active]="isLoginMenuOpen">
+              <a role="button" tabindex="0" aria-haspopup="true" [attr.aria-expanded]="isLoginMenuOpen"
+                (click)="toggleLoginMenu()" (keydown)="onDropdownKeydown($event, 'login')">
+                <span class="td-icon td-icon-Login"></span> login
+              </a>
+              <ul class="td-header-nav-dropdown-items td-header-nav-dropdown-items-end" role="menu"
+                [class.d-flex]="isLoginMenuOpen">
+                <li role="menuitem"><a [routerLink]="'/login'">Menu Item</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

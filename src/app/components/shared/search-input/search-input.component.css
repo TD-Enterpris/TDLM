@@ -1,0 +1,10 @@
+/* Hide visual feedback but keep keyboard focus */
+.no-hover,
+.no-hover:hover,
+.no-hover:focus,
+.no-hover:active {
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer;
+}

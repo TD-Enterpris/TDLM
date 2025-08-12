@@ -1,0 +1,12 @@
+.modal-body{
+    opacity: 1 !important;
+}
+/* 
+.td-modal-width {
+width: 720px !important;
+} */
+
+
+.modal {
+    --td-modal-width: 720px !important;
+}

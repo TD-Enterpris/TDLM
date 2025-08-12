@@ -1,0 +1,29 @@
+<!-- Bootstrap Modal Template -->
+<div #modalRef class="td-modal modal" [id]="id" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <button type="button" class="td-icon-button-delete td-icon-button-delete-sm z-3" data-bs-dismiss="modal" aria-label="Close">
+        <span class="visually-hidden"> Accessibility Description </span>
+      </button>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="modal-header pe-0 ps-0 sticky-top">
+                  <h5 class="modal-title">{{ title }}</h5>
+                </div>
+            </div>
+            <div class="col-12">
+                <ng-content></ng-content>
+            </div>
+            <div class="col-12">
+                <div class="modal-footer d-block flex-column">
+                    <div class="row">
+                      <ng-content select="[modal-footer]"></ng-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div *ngIf="isVisible" class="td-temporal-message mt-10 mb-10" role="alert" aria-live="assertive" [ngClass]="{
+    'bg-success': type === 'success',
+    'bg-warning': type === 'warning',
+    'bg-danger': type === 'danger',
+    'bg-info': type === 'info'
+  }">
+    <div class="row align-items-center justify-content-between">
+        <div class="col-auto">
+            <div class="d-flex align-items-center pe-20 ps-20 pt-10 pb-10">
+                <span class="visually-hidden">{{ type | titlecase }}</span>
+
+                <span *ngIf="type === 'success'" class="td-icon icon-regular td-icon-approved"
+                    aria-hidden="true"></span>
+                <span *ngIf="type === 'warning'" class="td-icon icon-regular td-icon-warning" aria-hidden="true"></span>
+                <span *ngIf="type === 'danger'" class="td-icon icon-regular td-icon-error" aria-hidden="true"></span>
+                <span *ngIf="type === 'info'" class="td-icon icon-regular td-icon-info" aria-hidden="true"></span>
+
+                <p class="m-0 ms-2">{{ message }}</p>
+            </div>
+        </div>
+
+        <div class="col-auto" *ngIf="showCloseButton">
+            <!-- Corrected the click handler to call the 'close' method -->
+            <button type="button" class="td-icon-button-delete td-icon-button-delete-xs" aria-label="Close message"
+                (click)="close()"></button>
+        </div>
+    </div>
+</div>

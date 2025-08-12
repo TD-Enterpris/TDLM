@@ -1,0 +1,41 @@
+/* Styles for the wrapper that holds your popover content */
+.my-popover-body-content-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem; /* Mimic Bootstrap popover padding */
+  background-color: var(--bs-popover-bg); /* Use Bootstrap variable for background */
+  color: var(--bs-popover-color); /* Use Bootstrap variable for text color */
+}
+
+/* Styles for the close button */
+.td-icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 0.75rem; /* Space between button and content */
+  font-size: 1.5rem; /* Larger for better tap target */
+  line-height: 1;
+  color: var(--bs-popover-header-color, #000); /* Try to match header color if available, or default */
+  opacity: 0.7; /* Slightly transparent */
+  transition: opacity 0.2s ease-in-out;
+}
+
+.td-icon-button:hover {
+  opacity: 1;
+}
+
+.td-icon-button-delete-XS {
+  font-size: 1.25rem; /* Smaller size variant */
+}
+
+/* Styles for the actual body content text */
+.my-popover-body-content {
+  flex-grow: 1; /* Allows content to take available space */
+  font-size: var(--bs-popover-font-size); /* Use Bootstrap variable for font size */
+}
+
+/* Optional: Override default Bootstrap popover body styles */
+/* .popover-body {
+  padding: 0;
+} */

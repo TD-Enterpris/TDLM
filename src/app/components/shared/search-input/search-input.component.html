@@ -1,0 +1,49 @@
+<div class="td-form-input td-form-input-search" [ngClass]="[customClass, errorMessage ? 'is-invalid' : '']">
+  <!-- Visually hidden label -->
+  <label [for]="id" class="visually-hidden">{{ label }}</label>
+
+  <!-- Accessible input -->
+  <input
+    type="text"
+    name="searchText"
+    [id]="id"
+    class="form-control"
+    [placeholder]="placeholder"
+    [attr.title]="label"
+    [attr.aria-label]="label"
+    [attr.aria-describedby]="errorMessage ? 'inputError' : null"
+    [attr.autocomplete]="'off'"
+    [value]="modelValue"
+    (input)="onInputChange($event)" />
+
+  <!-- Floating label -->
+  <span class="form-label" aria-hidden="true">{{ label }}</span>
+
+  <!-- Search button (static) -->
+  <button
+    type="button"
+    tabindex="-1"
+    class="td-icon-button-utility td-icon-button-utility-circle td-icon-button-utility-clear-bg td-form-input-search-button no-hover"
+    aria-hidden="true"
+    (click)="onSearch()">
+    <span class="td-icon-18x18 td-icon-18x18-search" aria-hidden="true"></span>
+  </button>
+
+  <!-- Clear button (only shown when there is a value) -->
+  <button
+    type="button"
+    class="td-icon-button-delete td-icon-button-delete-sm td-icon-button-delete-grey-bg"
+    (click)="onClear()"
+    *ngIf="modelValue">
+    <span class="visually-hidden">Clear Input</span>
+  </button>
+</div>
+
+<!-- Error message display -->
+<div class="td-error" *ngIf="errorMessage">
+  <div role="alert" id="inputError" aria-hidden="false">
+    <span class="td-error-symbol" aria-hidden="true"></span>
+    <span class="visually-hidden">Error:</span>
+    {{ errorMessage }}
+  </div>
+</div>

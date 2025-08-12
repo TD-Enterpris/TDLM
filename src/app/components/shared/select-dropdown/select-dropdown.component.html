@@ -1,0 +1,26 @@
+<div class="td-form-input td-select" [ngClass]="customClass">
+  <label [for]="id" class="visually-hidden">{{ label }}</label>
+
+<select class="form-control" [id]="id"
+   [attr.aria-label]="label || placeholder || 'Dropdown field'"
+   [attr.aria-describedby]="errorMessage ? id + '-error' : null" [attr.aria-invalid]="!!errorMessage"
+   [(ngModel)]="selectedValue" [attr.data-has-value]="selectedValue || ''" [attr.data-is-active]="isActive ? '' : null"
+   [disabled]="disabled" [attr.tabindex]="readonly ? -1 : null"
+   [ngStyle]="readonly ? {'pointer-events': 'none', 'background-color': '#f8f9fa'} : null" (change)="onChange($event)"
+   (keydown)="handleKeydown($event)" (click)="setActive()" (blur)="removeActive()" [ngClass]="customClass">
+   <option *ngIf="!selectedValue" value="" hidden disabled>{{ placeholder }}</option>
+   <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+</select>
+
+  <span class="select-form-label" aria-hidden="true">{{ label }}</span>
+</div>
+
+<!-- Inline validation error -->
+<div class="td-error" *ngIf="errorMessage">
+  <div role="alert">
+    <span class="td-error-symbol" aria-hidden="true"></span>
+    <span class="visually-hidden">Error:</span>
+    {{ errorMessage }}
+  </div>
+</div>
+

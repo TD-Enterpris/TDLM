@@ -1,0 +1,163 @@
+{
+  "dateReceived": "2024-08-26",
+  "businessOwnershipStatus": {
+    "minorityOwned": false,
+    "womenOwned": false,
+    "lgbtqiOwned": false,
+    "noneApply": false,
+    "noProvideInfo": true
+  },
+  "principleOwnersCount": 3,
+  "principleOwners": [
+    {
+      "hispanicLatino": true,
+      "hispanicDetails": {
+        "cuban": true,
+        "mexican": false,
+        "puertoRican": false,
+        "otherHispanic": false,
+        "otherHispanicOrigin": ""
+      },
+      "notHispanicLatino": false,
+      "noProvideEthnicity": false,
+      "sexGender": "Male",
+      "noProvideSexGender": false,
+      "race": {
+        "americanIndian": false,
+        "americanIndianTribe": "",
+        "asian": true,
+        "asianDetails": {
+          "asianIndian": true,
+          "chinese": false,
+          "filipino": false,
+          "japanese": false,
+          "korean": false,
+          "vietnamese": false,
+          "otherAsian": false,
+          "otherAsianRace": ""
+        },
+        "blackAfricanAmerican": false,
+        "blackDetails": {
+          "africanAmerican": false,
+          "ethiopian": false,
+          "haitian": false,
+          "jamaican": false,
+          "nigerian": false,
+          "somali": false,
+          "otherBlackAfricanAmerican": false,
+          "otherBlackAfricanAmericanRace": ""
+        },
+        "nativeHawaiianPacificIslander": false,
+        "pacificIslanderDetails": {
+          "guamanianChamorro": false,
+          "nativeHawaiian": false,
+          "samoan": false,
+          "otherPacificIslander": false,
+          "otherPacificIslanderRace": ""
+        },
+        "white": false,
+        "noProvideRace": false
+      }
+    },
+    {
+      "hispanicLatino": false,
+      "hispanicDetails": {
+        "cuban": false,
+        "mexican": false,
+        "puertoRican": false,
+        "otherHispanic": false,
+        "otherHispanicOrigin": ""
+      },
+      "notHispanicLatino": true,
+      "noProvideEthnicity": false,
+      "sexGender": "Female",
+      "noProvideSexGender": false,
+      "race": {
+        "americanIndian": true,
+        "americanIndianTribe": "Navajo",
+        "asian": false,
+        "asianDetails": {
+          "asianIndian": false,
+          "chinese": false,
+          "filipino": false,
+          "japanese": false,
+          "korean": false,
+          "vietnamese": false,
+          "otherAsian": false,
+          "otherAsianRace": ""
+        },
+        "blackAfricanAmerican": false,
+        "blackDetails": {
+          "africanAmerican": false,
+          "ethiopian": false,
+          "haitian": false,
+          "jamaican": false,
+          "nigerian": false,
+          "somali": false,
+          "otherBlackAfricanAmerican": false,
+          "otherBlackAfricanAmericanRace": ""
+        },
+        "nativeHawaiianPacificIslander": false,
+        "pacificIslanderDetails": {
+          "guamanianChamorro": false,
+          "nativeHawaiian": false,
+          "samoan": false,
+          "otherPacificIslander": false,
+          "otherPacificIslanderRace": ""
+        },
+        "white": true,
+        "noProvideRace": false
+      }
+    },
+    {
+      "hispanicLatino": false,
+      "hispanicDetails": {
+        "cuban": false,
+        "mexican": false,
+        "puertoRican": false,
+        "otherHispanic": false,
+        "otherHispanicOrigin": ""
+      },
+      "notHispanicLatino": false,
+      "noProvideEthnicity": true,
+      "sexGender": "Male",
+      "noProvideSexGender": true,
+      "race": {
+        "americanIndian": false,
+        "americanIndianTribe": "",
+        "asian": false,
+        "asianDetails": {
+          "asianIndian": false,
+          "chinese": false,
+          "filipino": false,
+          "japanese": false,
+          "korean": false,
+          "vietnamese": false,
+          "otherAsian": false,
+          "otherAsianRace": ""
+        },
+        "blackAfricanAmerican": false,
+        "blackDetails": {
+          "africanAmerican": false,
+          "ethiopian": false,
+          "haitian": false,
+          "jamaican": false,
+          "nigerian": false,
+          "somali": false,
+          "otherBlackAfricanAmerican": false,
+          "otherBlackAfricanAmericanRace": ""
+        },
+        "nativeHawaiianPacificIslander": false,
+        "pacificIslanderDetails": {
+          "guamanianChamorro": false,
+          "nativeHawaiian": false,
+          "samoan": false,
+          "otherPacificIslander": false,
+          "otherPacificIslanderRace": ""
+        },
+        "white": false,
+        "noProvideRace": true
+      }
+    }
+  ]
+}

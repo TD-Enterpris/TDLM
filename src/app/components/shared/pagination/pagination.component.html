@@ -1,0 +1,61 @@
+<div #paginationWrapper *ngIf="showPagination"
+  class="row align-items-center justify-content-lg-between justify-content-sm-between mt-20 mb-20 g-3">
+  <!-- Items Per Page Selector -->
+  <div *ngIf="showPageSizeSelector"
+    class="col-12 col-sm-auto d-flex align-items-center justify-content-center justify-content-sm-start">
+    <label for="pageSize" class="mb-0 pe-3">Items per page:</label>
+    <div class="td-select">
+      <select id="pageSize" class="form-control" aria-label="Items per page" [(ngModel)]="currentPageSize"
+        (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Pagination Navigation -->
+  <div *ngIf="showPagination" class="col-12 col-sm-auto col-lg d-flex justify-content-center">
+    <nav aria-label="Pagination Navigation" role="navigation">
+      <ul class="td-pagination td-pagination-square pagination align-items-center mb-0" *ngIf="totalRecords > pageSize">
+        <!-- Previous -->
+        <li class="page-item td-pagination-previous align-items-center">
+          <button class="btn td-btn-tertiary border-0" [class.disabled]="currentPageNumber === 0"
+            (click)="goToPage(currentPageNumber - 1); $event.preventDefault()" title="Go to previous page"
+            aria-label="Go to previous page">
+            <span class="td-icon td-icon-leftCaret" aria-hidden="true"></span>
+          </button>
+        </li>
+
+        <!-- Page Numbers -->
+        <ng-container *ngFor="let page of pages">
+          <li class="page-item" *ngIf="page >= 0" [class.active]="page === currentPageNumber"
+            [attr.aria-current]="page === currentPageNumber ? 'page' : null">
+            <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()"
+              (keydown)="onKeydown($event, page)" [attr.aria-label]="'Go to page ' + (page + 1)">
+              {{ page + 1 }}
+            </a>
+          </li>
+
+          <li class="page-item td-pagination-more-pages-indicator disabled" *ngIf="page === -1">
+            <span class="page-link" aria-hidden="true">…</span>
+          </li>
+        </ng-container>
+
+        <!-- Next -->
+        <li class="page-item td-pagination-next">
+          <button class="btn td-btn-tertiary border-0" [class.disabled]="currentPageNumber >= totalPages - 1"
+            (click)="goToPage(currentPageNumber + 1); $event.preventDefault()" title="Go to next page"
+            aria-label="Go to next page">
+            <span class="td-icon td-icon-rightCaret icon-regular" aria-hidden="true"></span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Total Records -->
+  <div *ngIf="showTotalRecords"
+    class="col-12 col-sm-auto d-flex align-items-center justify-content-center justify-content-sm-end"
+    aria-live="polite">
+    <strong>Total Records:</strong> {{ totalRecords }}
+  </div>
+</div>

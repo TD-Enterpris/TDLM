@@ -1,0 +1,407 @@
+.td-table-complex-pagination{
+  display: none;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left::before {
+  content: "\e918";
+}
+
+@supports (content: "x"/"y") {
+  .td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left::before {
+    content: "\e918";
+  }
+}
+
+@supports (alt: "") {
+  .td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left::before {
+    alt: "";
+  }
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right::before {
+  content: "\e923";
+}
+
+@supports (content: "x"/"y") {
+  .td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right::before {
+    content: "\e923";
+  }
+}
+
+@supports (alt: "") {
+  .td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right::before {
+    alt: "";
+  }
+}
+
+.table.td-table-complex {
+  --td-table-complex-fixed-col-width: 150px;
+}
+
+.table.td-table-complex tr {
+  border-top: 0;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left,
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right {
+  background-color: transparent;
+  box-shadow: none;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: inline-block;
+  color: var(--td-colour-primary);
+  text-align: center;
+  vertical-align: middle;
+  border: 0 solid transparent;
+  user-select: none;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left:hover,
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right:hover {
+  background-color: var(--td-colour-neutral-95);
+  text-decoration: none;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left::before,
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-right::before {
+  line-height: 1rem;
+  font-size: .75rem;
+  display: flex;
+  font-family: icons-18x18;
+  pointer-events: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.td-table-complex-pagination.td-table-complex-fixed-col-on .td-table-complex-pagination-btn-left {
+  margin-left: 12px;
+  margin-right: 4px;
+}
+
+.table.td-table-complex td,
+.table.td-table-complex th {
+  text-align: right;
+}
+
+.table.td-table-complex td:first-child,
+.table.td-table-complex th:first-child {
+  text-align: left;
+}
+
+.table.td-table-complex td:first-child .td-table-complex-sort,
+.table.td-table-complex th:first-child .td-table-complex-sort {
+  text-align: left;
+}
+
+.table.td-table-complex th {
+  padding-top: 16px;
+  vertical-align: middle;
+}
+
+.table.td-table-complex th a.td-descriptor.td-link-inline + .td-table-complex-sort .td-icon-sort {
+  bottom: -2px;
+}
+
+.table.td-table-complex th .td-table-complex-sort {
+  text-align: right;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.table.td-table-complex th .td-table-complex-sort .td-icon-sort {
+  opacity: 1;
+  font-size: 1rem;
+  color: var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex th .td-table-complex-sort .td-icon-sort::after,
+.table.td-table-complex th .td-table-complex-sort .td-icon-sort::before {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+.table.td-table-complex th .td-table-complex-sort .td-icon-sort.td-icon-sort-asc::before {
+  color: var(--td-colour-primary);
+}
+
+.table.td-table-complex th .td-table-complex-sort .td-icon-sort.td-icon-sort-asc {
+  opacity: 1;
+}
+
+.table.td-table-complex td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.table.td-table-complex tfoot td {
+  font-family: "TD Graphik Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: var(--td-colour-neutral-98);
+  padding: 15px;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on tr:last-child .td-table-complex-fixed-col {
+  box-shadow: 3px -2px 8px 4px rgba(var(--td-colour-neutral-10-always-rgb), .18);
+}
+
+/* UPDATED: Removed fixed width, min-width, and max-width */
+.table.td-table-complex.td-table-complex-fixed-col {
+  position: sticky;
+  z-index: 1;
+  box-shadow: 0 3px 8px 0 rgba(var(--td-colour-neutral-10-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on:has(+ .td-table-complex-fixed-col) {
+  box-shadow: none;
+  z-index: 2;
+}
+
+/* UPDATED: Removed the 'left' property that depended on the fixed width */
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-complex-fixed-col {
+  /* The 'left' property was removed */
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on tfoot td.td-table-complex-fixed-col {
+  box-shadow: 3px -2px 8px -4px rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on tfoot td.td-table-complex-fixed-col:has(+ .td-table-complex-fixed-col) {
+  box-shadow: none;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller tr:last-child .td-table-complex-fixed-col {
+  box-shadow: 3px -2px 8px -4px rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller tr:last-child .td-table-complex-fixed-col:has(+ .td-table-complex-fixed-col) {
+  box-shadow: 3px -2px 8px -4px rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller .td-table-complex-fixed-col {
+  box-shadow: 0 3px 8px 0 rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller .td-table-complex-fixed-col:has(+ .td-table-complex-fixed-col) {
+  box-shadow: 0 3px 8px 0 rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller .td-table-complex-fixed-col {
+  position: static;
+  min-width: 0;
+  max-width: none;
+  width: auto;
+  left: auto;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on-smaller tfoot td.td-table-complex-fixed-col {
+  box-shadow: 3px -2px 8px -4px rgba(var(--td-colour-neutral-18-always-rgb), .18);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on td,
+.table.td-table-complex.td-table-complex-fixed-col-on th {
+  border-left: none;
+  border-right: none;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on td:first-child,
+.table.td-table-complex.td-table-complex-fixed-col-on th:first-child {
+  border-left: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-colour-1 td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-colour-1 th {
+  border-right: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-colour-2 td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-colour-2 th {
+  border-right: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear td:first-child,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear th:first-child {
+  border-left: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear th {
+  border-color: transparent;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear td:last-child,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-col-clear th:last-child {
+  border-right: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-1 td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-1 th {
+  border-bottom: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-2 td:not(:last-child):last-child th {
+  border-bottom: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-3 td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-3 th {
+  border-bottom: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-2 td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-colour-2 th {
+  border-bottom: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-clear td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-clear th {
+  border-bottom: 1px solid transparent;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-clear tr:last-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-row-clear tr:last-child th {
+  border-bottom: 0;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-1 tr:first-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-1 tr:first-child th {
+  border-top: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-1 tr:last-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-1 tr:last-child th {
+  border-bottom: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-2 tr:first-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-2 tr:first-child th {
+  border-top: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-2 tr:last-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-colour-2 tr:last-child th {
+  border-bottom: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-clear tr:first-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-clear tr:first-child th {
+  border-top: 1px solid transparent;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-clear tr:last-child td,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-top-bottom-clear tr:last-child th {
+  border-bottom: 1px solid transparent;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-start-end-colour-1 td:first-child,
+.table.td-table-complex.td-table-complex-fixed-col-on .td-table-border-start-end-colour-1 th:first-child {
+  border-left: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-1 td:last-child,
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-1 th:last-child {
+  border-right: 1px solid var(--td-colour-neutral-80);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-2 td:first-child,
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-2 th:first-child {
+  border-left: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-2 td:last-child,
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-colour-2 th:last-child {
+  border-right: 1px solid var(--td-colour-neutral-95);
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-clear td:first-child,
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-clear th:first-child {
+  border-left: 1px solid transparent;
+}
+
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-clear td:last-child,
+.table.td-table-complex.td-table-complex-fixed-col-on.td-table-border-start-end-clear th:last-child {
+  border-right: 1px solid transparent;
+}
+
+/* This is the key rule that allows content to define column width */
+.table th,
+.table td {
+  white-space: nowrap; /* Keeps content on one line */
+  width: auto;         /* Allows column to expand to content width */
+  max-width: none;     /* Removes any maximum width constraint */
+}
+
+.td-multi-select-dropdown.dropdown div.dropdown-menu,
+.td-multi-select-dropdown.dropdown ul.dropdown-menu{
+  width: auto !important;
+  min-width: max-content !important;
+  right: 0;
+}
+
+.dropdown-menu {
+  width: 200px;
+  max-height: 250px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.dropdown-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dropdown-list {
+  overflow-y: auto;
+  max-height: 200px;
+  padding: 0.5rem;
+}
+
+.dropdown-footer {
+  padding: 0.5rem;
+  border-top: 1px solid #dee2e6;
+  background: white;
+  position: sticky;
+  bottom: 0;
+}
+
+.form-check-input:indeterminate{
+  background-color: var(--td-colour-primary);
+  border-color: var(--td-colour-primary);
+}
+
+.form-check-input:checked{
+  background-color: var(--td-colour-primary);
+  border-color: var(--td-colour-primary);
+}
+
+.td-multi-select-dropdown.dropdown ul.dropdown-menu li .dropdown-item,
+.td-single-select-dropdown.dropdown ul.dropdown-menu li .dropdown-item {
+    margin: unset !important;
+    padding: unset !important;
+    line-height: unset !important;
+    white-space: unset !important;
+    min-height: unset !important
+}
+
+.form-check-input:indeterminate:hover {
+  background-color: var(--td-colour-primary);
+  border-color: var(--td-colour-primary);
+}

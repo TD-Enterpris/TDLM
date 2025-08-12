@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "TDLM": {
+    "tdlm": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -21,15 +21,23 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/td-spacers.css",
+              "src/assets/css/custom.css",
+              "src/assets/css/td-standards.css",
+              "src/assets/css/td-borders.css",
+              "src/assets/css/td-colour-palette.css",
+              "src/assets/css/td-standards-utilities.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/bootstrap.bundle.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/td-standards.bundle.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -59,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "TDLM:build:production"
+              "buildTarget": "tdlm:build:production"
             },
             "development": {
-              "buildTarget": "TDLM:build:development"
+              "buildTarget": "tdlm:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,18 +87,29 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/td-spacers.css",
+              "src/assets/css/custom.css",
+              "src/assets/css/td-standards.css",
+              "src/assets/css/td-borders.css",
+              "src/assets/css/td-colour-palette.css",
+              "src/assets/css/td-standards-utilities.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/bootstrap.bundle.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/td-standards.bundle.js"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

@@ -1,0 +1,188 @@
+{
+  "message": "Policy list updated successfully",
+  "status": "success",
+  "data": {
+    "content": [
+      {
+        "id": 1,
+        "jurisdiction": "USA",
+        "businessArea": "Finance",
+        "inventoryType": "Digital Records",
+        "entityType": "Customer PII",
+        "description": "Standard customer financial data retention policy.",
+        "retentionPeriod": "7 years",
+        "effectiveDate": "2023-01-01",
+        "policyParameter": "SOX-COMPLIANT",
+        "status": "Approved"
+      },
+      {
+        "id": 2,
+        "jurisdiction": "EU",
+        "businessArea": "HR",
+        "inventoryType": "Employee Files",
+        "entityType": "Employee PII",
+        "description": "GDPR compliant employee data handling.",
+        "retentionPeriod": "5 years post-employment",
+        "effectiveDate": "2022-08-15",
+        "policyParameter": "GDPR-ART-5",
+        "status": "Approved"
+      },
+      {
+        "id": 3,
+        "jurisdiction": "Canada",
+        "businessArea": "Marketing",
+        "inventoryType": "Campaign Data",
+        "entityType": "Customer Non-PII",
+        "description": "Policy for marketing campaign analytics.",
+        "retentionPeriod": "2 years",
+        "effectiveDate": "2024-02-20",
+        "policyParameter": "CASL-COMPLIANT",
+        "status": "Pending"
+      },
+      {
+        "id": 4,
+        "jurisdiction": "USA",
+        "businessArea": "IT",
+        "inventoryType": "System Logs",
+        "entityType": "Machine Data",
+        "description": "Server access and error log retention.",
+        "retentionPeriod": "90 days",
+        "effectiveDate": "2023-11-10",
+        "policyParameter": "SECURITY-AUDIT",
+        "status": "Approved"
+      },
+      {
+        "id": 5,
+        "jurisdiction": "UK",
+        "businessArea": "Legal",
+        "inventoryType": "Contracts",
+        "entityType": "Legal Documents",
+        "description": "Retention policy for signed client contracts.",
+        "retentionPeriod": "10 years post-termination",
+        "effectiveDate": "2021-05-01",
+        "policyParameter": "LEGAL-HOLD-CAPABLE",
+        "status": "Expired"
+      },
+      {
+        "id": 6,
+        "jurisdiction": "Germany",
+        "businessArea": "Finance",
+        "inventoryType": "Invoices",
+        "entityType": "Transactional Data",
+        "description": "Policy for retaining customer invoices.",
+        "retentionPeriod": "10 years",
+        "effectiveDate": "2020-01-01",
+        "policyParameter": "BDSG-COMPLIANT",
+        "status": "Approved"
+      },
+      {
+        "id": 7,
+        "jurisdiction": "USA",
+        "businessArea": "HR",
+        "inventoryType": "Recruitment Data",
+        "entityType": "Candidate PII",
+        "description": "Policy for applicant data before hiring.",
+        "retentionPeriod": "1 year",
+        "effectiveDate": "2023-06-01",
+        "policyParameter": "EEO-REPORTING",
+        "status": "Approved"
+      },
+      {
+        "id": 8,
+        "jurisdiction": "Australia",
+        "businessArea": "Sales",
+        "inventoryType": "Customer Relationship Data",
+        "entityType": "Customer PII",
+        "description": "Policy for CRM data.",
+        "retentionPeriod": "3 years",
+        "effectiveDate": "2023-04-12",
+        "policyParameter": "APP-COMPLIANT",
+        "status": "Pending"
+      },
+      {
+        "id": 9,
+        "jurisdiction": "Japan",
+        "businessArea": "IT",
+        "inventoryType": "Source Code",
+        "entityType": "Intellectual Property",
+        "description": "Retention policy for software source code.",
+        "retentionPeriod": "15 years",
+        "effectiveDate": "2022-01-10",
+        "policyParameter": "IP-PROTECTION",
+        "status": "Approved"
+      },
+      {
+        "id": 10,
+        "jurisdiction": "USA",
+        "businessArea": "Finance",
+        "inventoryType": "Tax Records",
+        "entityType": "Financial Data",
+        "description": "Policy for corporate tax filings.",
+        "retentionPeriod": "7 years",
+        "effectiveDate": "2023-03-15",
+        "policyParameter": "IRS-COMPLIANT",
+        "status": "Approved"
+      },
+      {
+        "id": 11,
+        "jurisdiction": "EU",
+        "businessArea": "Marketing",
+        "inventoryType": "Web Analytics",
+        "entityType": "User Behavior Data",
+        "description": "Cookie and user tracking data policy.",
+        "retentionPeriod": "26 months",
+        "effectiveDate": "2023-09-01",
+        "policyParameter": "ECOOKIE-DIRECTIVE",
+        "status": "Approved"
+      },
+      {
+        "id": 12,
+        "jurisdiction": "Canada",
+        "businessArea": "Legal",
+        "inventoryType": "Litigation Records",
+        "entityType": "Legal Documents",
+        "description": "Records related to ongoing litigation.",
+        "retentionPeriod": "Until case closed + 7 years",
+        "effectiveDate": "2020-11-05",
+        "policyParameter": "LEGAL-HOLD",
+        "status": "Pending"
+      },
+      {
+        "id": 13,
+        "jurisdiction": "Test",
+        "businessArea": "Test",
+        "inventoryType": "Test",
+        "entityType": "Test",
+        "description": "Test",
+        "retentionPeriod": "Test",
+        "effectiveDate": "2025-12-12",
+        "policyParameter": "Test",
+        "status": "Pending"
+      },
+      {
+        "id": 14,
+        "jurisdiction": "Test1",
+        "businessArea": "Test1",
+        "inventoryType": "Test1",
+        "entityType": "Test1",
+        "description": "Test1",
+        "retentionPeriod": "Test1",
+        "effectiveDate": "2025-07-20",
+        "policyParameter": "Test1",
+        "status": "Pending"
+      },
+      {
+        "id": 15,
+        "jurisdiction": "Test2",
+        "businessArea": "Test2",
+        "inventoryType": "Test2",
+        "entityType": "Test2",
+        "description": "Test2",
+        "retentionPeriod": "Test2",
+        "effectiveDate": "2025-07-20",
+        "policyParameter": "Test2",
+        "status": "Pending"
+      }
+    ]
+  }
+}

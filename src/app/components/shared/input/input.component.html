@@ -1,0 +1,27 @@
+<div class="td-form-input position-relative"   [ngClass]="inputClass">
+<label *ngIf="!disabled" [for]="id" class="visually-hidden">{{ label }}</label>
+<input
+  [id]="id"
+  [type]="type"
+  class="form-control"
+  [ngClass]="inputClass"
+  [attr.placeholder]="placeholder"
+  [attr.maxLength]="maxLength"
+  [inputMode]="inputMode"
+  [attr.readonly]="readonly ? true : null"
+  [disabled]="disabled"
+  [value]="model"
+  (input)="onInputChange($event)"
+  (blur)="onBlur()"
+  (keypress)="onKeyPress($event)"
+/>
+
+<span *ngIf="!disabled" class="form-label" aria-hidden="true">{{ label }}</span>
+
+</div>
+<div class="td-error" *ngIf="error">
+  <div role="alert">
+    <span class="td-error-symbol" aria-hidden="true"></span>
+    <span class="visually-hidden">Error:</span>{{ error }}
+  </div>
+</div>

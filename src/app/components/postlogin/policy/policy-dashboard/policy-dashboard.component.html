@@ -1,0 +1,202 @@
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center"
+  style="height: 75vh"
+>
+  <app-spinner
+    heading="Loading..."
+    message="Fetching policy data"
+    [isVisible]="true"
+  ></app-spinner>
+</div>
+
+<div *ngIf="!isLoading">
+  <div class="container-fluid mt-20 mb-20">
+    <app-temporal-message
+      *ngIf="message"
+      [message]="message"
+      [type]="messageType"
+      [duration]="messageType === 'success' ? 5000 : null"
+    >
+    </app-temporal-message>
+
+    <div class="search-add-container">
+      <div class="row justify-content-between align-items-center mt-20 mb-20">
+        <div class="col-auto">
+          <h1 class="h1 mb-0">
+            {{ isAdding ? "Add Policy" : "Policy Search" }}
+          </h1>
+        </div>
+        <div class="col-auto">
+          <button
+            (click)="toggleSearchCollapse()"
+            class="btn btn-sm td-btn-tertiary"
+            aria-label="Toggle search and add form"
+          >
+            <span
+              class="td-icon-18x18"
+              [ngClass]="
+                isSearchCollapsed
+                  ? 'td-icon-18x18-chevron-down'
+                  : 'td-icon-18x18-chevron-up'
+              "
+            ></span>
+          </button>
+        </div>
+      </div>
+      <div #collapsibleContent class="collapsible-content">
+        <div #section1 *ngIf="!isAdding">
+          <div class="row mt-20 mb-10">
+            <div class="col-12">
+              <div class="row g-3">
+                <ng-container *ngFor="let filter of dynamicFilters">
+                  <div class="col-12 col-lg-4 col-md-6">
+                    <app-select-dropdown
+                      [id]="filter.key + '-filter'"
+                      [label]="filter.label"
+                      [placeholder]="'Select ' + filter.label"
+                      [options]="filter.options"
+                      [(selectedValue)]="filter.selectedValue"
+                    >
+                    </app-select-dropdown>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="row mt-20 mb-10 justify-content-end">
+                <ng-container *ngIf="areFiltersActive">
+                  <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                    <div class="ps-20">
+                      <app-button
+                        buttonLabel="Clear"
+                        (buttonClick)="onReset()"
+                        buttonClass="btn td-btn-secondary-clear w-100"
+                      >
+                      </app-button>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                  <div class="pe-20">
+                    <app-button
+                      buttonLabel="Search"
+                      (buttonClick)="onSearchButtonClick()"
+                      buttonClass="btn td-btn-primary-light w-100"
+                      [disabled]="!areFiltersActive"
+                    >
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div #addSection *ngIf="isAdding">
+          <div class="row mt-20 mb-10">
+            <div class="col-12">
+              <div class="row g-3">
+                <ng-container *ngFor="let field of addFormFields">
+                  <div class="col-12 col-lg-4 col-md-6">
+                    <ng-container [ngSwitch]="field.type">
+                      <ng-container *ngSwitchCase="'date'">
+                        <!-- <app-date
+                          [id]="'add-' + field.key"
+                          [label]="field.label"
+                          [placeholder]="'Enter ' + field.label"
+                          [(model)]="newPolicy[field.key]"
+                          [error]="formErrors[field.key]"
+                          [inputClass]="formErrors[field.key] ? 'is-invalid' : ''"
+                        >
+                        </app-date> -->
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <app-input
+                          [id]="'add-' + field.key"
+                          [label]="field.label"
+                          [placeholder]="'Enter ' + field.label"
+                          type="text"
+                          [(model)]="newPolicy[field.key]"
+                          [error]="formErrors[field.key]"
+                          [inputClass]="
+                            formErrors[field.key] ? 'is-invalid' : ''
+                          "
+                        >
+                        </app-input>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="row mt-20 mb-10 justify-content-end">
+                <ng-container *ngIf="isNewPolicyDirty">
+                  <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                    <div class="ps-20">
+                      <app-button
+                        buttonLabel="Clear"
+                        (buttonClick)="onClearAddForm()"
+                        buttonClass="btn td-btn-secondary-clear w-100"
+                      >
+                      </app-button>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                  <div class="pe-20">
+                    <app-button
+                      buttonLabel="Save"
+                      (buttonClick)="onSaveAdd()"
+                      buttonClass="btn td-btn-primary-light w-100"
+                      [disabled]="!isNewPolicyDirty"
+                    >
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr #section2 class="td-thin-divider-line-1" />
+
+    <div #section3>
+      <div class="row mt-10 mb-20">
+        <div class="col-12">
+          <app-complex-table
+            title="Policy Results"
+            titleLevel="h2"
+            titleClass="h2"
+            [data]="pagedPolicyData"
+            [columnConfig]="columnConfig"
+            [defaultSelectedColumns]="defaultVisibleColumns"
+            [idProperty]="idProperty"
+            [pageSize]="pageSize"
+            [currentPageNumber]="currentPageNumber"
+            [enableCheckbox]="false"
+            [sortState]="sortState"
+            (sortChanged)="onSortChanged($event)"
+            (reloadRequested)="onSearch()"
+            [serverSidePagination]="true"
+            [showAddButton]="true"
+            [isAddingMode]="isAdding"
+            (addClicked)="onAddPolicy()"
+            (searchClicked)="onCancelAdd()"
+            [editableRowIds]="editableRowIds"
+            [editableColumns]="a_policy_columns"
+            (actionTriggered)="onActionTriggered($event)"
+            (editCancelled)="handleCancel($event.row)"
+          >
+          </app-complex-table>
+          <app-pagination
+            [totalRecords]="totalRecords"
+            [pageSize]="pageSize"
+            [currentPageNumber]="currentPageNumber"
+            (pageChange)="onPageChange($event)"
+            (pageSizeChange)="onPageSizeChange($event)"
+          >
+          </app-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

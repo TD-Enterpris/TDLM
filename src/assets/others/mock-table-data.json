@@ -1,0 +1,48 @@
+{
+  "tableData": [
+    {
+      "heading": "Search results by Application Number",
+      "data": [
+        {
+          "accountNumber": "987654321",
+          "applicationNumber": "123456789",
+          "applicationDate": "2022-01-01",
+          "source": "Online",
+          "productPackage": "Package A",
+          "expandedData": [
+            {
+              "ssn": "XXX-XX-9573",
+              "name": "John Doe",
+              "ownership": "Primary",
+              "entityType": "SSN",
+              "demographic": "URL to demographic",
+              "emailCommunication": "URL to email communication"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Search results by Account Number",
+      "data": [
+        {
+          "accountNumber": "987654321",
+          "applicationNumber": "B456",
+          "applicationDate": "2022-02-01",
+          "source": "Branch",
+          "productPackage": "Package B",
+          "expandedData": [
+            {
+              "ssn": "XXX-XX-1234",
+              "name": "Alice Smith",
+              "ownership": "Primary",
+              "entityType": "SSN",
+              "demographic": "URL to demographic",
+              "emailCommunication": "URL to email communication"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

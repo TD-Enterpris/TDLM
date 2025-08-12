@@ -1,0 +1,79 @@
+{
+  "jurisdictions": [
+    "Australia",
+    "Canada",
+    "EU",
+    "Germany",
+    "Japan",
+    "Test",
+    "Test1",
+    "Test2",
+    "UK",
+    "USA"
+  ],
+  "businessAreas": [
+    "Finance",
+    "HR",
+    "IT",
+    "Legal",
+    "Marketing",
+    "Sales",
+    "Test",
+    "Test1",
+    "Test2"
+  ],
+  "inventoryTypes": [
+    "Campaign Data",
+    "Contracts",
+    "Customer Relationship Data",
+    "Digital Records",
+    "Employee Files",
+    "Invoices",
+    "Litigation Records",
+    "Recruitment Data",
+    "Source Code",
+    "System Logs",
+    "Tax Records",
+    "Test",
+    "Test1",
+    "Test2",
+    "Web Analytics"
+  ],
+  "entityTypes": [
+    "Candidate PII",
+    "Customer Non-PII",
+    "Customer PII",
+    "Employee PII",
+    "Financial Data",
+    "Intellectual Property",
+    "Legal Documents",
+    "Machine Data",
+    "Test",
+    "Test1",
+    "Test2",
+    "Transactional Data",
+    "User Behavior Data"
+  ],
+  "approvalStatuses": [
+    "Approved",
+    "Pending",
+    "Expired"
+  ],
+  "policyTypes": [
+    "APP-COMPLIANT",
+    "BDSG-COMPLIANT",
+    "CASL-COMPLIANT",
+    "ECOOKIE-DIRECTIVE",
+    "EEO-REPORTING",
+    "GDPR-ART-5",
+    "IP-PROTECTION",
+    "IRS-COMPLIANT",
+    "LEGAL-HOLD",
+    "LEGAL-HOLD-CAPABLE",
+    "SECURITY-AUDIT",
+    "SOX-COMPLIANT",
+    "Test",
+    "Test1",
+    "Test2"
+  ]
+}

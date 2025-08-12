@@ -1,0 +1,24 @@
+.content-to-animate {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/*
+  Using ::ng-deep is necessary here to apply styles from the
+  policy-dashboard component down to the encapsulated chip component.
+*/
+
+:host ::ng-deep .td-chips.status-approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+:host ::ng-deep .td-chips.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+:host ::ng-deep .td-chips.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}

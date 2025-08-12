@@ -1,0 +1,5 @@
+<button [ngClass]="buttonClass" (click)="onClick()" [disabled]="disabled" [attr.aria-label]="ariaLabel || buttonLabel"
+  [attr.title]="title || null" type="button">
+  <span *ngIf="showIcon" [ngClass]="iconClass" aria-hidden="true"></span>
+  <span>{{ buttonLabel }}</span>
+</button>

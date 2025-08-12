@@ -1,0 +1,13 @@
+<div #popoverContentTemplate
+     id="myCustomPopoverContent"
+     style="display: none;">
+  <div class="my-popover-body-content-wrapper">
+    <a *ngIf="showCloseButton"
+       class="td-icon-button td-icon-button-delete td-icon-button-delete-XS"
+       role="button"
+       aria-label="Close">
+      <i class="fas fa-times"></i>
+    </a>
+    <ng-content></ng-content>
+  </div>
+</div>
