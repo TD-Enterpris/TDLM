@@ -41,7 +41,7 @@
 }
 
 .table.td-table-complex {
-  --td-table-complex-fixed-col-width: 150px;
+  table-layout: auto;
 }
 
 .table.td-table-complex tr {
@@ -162,7 +162,6 @@
   box-shadow: 3px -2px 8px 4px rgba(var(--td-colour-neutral-10-always-rgb), .18);
 }
 
-/* UPDATED: Removed fixed width, min-width, and max-width */
 .table.td-table-complex.td-table-complex-fixed-col {
   position: sticky;
   z-index: 1;
@@ -174,7 +173,6 @@
   z-index: 2;
 }
 
-/* UPDATED: Removed the 'left' property that depended on the fixed width */
 .table.td-table-complex.td-table-complex-fixed-col-on .td-table-complex-fixed-col {
   /* The 'left' property was removed */
 }
@@ -340,12 +338,10 @@
   border-right: 1px solid transparent;
 }
 
-/* This is the key rule that allows content to define column width */
 .table th,
 .table td {
-  white-space: nowrap; /* Keeps content on one line */
-  width: auto;         /* Allows column to expand to content width */
-  max-width: none;     /* Removes any maximum width constraint */
+  white-space: nowrap;
+  width: 1%;
 }
 
 .td-multi-select-dropdown.dropdown div.dropdown-menu,
@@ -404,4 +400,10 @@
 .form-check-input:indeterminate:hover {
   background-color: var(--td-colour-primary);
   border-color: var(--td-colour-primary);
+}
+
+:host ::ng-deep .table td app-input-legacy input,
+:host ::ng-deep .table td app-dropdown-legacy select {
+    width: 100%;
+    min-width: 150px;
 }

@@ -3,11 +3,6 @@
   opacity: 0;
 }
 
-/*
-  Using ::ng-deep is necessary here to apply styles from the
-  policy-dashboard component down to the encapsulated chip component.
-*/
-
 :host ::ng-deep .td-chips.status-approved {
   background-color: #d4edda;
   color: #155724;

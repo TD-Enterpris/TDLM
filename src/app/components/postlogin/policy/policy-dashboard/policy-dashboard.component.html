@@ -24,7 +24,7 @@
       <div class="row justify-content-between align-items-center mt-20 mb-20">
         <div class="col-auto">
           <h1 class="h1 mb-0">
-            {{ isAdding ? "Add Policy" : "Policy Search" }}
+            {{ isAdding ? 'Add Policy' : 'Policy Search' }}
           </h1>
         </div>
         <div class="col-auto">
@@ -93,39 +93,121 @@
         <div #addSection *ngIf="isAdding">
           <div class="row mt-20 mb-10">
             <div class="col-12">
-              <div class="row g-3">
-                <ng-container *ngFor="let field of addFormFields">
-                  <div class="col-12 col-lg-4 col-md-6">
-                    <ng-container [ngSwitch]="field.type">
-                      <ng-container *ngSwitchCase="'date'">
-                        <!-- <app-date
-                          [id]="'add-' + field.key"
-                          [label]="field.label"
-                          [placeholder]="'Enter ' + field.label"
-                          [(model)]="newPolicy[field.key]"
-                          [error]="formErrors[field.key]"
-                          [inputClass]="formErrors[field.key] ? 'is-invalid' : ''"
-                        >
-                        </app-date> -->
-                      </ng-container>
-                      <ng-container *ngSwitchDefault>
-                        <app-input
-                          [id]="'add-' + field.key"
-                          [label]="field.label"
-                          [placeholder]="'Enter ' + field.label"
-                          type="text"
-                          [(model)]="newPolicy[field.key]"
-                          [error]="formErrors[field.key]"
-                          [inputClass]="
-                            formErrors[field.key] ? 'is-invalid' : ''
-                          "
-                        >
-                        </app-input>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </ng-container>
+              <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-jurisdiction"
+                    label="Jurisdiction"
+                    placeholder="Select Jurisdiction"
+                    [options]="getOptionsForField('jurisdiction')"
+                    [(selectedValue)]="newPolicy['jurisdiction']"
+                  ></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-businessArea"
+                    label="Business Area"
+                    placeholder="Select Business Area"
+                    [options]="getOptionsForField('businessArea')"
+                    [(selectedValue)]="newPolicy['businessArea']"
+                  ></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-inventoryType"
+                    label="Inventory Type"
+                    placeholder="Select Inventory Type"
+                    [options]="getOptionsForField('inventoryType')"
+                    [(selectedValue)]="newPolicy['inventoryType']"
+                  ></app-select-dropdown>
+                </div>
               </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-entityType"
+                    label="Entity Type"
+                    placeholder="Select Entity Type"
+                    [options]="getOptionsForField('entityType')"
+                    [(selectedValue)]="newPolicy['entityType']"
+                  ></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-status"
+                    label="Status"
+                    placeholder="Select Status"
+                    [options]="getOptionsForField('status')"
+                    [(selectedValue)]="newPolicy['status']"
+                  ></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-select-dropdown
+                    id="add-policyParameter"
+                    label="Policy Parameter"
+                    placeholder="Select Policy Parameter"
+                    [options]="getOptionsForField('policyParameter')"
+                    [(selectedValue)]="newPolicy['policyParameter']"
+                  ></app-select-dropdown>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-input
+                    id="add-description"
+                    label="Description"
+                    placeholder="Enter Description"
+                    type="text"
+                    [(model)]="newPolicy['description']"
+                    [error]="formErrors['description']"
+                  ></app-input>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-date
+                    [mode]="'single'"
+                    label="Effective Date"
+                    placeholder="Enter Effective Date"
+                    [initialValues]="{ date: newPolicy['effectiveDate'] }"
+                    (valueChanges)="onDateChange('effectiveDate', $event)"
+                    [error]="formErrors['effectiveDate']"
+                  ></app-date>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-date
+                    [mode]="'single'"
+                    label="Expiration Date"
+                    placeholder="Enter Expiration Date"
+                    [initialValues]="{ date: newPolicy['expirationDate'] }"
+                    (valueChanges)="onDateChange('expirationDate', $event)"
+                    [error]="formErrors['expirationDate']"
+                  ></app-date>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6">
+                  <app-input
+                    id="add-retentionPeriod"
+                    label="Retention Period"
+                    placeholder="Enter Retention Period"
+                    type="text"
+                    [(model)]="newPolicy['retentionPeriod']"
+                    [error]="formErrors['retentionPeriod']"
+                  ></app-input>
+                </div>
+                <div class="col-12 col-md-6">
+                  <app-select-dropdown
+                    id="add-mediaStorageType"
+                    label="Media Storage Type"
+                    placeholder="Select Media Storage Type"
+                    [options]="mediaStorageTypeOptions"
+                    [(selectedValue)]="newPolicy['mediaStorageType']"
+                  ></app-select-dropdown>
+                </div>
+              </div>
+
               <div class="row mt-20 mb-10 justify-content-end">
                 <ng-container *ngIf="isNewPolicyDirty">
                   <div class="col-6 col-sm-6 col-md-3 col-lg-2">
@@ -185,6 +267,9 @@
             [editableColumns]="a_policy_columns"
             (actionTriggered)="onActionTriggered($event)"
             (editCancelled)="handleCancel($event.row)"
+            [showExpandCollapse]="false" [expandedRowTemplate]="expandedDetail"
+            [showFilterColumns]="false"
+            [rowClickable]="false"
           >
           </app-complex-table>
           <app-pagination
@@ -200,3 +285,19 @@
     </div>
   </div>
 </div>
+
+<ng-template #expandedDetail let-row>
+  <div class="expanded-content">
+    <h5 class="h5">Additional Policy Details</h5>
+    <p>
+      This is the expanded section for the policy in
+      <strong>{{ row.jurisdiction }}</strong
+      >. More details will be displayed here in the future.
+    </p>
+    <ul>
+      <li><strong>Policy ID:</strong> {{ row.id }}</li>
+      <li><strong>Current Status:</strong> {{ row.status }}</li>
+      <li><strong>Full Description:</strong> {{ row.description }}</li>
+    </ul>
+  </div>
+</ng-template>

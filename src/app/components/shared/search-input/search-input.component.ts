@@ -17,8 +17,8 @@ export class SearchInputComponent {
   @Input() customClass: string | string[] = '';
   @Input() title: string = '';
 
-  @Input() modelValue: string = ''; // Changed from value ➡️ modelValue
-  @Output() modelValueChange = new EventEmitter<string>(); // Changed from valueChange ➡️ modelValueChange
+  @Input() modelValue: string = '';
+  @Output() modelValueChange = new EventEmitter<string>();
   @Output() search = new EventEmitter<void>();
   @Output() clear = new EventEmitter<void>();
 
@@ -34,7 +34,7 @@ export class SearchInputComponent {
     const input = event?.target as HTMLInputElement;
     if (input?.value !== undefined) {
       this.modelValue = input.value;
-      this.modelValueChange.emit(this.modelValue); // Emit modelValueChange
+      this.modelValueChange.emit(this.modelValue);
     }
   }
 

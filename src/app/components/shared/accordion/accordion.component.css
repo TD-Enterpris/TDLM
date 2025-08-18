@@ -1,0 +1,4 @@
+:host ::ng-deep .accordion-collapse {
+  overflow: hidden;
+  visibility: visible !important;
+}

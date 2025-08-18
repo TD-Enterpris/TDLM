@@ -2,22 +2,19 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  min-height: 100px; /* Adjust this based on your input + error line height */
+  min-height: 100px;
 }
 
-/* Error text styling */
 .td-error {
   margin-top: 4px;
   font-size: 0.875rem;
-  min-height: 20px; /* Reserves space */
+  min-height: 20px;
 }
 
-/* Hide visually but keep height */
 .td-error.invisible {
   visibility: hidden;
 }
 
-/* Apply styles only when the input is disabled */
 input:disabled {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -25,15 +22,13 @@ input:disabled {
   width: 100%;
 }
 
-/* Optional: Ensure the parent container does not restrict overflow */
 .td-form-input {
   width: 100%;
   overflow: hidden;
 }
 
-/* Optional: Add a tooltip (title) to display the full text on hover */
 input[disabled] {
-  cursor: not-allowed; /* Makes the input look disabled */
+  cursor: not-allowed;
 }
 
 input[disabled]:hover {

@@ -1,21 +1,22 @@
 <app-popover #textPopover>{{ fullTextForPopover }}</app-popover>
-
-<div class="row justify-content-between align-items-center mt-20 mb-20">
-
+<div class="row justify-content-between align-items-center mt-20 mb-20"
+  *ngIf="title || showFilterColumns || showDropdownFilter || isScrollVisible || showAddButton || showReloadButton || showBackButton">
   <div class="col-auto">
-    <ng-container *ngIf="title" [ngSwitch]="titleLevel">
-      <h1 *ngSwitchCase="'h1'" [ngClass]="titleClass" class="mb-0">{{ title }}</h1>
-      <h2 *ngSwitchCase="'h2'" [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
-      <h3 *ngSwitchCase="'h3'" [ngClass]="titleClass" class="mb-0">{{ title }}</h3>
-      <h2 *ngSwitchDefault [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
-    </ng-container>
+    <div class="d-flex align-items-center">
+      <button *ngIf="showBackButton" class="btn td-btn-icon me-2" (click)="onBackClick()" aria-label="Go back">
+        <span class="td-icon-24x24-arrow-left"></span>
+      </button>
+      <ng-container *ngIf="title" [ngSwitch]="titleLevel">
+        <h1 *ngSwitchCase="'h1'" [ngClass]="titleClass" class="mb-0">{{ title }}</h1>
+        <h2 *ngSwitchCase="'h2'" [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
+        <h3 *ngSwitchCase="'h3'" [ngClass]="titleClass" class="mb-0">{{ title }}</h3>
+        <h2 *ngSwitchDefault [ngClass]="titleClass" class="mb-0">{{ title }}</h2>
+      </ng-container>
+    </div>
   </div>
-
   <div class="col-auto d-flex align-items-center gap-3">
-
     <div class="td-table-complex-pagination td-table-complex-fixed-col-on mb-0 d-flex align-items-center" role="region"
       aria-label="Table controls">
-
       <div #dropdownContainer *ngIf="showFilterColumns" class="td-multi-select-dropdown dropdown">
         <button #dropdownMenuToggle class="btn td-btn-tertiary btn-sm" type="button" (click)="toggleDropdown(0, $event)"
           aria-haspopup="true" [attr.aria-expanded]="openDropdownIndex !== null">
@@ -51,14 +52,12 @@
           </div>
         </div>
       </div>
-
       <div *ngIf="showDropdownFilter" class="ms-3">
         <app-select-dropdown id="static-filter-select" [label]="'Filter by Type'" [placeholder]="'Select type'"
           [options]="dropdownOptions" [selectedValue]="selectedDropdownValue"
           (selectedValueChange)="dropdownValueChange.emit($event)" [disabled]="false" [customClass]="'custom-class'">
         </app-select-dropdown>
       </div>
-
       <div *ngIf="isScrollVisible" class="d-inline-flex align-items-center ms-3">
         <button type="button" class="td-table-complex-pagination-btn-left" (click)="scrollPrevColumn()"
           (mousedown)="startScrollHold('left')" (mouseup)="stopScrollHold()" (mouseleave)="stopScrollHold()"
@@ -70,7 +69,6 @@
           aria-label="Scroll table right"></button>
       </div>
     </div>
-
     <div class="d-flex align-items-center gap-2">
       <button *ngIf="showAddButton" class="btn btn-sm td-btn-primary-light"
         (click)="isAddingMode ? onSearchClicked() : onAddClicked()"
@@ -82,16 +80,13 @@
         }"></span>
         {{ isAddingMode ? 'Search' : 'Add' }}
       </button>
-      <button class="btn td-btn-tertiary btn-sm" aria-label="Reload Data" (click)="reload()" (keydown.enter)="reload()"
+      <button *ngIf="showReloadButton" class="btn td-btn-tertiary btn-sm" aria-label="Reload Data" (click)="reload()" (keydown.enter)="reload()"
         (keydown.space)="reload()">
         <span class="td-icon-18x18 td-icon-colour-primary td-icon-18x18-reload"></span>
       </button>
     </div>
-
   </div>
 </div>
-
-
 <div class="row">
   <div class="col-12">
     <div class="table-responsive" #tableContainer>
@@ -102,15 +97,14 @@
           <tr>
             <th *ngIf="enableCheckbox || showExpandCollapse" class="sticky sticky-checkbox">
               <div class="d-flex align-items-center justify-content-center gap-1">
-                <div *ngIf="enableCheckbox" class="form-check p-0">
+                <div class="form-check p-0">
                   <input #selectAllCheckbox type="checkbox" class="form-check-input" aria-label="Select all rows"
                     [checked]="allRowsSelected()" [indeterminate]="someRowsSelected()"
                     (change)="toggleSelectAllRows($event)" />
                 </div>
               </div>
             </th>
-
-            <th scope="col" class="text-start" *ngFor="let col of visibleColumns; let i = index; trackBy: trackByColumn"
+            <th #headerCell scope="col" class="text-start" *ngFor="let col of visibleColumns; let i = index; trackBy: trackByColumn"
               [attr.id]="i === 0 && !enableCheckbox ? 'firstColumnCell' : null" [attr.aria-sort]="
     col !== 'Action' && sortState.column === col
       ? sortState.direction === 'asc'
@@ -118,18 +112,13 @@
         : 'descending'
       : 'none'
   ">
-
               <div class="d-flex align-items-center justify-content-between w-100 flex-column"
                 [ngClass]="{'mt-10': (columnConfig[col].currentFilterValues || []).length}">
-
                 <div class="d-flex align-items-center justify-content-between w-100">
-                  <ng-container *ngIf="col.trim().toLowerCase() !== 'actions'; else nonSortableColumn">
-
+                  <ng-container *ngIf="isSortable && col.trim().toLowerCase() !== 'actions'; else nonSortableColumn">
                     <button class="td-table-complex-sort text-start" (click)="onSort(col)"
                       [attr.aria-label]="'Sort by ' + getFormattedHeader(col)">
-
                       {{ getFormattedHeader(col) }}
-
                       <span class="td-icon" [ngClass]="{
       'td-icon-sort': true,
       'td-icon-sort-asc': sortState.column === col && sortState.direction === 'asc',
@@ -137,11 +126,9 @@
     }"></span>
                     </button>
                   </ng-container>
-
                   <ng-template #nonSortableColumn>
                     <span class="pe-2">{{ getFormattedHeader(col) }}</span>
                   </ng-template>
-
                   <div class="td-multi-select-dropdown dropdown" *ngIf="columnConfig[col]?.filterable">
                     <button class="td-chips td-chips-icon" [class.show]="openColumnDataFilterDropdownCol === col"
                       id="dropdownMenuMultiSelect-{{ col }}"
@@ -149,18 +136,15 @@
                       (click)="toggleColumnDataFilterDropdown(col, $event)">
                       <span class="td-icon-18x18 td-icon-colour-primary td-icon-18x18-filter"></span>
                     </button>
-
                     <div class="dropdown-menu" #columnDataFilterDropdownMenu
                       [class.show]="openColumnDataFilterDropdownCol === col"
                       [attr.aria-labelledby]="'dropdownMenuMultiSelect-' + col" role="menu">
-
                       <div class="dropdown-content-wrapper">
                         <ul class="list-unstyled mb-0" role="group" aria-label="Filter options"
                           aria-multiselectable="true">
                           <li *ngIf="!(columnConfig[col].filterOptions?.length)">
                             <span class="dropdown-item disabled">No options available</span>
                           </li>
-
                           <li *ngFor="let option of columnConfig[col]?.filterOptions || []">
                             <div class="form-check dropdown-item">
                               <input type="checkbox" class="form-check-input"
@@ -173,7 +157,6 @@
                             </div>
                           </li>
                         </ul>
-
                         <div class="dropdown-footer d-flex justify-content-center border-top z-3"
                           *ngIf="(columnConfig[col]?.filterOptions?.length)">
                           <div class="row w-100 gap-2">
@@ -192,15 +175,11 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </th>
-
-
           </tr>
         </thead>
-
         <tbody>
           <ng-container *ngFor="
               let row of pagedData || [];
@@ -210,9 +189,9 @@
             <tr class="align-middle" [style.cursor]="rowClickable ? 'pointer' : 'default'"
               [attr.tabindex]="rowClickable ? 0 : null" [attr.role]="rowClickable ? 'button' : null"
               (click)="rowClickable && onRowClick(row)" (keydown)="onRowKeydown($event, row)">
-              <td *ngIf="enableCheckbox || showExpandCollapse" class="text-center sticky sticky-checkbox">
+              <td *ngIf="enableCheckbox" class="text-center sticky sticky-checkbox">
                 <div class="d-flex align-items-center justify-content-center gap-1">
-                  <div *ngIf="enableCheckbox" class="form-check p-0">
+                  <div class="form-check p-0">
                     <input type="checkbox" attr.aria-label="Select row {{ i + 1 }}" [checked]="isRowSelected(row)"
                       (click)="$event.stopPropagation()" (change)="toggleRowSelection(row)" />
                   </div>
@@ -232,9 +211,7 @@
                   </button>
                 </div>
               </td>
-
               <td *ngFor="let col of visibleColumns; trackBy: trackByColumn" class="text-start">
-
                 <ng-container
                   *ngIf="editableColumns.includes(col) && editableRowIds.has(row[idProperty]) && columnConfig[col]?.type !== 'button' && columnConfig[col]?.type !== 'buttons'; else normalCell">
                   <ng-container *ngIf="columnConfig[col] as config">
@@ -250,7 +227,28 @@
                           (mouseleave)="hidePopover()">
                         </app-dropdown-legacy>
                       </ng-container>
-
+                      <ng-container *ngSwitchCase="'date'">
+                        <app-date
+                          [mode]="'single'"
+                          [label]="''"
+                          [initialValues]="{ date: getCellValue(row[idProperty], col) }"
+                          (valueChanges)="onDateEditChange(row[idProperty], col, $event)"
+                          (click)="$event.stopPropagation()"
+                          [error]="getError(row[idProperty], col)">
+                        </app-date>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'textarea'">
+                        <textarea
+                          class="form-control"
+                          rows="3"
+                          [id]="col + '-' + row[idProperty]"
+                          [value]="getCellValue(row[idProperty], col)"
+                          (input)="updateCellValue(row[idProperty], col, $any($event.target).value)"
+                          (click)="$event.stopPropagation()"
+                          [ngClass]="getError(row[idProperty], col)"
+                          [placeholder]="'Enter ' + getFormattedHeader(col)">
+                        </textarea>
+                      </ng-container>
                       <ng-container *ngSwitchDefault>
                         <div class="position-relative">
                           <app-input-legacy #editableInput [id]="col + '-' + row[idProperty]" [label]="col"
@@ -267,7 +265,6 @@
                     </ng-container>
                   </ng-container>
                 </ng-container>
-
                 <ng-template #normalCell>
                   <ng-container *ngIf="columnConfig[col] as config">
                     <ng-container [ngSwitch]="config.type || 'text'">
@@ -294,8 +291,18 @@
                           <span *ngIf="config.showLabel !== false && config.label">{{ config.label }}</span>
                         </button>
                       </ng-container>
-
                       <ng-container *ngSwitchCase="'buttons'">
+                        <button *ngIf="showExpandCollapse" class="btn td-btn-tertiary btn-sm"
+                          (click)="toggleRow(i); $event.stopPropagation()"
+                          (keydown.enter)="toggleRow(i); $event.stopPropagation()"
+                          (keydown.space)="toggleRow(i); $event.stopPropagation()" title="Toggle row details">
+                          <ng-container *ngIf="useIcons; else textExpandCollapse">
+                            <span class="td-icon-18x18" [ngClass]="row.expanded ? 'td-icon-18x18-chevron-up' : 'td-icon-18x18-chevron-down'"></span>
+                          </ng-container>
+                          <ng-template #textExpandCollapse>
+                            <span>{{ toggleText }}</span>
+                          </ng-template>
+                        </button>
                         <ng-container *ngIf="resolveButtons(config, row, i) as resolvedButtons">
                           <ng-container *ngFor="
               let btn of resolvedButtons;
@@ -317,7 +324,6 @@
                           </ng-container>
                         </ng-container>
                       </ng-container>
-
                       <ng-container *ngSwitchCase="'select'">
                         <div class="td-truncate-text"
                           (mouseover)="showPopoverIfOverflow($event, getPrecomputedOptionLabel(col, row[col]))"
@@ -325,11 +331,14 @@
                           {{ getPrecomputedOptionLabel(col, row[col]) }}
                         </div>
                       </ng-container>
-
+                      <ng-container *ngSwitchCase="'date'">
+                        <div>
+                          {{ row[col] | date:'MM/dd/yyyy' }}
+                        </div>
+                      </ng-container>
                       <ng-container *ngSwitchCase="'chip'">
                         <app-chip [customClass]="config.classFn ? config.classFn(row) : ''">{{ row[col] }}</app-chip>
                       </ng-container>
-
                       <ng-container *ngSwitchDefault>
                         <div class="td-truncate-text" (mouseover)="showPopoverIfOverflow($event, row[col])"
                           (mouseleave)="hidePopover()">
@@ -338,7 +347,6 @@
                       </ng-container>
                     </ng-container>
                   </ng-container>
-
                   <ng-container *ngIf="!columnConfig[col]">
                     <div class="td-truncate-text" (mouseover)="showPopoverIfOverflow($event, row[col])"
                       (mouseleave)="hidePopover()">
@@ -346,10 +354,8 @@
                     </div>
                   </ng-container>
                 </ng-template>
-
               </td>
             </tr>
-
             <tr *ngIf="showExpandCollapse && row.visibleExpanded">
               <td [attr.colspan]="visibleColumns.length + (enableCheckbox || showExpandCollapse ? 1 : 0)">
                 <div #expandedRow class="expanded-wrapper" [style.display]="'block'">
@@ -358,7 +364,6 @@
               </td>
             </tr>
           </ng-container>
-
           <tr *ngIf="pagedData.length === 0">
             <td [attr.colspan]="visibleColumns.length + (enableCheckbox || showExpandCollapse ? 1 : 0)"
               class="text-center" role="alert">

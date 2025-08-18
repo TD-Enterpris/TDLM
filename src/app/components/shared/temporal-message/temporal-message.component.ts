@@ -30,11 +30,10 @@ export class TemporalMessageComponent implements AfterViewInit, OnChanges, OnDes
   constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
-    // This hook ensures the element from *ngIf is in the DOM
     if (this.el.nativeElement.firstElementChild) {
       gsap.fromTo(
         this.el.nativeElement.firstElementChild,
-        { y: 30, opacity: 0 }, // Start from below
+        { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
       );
     }
@@ -44,7 +43,7 @@ export class TemporalMessageComponent implements AfterViewInit, OnChanges, OnDes
     if (this.duration !== null && (changes['duration'] || changes['message'])) {
       clearTimeout(this.timeoutRef);
       this.timeoutRef = setTimeout(() => {
-        this.close(); // Call the renamed method
+        this.close(); 
       }, this.duration);
     }
   }
@@ -53,22 +52,19 @@ export class TemporalMessageComponent implements AfterViewInit, OnChanges, OnDes
     clearTimeout(this.timeoutRef);
   }
 
-  // Renamed this method from hideMessage to close
   close(): void {
     if (this.el.nativeElement.firstElementChild) {
       gsap.to(this.el.nativeElement.firstElementChild, {
         opacity: 0,
-        y: 30, // End below
+        y: 30, 
         duration: 0.3,
         ease: 'power2.in',
         onComplete: () => {
           this.isVisible = false;
-          // Tell Angular to check for changes
           this.cdr.markForCheck();
         },
       });
     } else {
-        // Fallback if animation target is already gone
         this.isVisible = false;
     }
   }

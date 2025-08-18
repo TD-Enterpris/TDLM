@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
 
-// This interface should be shared or defined in a common location
 export interface NewPolicy {
   [key: string]: string;
   jurisdiction: string;
@@ -40,7 +39,6 @@ export class PolicyDashboardService {
   }): Observable<any> {
     let httpParams = new HttpParams();
 
-    // Iterate over the params object and add them to HttpParams if they are not null/undefined/empty
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         httpParams = httpParams.set(key, value.toString());

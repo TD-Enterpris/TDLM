@@ -1,13 +1,66 @@
-<!-- <form [formGroup]="form">
-  <div class="row">
-    <div class="col-12">
-      <mplx-date-picker
-        [control]="single1"
-        (input)="onDateInput($event)"
-        [label]="Choose a date"
-        [placeholder]="mm/dd/yyyy"
-        [errorMessages]="{ 'required': 'Error text' }"
-      ></mplx-date-picker>
-    </div>
+<!-- <div *ngIf="form" [formGroup]="form">
+  <ng-container *ngIf="mode === 'single'">
+    <mplx-date-picker
+    [control]="'date'"
+    [label]="label"
+    [placeholder]="placeholder"
+    [errorMessage]="{required: 'This field is required', invalid: 'Invalid date format'}"
+    [attr.readonly]="readonly ? true : null"
+    [attr.disabled]="disabled ? true : null">
+    </mplx-date-picker>
+  </ng-container>
+    <ng-container *ngIf="mode === 'range'">
+    <mplx-date-picker
+    [datePickerType]="'range'"
+    [control]="'startDate'"
+    [endControl]="'endDate'"
+    [label]="label"
+    [placeholder]="placeholder"
+    [endDatePlaceholder]="endDatePlaceholder"
+    [errorMessage]="{'start-date-required': 'Start date is required', 'end-date-required': 'End date is required', 'invalid': 'Invalid date format'}"
+    [attr.readonly]="readonly ? true : null"
+    [attr.disabled]="disabled ? true : null">
+    </mplx-date-picker>
+  </ng-container>
+</div> -->
+
+<div *ngIf="form" [formGroup]="form">
+
+  <ng-container *ngIf="mode === 'single'">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ label }}</mat-label>
+      <input 
+        matInput 
+        [matDatepicker]="picker"
+        formControlName="date"
+        [placeholder]="placeholder"
+        [readonly]="readonly">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.get('date')?.hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="form.get('date')?.hasError('matDatepickerParse')">Invalid date format</mat-error>
+    </mat-form-field>
+  </ng-container>
+  
+  <ng-container *ngIf="mode === 'range'">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ label }}</mat-label>
+      <mat-date-range-input [formGroup]="form" [rangePicker]="rangePicker">
+        <input 
+          matStartDate 
+          formControlName="startDate" 
+          [placeholder]="placeholder"
+          [readonly]="readonly">
+        <input 
+          matEndDate 
+          formControlName="endDate" 
+          [placeholder]="endDatePlaceholder"
+          [readonly]="readonly">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+      <mat-error *ngIf="form.get('startDate')?.hasError('required')">Start date is required</mat-error>
+      <mat-error *ngIf="form.get('endDate')?.hasError('required')">End date is required</mat-error>
+    </mat-form-field>
+  </ng-container>
   </div>
-</form> -->

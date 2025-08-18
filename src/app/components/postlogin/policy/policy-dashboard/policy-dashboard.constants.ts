@@ -3,19 +3,25 @@ import {
   SortDirection,
 } from '../../../shared/complex-table/complex-table.component';
 
+export const MEDIA_STORAGE_TYPE_OPTIONS = [
+  { label: 'Cloud', value: 'Cloud' },
+  { label: 'Physical', value: 'Physical' },
+  { label: 'Hybrid', value: 'Hybrid' },
+];
+
 export const NEW_COLUMN_CONFIG: Record<string, ColumnConfig> = {
-  jurisdiction: { type: 'text', label: 'Jurisdiction' },
-  businessArea: { type: 'text', label: 'Business Area' },
-  inventoryType: { type: 'text', label: 'Inventory Type' },
-  entityType: { type: 'text', label: 'Entity Type' },
+  jurisdiction: { type: 'select', label: 'Jurisdiction' },
+  businessArea: { type: 'select', label: 'Business Area' },
+  inventoryType: { type: 'select', label: 'Inventory Type' },
+  entityType: { type: 'select', label: 'Entity Type' },
   description: { type: 'text', label: 'Description' },
   retentionPeriod: { type: 'text', label: 'Retention Period' },
-  effectiveDate: { type: 'text', label: 'Effective Date' },
-  mediaStorageType: { type: 'text', label: 'Media Storage Type' },
-  expirationDate: { type: 'text', label: 'Expiration Date' },
-  policyParameter: { type: 'text', label: 'Policy Parameter' },
+  effectiveDate: { type: 'date', label: 'Effective Date' },
+  mediaStorageType: { type: 'select', label: 'Media Storage Type' },
+  expirationDate: { type: 'date', label: 'Expiration Date' },
+  policyParameter: { type: 'select', label: 'Policy Parameter' },
   status: {
-    type: 'chip',
+    type: 'select',
     label: 'Status',
     classFn: (row: { [key: string]: any }): string => {
       if (!row || !row['status']) return '';
@@ -58,25 +64,31 @@ export const ADD_FORM_FIELDS = [
   {
     key: 'jurisdiction',
     label: 'Jurisdiction',
-    type: 'text',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
   {
     key: 'businessArea',
     label: 'Business Area',
-    type: 'text',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
   {
     key: 'inventoryType',
     label: 'Inventory Type',
-    type: 'text',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
   {
     key: 'entityType',
     label: 'Entity Type',
-    type: 'text',
+    type: 'select',
+    validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
   {
@@ -100,7 +112,7 @@ export const ADD_FORM_FIELDS = [
   {
     key: 'mediaStorageType',
     label: 'Media Storage Type',
-    type: 'text',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
   {
@@ -112,7 +124,7 @@ export const ADD_FORM_FIELDS = [
   {
     key: 'policyParameter',
     label: 'Policy Parameter',
-    type: 'text',
+    type: 'select',
     validators: [{ type: 'required', message: VALIDATION_MESSAGES.REQUIRED }],
   },
 ];

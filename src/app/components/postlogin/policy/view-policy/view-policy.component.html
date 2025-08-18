@@ -1,0 +1,99 @@
+<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 75vh">
+  <app-spinner
+    heading="Loading Policy Details..."
+    message="Fetching policy data from the server"
+    [isVisible]="true"
+  ></app-spinner>
+</div>
+
+<div *ngIf="!isLoading">
+  <div class="container-fluid my-3">
+    <div class="row">
+      <div #summaryTable class="col-12">
+        <app-complex-table
+          *ngIf="infoColumnConfig"
+          [title]="'Policy details'"
+          [data]="infoData"
+          [columnConfig]="infoColumnConfig"
+          [defaultSelectedColumns]="infoDefaultVisibleColumns"
+          idProperty="policyId"
+          [enableCheckbox]="false"
+          [showAddButton]="false"
+          [showFilterColumns]="false"
+          [pageSize]="10"
+          [isSortable]="false"
+          (actionTriggered)="onTableAction($event)"
+          [showBackButton]="true"
+          (backClicked)="goBack()"
+          [showReloadButton]="true"
+          (reloadClicked)="reload()"
+        >
+        </app-complex-table>
+      </div>
+    </div>
+
+    <div #accordionSection class="mt-4">
+      <div class="row gx-4">
+        <div class="col-md-7 d-flex flex-column gap-4">
+          <app-card *ngFor="let section of policyAccordionData[0]">
+            <div class="card-header">
+              <h5 class="card-title mb-0">{{ section.title }}</h5>
+            </div>
+            <div class="card-body">
+              <div *ngFor="let field of section.fields" class="row mb-2">
+                <div class="col-5">
+                  <strong>{{ field.label }}</strong>
+                </div>
+                <div class="col-7 small">
+                  {{ field.value || 'N/A' }}
+                </div>
+              </div>
+            </div>
+          </app-card>
+        </div>
+
+        <div class="col-md-5">
+          <app-card *ngFor="let section of policyAccordionData[1]" [bodyClass]="'h-100'">
+            <div class="card-header">
+              <h5 class="card-title mb-0">{{ section.title }}</h5>
+            </div>
+            <div class="card-body">
+              <div class="stepper">
+                <div *ngFor="let event of section.timelineEvents; let i = index" class="step-item" [ngClass]="event.status">
+                  <div class="step-marker">
+                    <span *ngIf="event.status !== 'completed'" class="step-icon" [ngClass]="event.icon"></span>
+                    <span *ngIf="event.status === 'completed'" class="step-icon td-icon-18x18-check"></span>
+                  </div>
+                  <div class="step-content">
+                    <div class="fw-bold">{{ event.label }}</div>
+                    <div class="small">{{ event.title }} {{ event.details }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </app-card>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <app-complex-table
+            *ngIf="approversColumnConfig"
+            [title]="'Approvers'"
+            [data]="policyApprovers"
+            [columnConfig]="approversColumnConfig"
+            [defaultSelectedColumns]="approversDefaultVisibleColumns"
+            idProperty="approverId"
+            [enableCheckbox]="false"
+            [showAddButton]="false"
+            [showFilterColumns]="false"
+            [pageSize]="5"
+            [isSortable]="false"
+            [showReloadButton]="false"
+          >
+          </app-complex-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

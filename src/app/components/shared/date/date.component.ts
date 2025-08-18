@@ -1,70 +1,74 @@
-// --- src/app/components/shared/date/date.component.ts ---
-import { Component, OnInit, AfterContentChecked, Inject, Optional } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
-// import { DatepickerModule, TruncateModule } from '@my-app/ui-library';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoModule } from '@ngneat/transloco';
+
+// THIS IS CLIENT CODE START, COMMENT/UNCOMMENT BASED ON YOUR NEED
+// import { DatePickerComponent } from '@com-td-mplx/ibrary';
+// THIS IS CLIENT CODE END
+
+// THIS IS ANGULAR MATERIAL CODE START, COMMENT/UNCOMMENT BASED ON YOUR NEED
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+// THIS IS ANGULAR MATERIAL CODE END
 
 @Component({
   selector: 'app-date',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslocoModule,
+    // THIS IS CLIENT CODE START, COMMENT/UNCOMMENT BASED ON YOUR NEED
+    // DatePickerComponent,
+    // THIS IS CLIENT CODE END
+
+    // THIS IS ANGULAR MATERIAL CODE START, COMMENT/UNCOMMENT BASED ON YOUR NEED
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+    // THIS IS ANGULAR MATERIAL CODE END
+  ],
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.css'],
-  // encapsulation: ViewEncapsulation.None,
-  providers: [
-
-  ]
 })
-export class DateComponent implements OnInit, AfterContentChecked {
+export class DateComponent implements OnInit {
 
-  form: FormGroup;
-  // private title: string;
+  @Input() mode: 'single' | 'range' = 'single';
+  @Input() label: string = '';
+  @Input() placeholder: string = 'MM/DD/YYYY';
+  @Input() endDatePlaceholder: string = 'MM/DD/YYYY';
+  @Input() readonly: boolean = false;
+  @Input() disabled: boolean = false;
+  @Input() initialValues: { date?: string; startDate?: string; endDate?: string; } | null = null;
+  @Input() inputClass: string = '';
+  @Input() error: string = '';
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      single1: new FormControl('', Validators.required),
-      range1: new FormControl('', Validators.required),
-      range1_2: new FormControl('', Validators.required),
-      single2: new FormControl('', Validators.required),
-      range2: new FormControl('', Validators.required),
-      range2_2: new FormControl('', Validators.required),
-      single3: new FormControl('', Validators.required),
-      range3: new FormControl('', Validators.required),
-      range3_2: new FormControl('', Validators.required),
-    });
+  // form: FormGroup;
+  form: FormGroup = new FormGroup({});
+  @Output() valueChanges = new EventEmitter<any>();
+  
+  ngOnInit(): void{
+    this.buildForm();
+    this.form.valueChanges.subscribe(values => {
+      this.valueChanges.emit(values);
+    })
   }
 
-  ngOnInit(): void {
-
-  }
-
-  ngAfterContentChecked(): void {
-    const date = new Date('2023-04-28');
-    this.form.patchValue({ single1: date });
-
-    const range1 = new Date('2023-10-18');
-    this.form.patchValue({ single2: range1 });
-
-    const range2 = new Date('2023-10-29');
-    this.form.patchValue({ single3: range2 });
-  }
-
-  onDateInput(event: any): void {
-    let value = event.target.value;
-    value = value.replace(/\D/g, '');
-
-    let formattedValue = '';
-    if (value.length > 0) {
-      formattedValue += value.slice(0, 2);
+  private buildForm(): void {
+    if (this.mode === 'single') {
+      this.form = new FormGroup({
+        date: new FormControl({value: this.initialValues?.date || '', disabled: this.disabled}, Validators.required)
+      });
+    } else if (this.mode === 'range') {
+      this.form = new FormGroup({
+        startDate: new FormControl({value: this.initialValues?.startDate || '', disabled: this.disabled}, Validators.required),
+        endDate: new FormControl({value: this.initialValues?.endDate || '', disabled: this.disabled}, Validators.required)
+      });
     }
-    if (value.length > 2) {
-      formattedValue += '/' + value.slice(2, 4);
-    }
-    if (value.length > 4) {
-      formattedValue += '/' + value.slice(4, 8);
-    }
-
-    event.target.value = formattedValue;
-
-    this.form.get('single1')?.setValue(formattedValue, { emitEvent: false });
   }
+  
 }
-
-

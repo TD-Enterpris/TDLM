@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // ✅ Import CommonModule
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-text-area',
   standalone: true,
-  imports: [CommonModule, FormsModule], // ✅ Add CommonModule here
+  imports: [CommonModule, FormsModule],
   templateUrl: './text-area.component.html',
   styleUrl: './text-area.component.css'
 })

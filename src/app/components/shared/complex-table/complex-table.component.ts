@@ -18,7 +18,7 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { CommonModule, NgForOf, NgIf, NgClass } from '@angular/common';
+import { CommonModule, NgForOf, NgIf, NgClass, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
 import { SelectDropdownComponent } from '../select-dropdown/select-dropdown.component';
@@ -26,6 +26,7 @@ import { PopoverComponent } from '../popover/popover.component';
 import { InputLegacyComponent } from '../input-legacy/input-legacy.component';
 import { DropdownLegacyComponent } from '../dropdown-legacy/dropdown-legacy.component';
 import { ChipComponent } from '../chip/chip.component';
+import { DateComponent } from '../date/date.component';
 
 export enum SortDirection {
   ASC = 'asc',
@@ -61,7 +62,7 @@ export interface TableRow {
   [key: string]: any;
 }
 export interface ColumnConfig {
-  type: 'text' | 'button' | 'buttons' | 'select' | 'chip';
+  type: 'text' | 'button' | 'buttons' | 'select' | 'chip' | 'date' | 'textarea';
   label?: string;
   action?: string;
   title?: string;
@@ -95,6 +96,8 @@ export interface ColumnConfig {
     InputLegacyComponent,
     DropdownLegacyComponent,
     ChipComponent,
+    DateComponent,
+    DatePipe,
   ],
   templateUrl: './complex-table.component.html',
   styleUrls: ['./complex-table.component.css'],
@@ -158,6 +161,9 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
     direction: SortDirection.ASC,
   };
   @Input() isAddingMode: boolean = false;
+  @Input() isSortable: boolean = true;
+  @Input() showReloadButton: boolean = true;
+  @Input() showBackButton: boolean = false;
 
   @Output() dropdownValueChange = new EventEmitter<string>();
   @Output() rowEdited = new EventEmitter<TableRow>();
@@ -182,6 +188,7 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   }>();
   @Output() inputChanged = new EventEmitter<void>();
   @Output() columnFilterChanged = new EventEmitter<{ [key: string]: string[] }>();
+  @Output() backClicked = new EventEmitter<void>();
   @Input() idProperty: string = 'id';
 
   @Input() set data(value: TableRow[]) {
@@ -205,6 +212,10 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   }
   get data(): TableRow[] {
     return this._data;
+  }
+  
+  onBackClick(): void {
+    this.backClicked.emit();
   }
 
   pagedData: TableRow[] = [];
@@ -237,6 +248,7 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   columnDataFilterDropdownMenus!: QueryList<ElementRef<HTMLUListElement>>;
   @ViewChildren('expandedRow') expandedRows!: QueryList<ElementRef>;
   @ViewChildren('editableInput') editableInputs!: QueryList<ElementRef>;
+  @ViewChildren('headerCell') headerCells!: QueryList<ElementRef<HTMLTableCellElement>>;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] || changes['defaultSelectedColumns']) {
@@ -287,6 +299,37 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
     this.globalClickUnlistener?.();
     this.mutationObserver?.disconnect();
     this.textPopover?.dispose();
+  }
+
+  onButtonMouseEnter(event: MouseEvent): void {
+    const button = event.currentTarget as HTMLElement;
+    const textSpan = button.querySelector('span:last-of-type');
+    if (textSpan) {
+      gsap.to(textSpan, {
+        width: 'auto',
+        opacity: 1,
+        duration: 0.3,
+        ease: 'power2.out',
+        overwrite: 'auto',
+        display: 'inline-block',
+        paddingLeft: '0.3rem'
+      });
+    }
+  }
+
+  onButtonMouseLeave(event: MouseEvent): void {
+    const button = event.currentTarget as HTMLElement;
+    const textSpan = button.querySelector('span:last-of-type');
+    if (textSpan) {
+      gsap.to(textSpan, {
+        width: 0,
+        opacity: 0,
+        paddingLeft: 0,
+        duration: 0.2,
+        ease: 'power2.in',
+        overwrite: 'auto',
+      });
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -685,20 +728,47 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   scrollNextColumn() {
     const container = this.tableContainerRef?.nativeElement;
     if (!container) return;
-    const targetScrollLeft = container.scrollLeft + container.clientWidth;
-    gsap.to(container, {
-      scrollLeft: targetScrollLeft,
-      duration: this.SCROLL_ANIMATION_DURATION_S,
-      ease: 'power2.out',
-    });
+
+    const currentScrollLeft = container.scrollLeft;
+    const headerElements = this.headerCells.map(ref => ref.nativeElement);
+    let targetScrollLeft = -1;
+
+    for (const header of headerElements) {
+      if (header.offsetLeft > currentScrollLeft + 1) {
+        targetScrollLeft = header.offsetLeft;
+        break;
+      }
+    }
+
+    if (targetScrollLeft !== -1) {
+      gsap.to(container, {
+        scrollLeft: targetScrollLeft,
+        duration: this.SCROLL_ANIMATION_DURATION_S,
+        ease: 'power2.out',
+      });
+    }
   }
 
   scrollPrevColumn() {
     const container = this.tableContainerRef?.nativeElement;
     if (!container) return;
-    const targetScrollLeft = container.scrollLeft - container.clientWidth;
+    
+    const currentScrollLeft = container.scrollLeft;
+    const headerElements = this.headerCells.map(ref => ref.nativeElement);
+    let targetScrollLeft = -1;
+
+    for (let i = headerElements.length - 1; i >= 0; i--) {
+      const header = headerElements[i];
+      if (header.offsetLeft < currentScrollLeft - 1) {
+        targetScrollLeft = header.offsetLeft;
+        break;
+      }
+    }
+    
+    const finalTarget = targetScrollLeft !== -1 ? targetScrollLeft : 0;
+
     gsap.to(container, {
-      scrollLeft: targetScrollLeft,
+      scrollLeft: finalTarget,
       duration: this.SCROLL_ANIMATION_DURATION_S,
       ease: 'power2.out',
     });
@@ -920,6 +990,9 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
     this.inputChanged.emit();
   }
 
+  onDateEditChange(rowId: string | number | undefined, col: string, values: { date: string }): void {
+    this.updateCellValue(rowId, col, values.date);
+  }
 
   onAddClicked(): void {
     this.addClicked.emit();

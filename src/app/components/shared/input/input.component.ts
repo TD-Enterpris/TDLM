@@ -35,7 +35,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() inputMode: string = 'text';
   @Input() error: string = '';
   @Input() readonly: boolean = false;
-  @Input() disabled: boolean = false; // ✅ Newly added
+  @Input() disabled: boolean = false;
   @Input() inputClass: string = '';
 
   private _model: string = '';
@@ -69,7 +69,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled; // ✅ Wire to internal flag
+    this.disabled = isDisabled;
   }
 
   onInputChange(event: Event): void {

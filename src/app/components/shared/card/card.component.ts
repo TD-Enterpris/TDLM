@@ -17,11 +17,11 @@ import { gsap } from 'gsap';
 })
 export class CardComponent implements AfterViewInit {
   @Input() bodyClass: string = '';
-  @Input() animate: boolean = false; // ✅ NEW
+  @Input() animate: boolean = false;
   @ViewChild('card', { static: true }) cardEl!: ElementRef;
 
   ngAfterViewInit() {
-    if (!this.animate) return; // ✅ Skip animation if not enabled
+    if (!this.animate) return;
 
     const card = this.cardEl.nativeElement;
 

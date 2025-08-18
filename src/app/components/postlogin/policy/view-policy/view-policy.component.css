@@ -1,0 +1,97 @@
+:host ::ng-deep .status-approved {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep .status-pending {
+  background-color: #ffc107 !important;
+  color: #212932 !important;
+}
+
+:host ::ng-deep .status-rejected {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep .td-btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:host ::ng-deep .td-btn-tertiary span:last-of-type {
+  display: inline;
+  white-space: nowrap;
+}
+
+.stepper {
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.step-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  width: 2px;
+  height: calc(100% - 20px);
+  background-color: #e9ecef;
+}
+
+.step-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid #adb5bd;
+  color: #adb5bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-right: 15px;
+  z-index: 2;
+}
+
+.step-content {
+  padding-top: 2px;
+}
+
+.step-item.completed .step-marker {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.step-item.completed:not(:last-child)::before {
+  background-color: #6c757d;
+}
+
+.step-item.completed .step-content .fw-bold {
+  color: #6c757d;
+}
+
+.step-icon {
+  font-size: 20px;
+}
+
+.step-item.active .step-marker {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.step-item.active .step-content .fw-bold {
+  color: #0d6efd;
+}
+
+.step-item.pending .step-content {
+  opacity: 0.7;
+}

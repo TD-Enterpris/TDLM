@@ -41,7 +41,7 @@ export class InputLegacyComponent implements ControlValueAccessor, AfterViewInit
   @Input() readonly: boolean = false;
   @Input() disabled: boolean = false;
   @Input() inputClass: string = '';
-  @Input() autofocus: boolean = false; // ✅ New
+  @Input() autofocus: boolean = false;
 
   @ViewChild('editableInput') inputElementRef!: ElementRef;
 
@@ -61,9 +61,6 @@ export class InputLegacyComponent implements ControlValueAccessor, AfterViewInit
   @Output() keypress = new EventEmitter<KeyboardEvent>();
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['inputClass']) {
-      console.log('InputLegacyComponent received inputClass:', changes['inputClass'].currentValue);
-    }
   }
 
   ngAfterViewInit(): void {

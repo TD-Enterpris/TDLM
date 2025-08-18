@@ -1,0 +1,53 @@
+<div class="td-accordion accordion" id="accordionExample">
+  <div class="accordion-item" *ngFor="let item of accordionItems">
+    <h2 class="accordion-header" [id]="'heading' + item.id">
+      <button class="accordion-button" type="button"
+        (click)="togglePanel(item)"
+        [class.collapsed]="!item.isOpen"
+        [attr.aria-expanded]="item.isOpen" [attr.aria-controls]="'collapse' + item.id">
+        {{ item.title }}
+      </button>
+    </h2>
+    <div [id]="'collapse' + item.id" class="accordion-collapse collapse"
+      [class.show]="item.isOpen" [attr.aria-labelledby]="'heading' + item.id">
+      <div class="accordion-body">
+
+        <ng-container *ngIf="!item.contentTemplate">
+          <div class="row" *ngIf="item.fields?.length">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4" *ngFor="let field of item.fields">
+              <div class="mb-2">
+                <strong>{{ field.label }}:</strong> {{ field.value || 'N/A' }}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="item.documents?.length">
+            <div class="table-responsive mt-4">
+              <table class="table table-bordered td-table-border-top-bottom-clear td-table-border-start-end-clear td-table-border-row-colour-1">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of getTableHeaders(item.documents)">
+                      {{ header | titlecase }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let doc of item.documents">
+                    <td *ngFor="let header of getTableHeaders(item.documents)">
+                      {{ doc[header] || 'N/A' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- FIX: Pass the context object to the ngTemplateOutlet -->
+        <ng-container *ngIf="item.contentTemplate">
+          <ng-container *ngTemplateOutlet="item.contentTemplate; context: item.context"></ng-container>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>

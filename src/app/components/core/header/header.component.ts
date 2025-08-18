@@ -19,23 +19,19 @@ import gsap from 'gsap';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
-  // Properties for mobile menu visibility
   isMenuOpen = false;
   isMenuVisible = false;
   isOverlayVisible = false;
 
-  // Properties for dropdown states
   isPolicyOpen = false;
   isLoginMenuOpen = false;
 
   private focusTrapHandler: ((event: KeyboardEvent) => void) | null = null;
 
-  // --- ViewChild References ---
   @ViewChild('headerWrapper', { static: false }) headerWrapper!: ElementRef;
   @ViewChild('mobileMenuContent', { static: false }) mobileMenuContent!: ElementRef;
   @ViewChild('menuToggleBtn', { static: false }) menuToggleBtn!: ElementRef;
 
-  // Updated ViewChild references for dropdowns
   @ViewChild('policyDropdownContainer') policyDropdownContainer!: ElementRef;
   @ViewChild('loginDropdownContainer') loginDropdownContainer!: ElementRef;
 
@@ -43,7 +39,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     @Inject(DOCUMENT) private document: Document
   ) {
-    // Close menus on route change
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -53,7 +48,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Initial animation for the header
     gsap.fromTo(
       this.headerWrapper.nativeElement,
       { y: -100, opacity: 0 },
@@ -78,9 +72,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Closes a dropdown menu if focus moves outside of it.
-   */
   onDropdownFocusOut(event: FocusEvent, menu: string): void {
     setTimeout(() => {
       let container: HTMLElement;
@@ -101,9 +92,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }, 0);
   }
 
-  /**
-   * Toggles the main mobile navigation menu.
-   */
   toggleMenu(): void {
     if (!this.isMenuOpen) {
       this.isMenuVisible = true;
@@ -123,9 +111,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Closes the main mobile navigation menu.
-   */
   closeMenu(): void {
     this.isMenuOpen = false;
     setTimeout(() => (this.isMenuVisible = false), 400);
@@ -136,25 +121,16 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }, 500);
   }
 
-  /**
-   * Toggles the Policy dropdown menu.
-   */
   togglePolicy(): void {
-    this.isLoginMenuOpen = false; // Close other dropdowns
+    this.isLoginMenuOpen = false;
     this.isPolicyOpen = !this.isPolicyOpen;
   }
 
-  /**
-   * Toggles the Login dropdown menu.
-   */
   toggleLoginMenu(): void {
-    this.isPolicyOpen = false; // Close other dropdowns
+    this.isPolicyOpen = false;
     this.isLoginMenuOpen = !this.isLoginMenuOpen;
   }
 
-  /**
-   * Handles keyboard events for opening desktop dropdowns.
-   */
   onDropdownKeydown(event: KeyboardEvent, menu: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -163,9 +139,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Handles keyboard events for opening mobile accordions.
-   */
   onAccordionKeydown(event: KeyboardEvent, type: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -173,9 +146,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Sets up a focus trap within the mobile menu for accessibility.
-   */
   setupFocusTrap(): void {
     const menu = this.mobileMenuContent?.nativeElement;
     if (!menu) return;
@@ -219,9 +189,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     menu.addEventListener('keydown', this.focusTrapHandler);
   }
 
-  /**
-   * Implements the "Skip to main content" link functionality.
-   */
   skipToMain(): void {
     const mainElement = this.document.getElementById('main');
     if (mainElement) {
@@ -230,9 +197,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Closes all open dropdown menus.
-   */
   closeDropdowns(): void {
     this.isPolicyOpen = false;
     this.isLoginMenuOpen = false;

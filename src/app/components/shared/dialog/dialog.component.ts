@@ -79,7 +79,6 @@ export class DialogComponent implements AfterViewInit {
         this.modalInstance?.hide();
         this.isClosingWithAnimation = false;
         if (backdrop) {
-          // Remove the inline style so Bootstrap can control it next time
           (backdrop as HTMLElement).style.opacity = '';
         }
       }
@@ -97,7 +96,7 @@ export class DialogComponent implements AfterViewInit {
         opacity: 0,
         duration: 0.35,
         ease: 'expo.in'
-      }, "<"); // Starts at the same time as the previous animation
+      }, "<");
     }
   }
 }

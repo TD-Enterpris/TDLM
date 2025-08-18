@@ -26,6 +26,7 @@ import { SpinnerComponent } from '../../../shared/spinner/spinner.component';
 import { DateComponent } from '../../../shared/date/date.component';
 
 import {
+  MEDIA_STORAGE_TYPE_OPTIONS,
   NEW_COLUMN_CONFIG,
   DEFAULT_VISIBLE_COLUMNS,
   ANIMATION_CONSTANTS,
@@ -53,6 +54,7 @@ interface DynamicFilter {
 
 @Component({
   selector: 'app-policy-dashboard',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -63,7 +65,7 @@ interface DynamicFilter {
     TemporalMessageComponent,
     SpinnerComponent,
     InputComponent,
-    DateComponent
+    DateComponent,
   ],
   templateUrl: './policy-dashboard.component.html',
   styleUrls: ['./policy-dashboard.component.css'],
@@ -105,7 +107,6 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   public isLoading: boolean = true;
   private isInitialLoad = true;
 
-  // ADD THIS ARRAY OF EDITABLE COLUMN KEYS
   public a_policy_columns: string[] = [
     'jurisdiction',
     'businessArea',
@@ -117,7 +118,10 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     'mediaStorageType',
     'expirationDate',
     'policyParameter',
+    'status',
   ];
+
+  public mediaStorageTypeOptions = MEDIA_STORAGE_TYPE_OPTIONS;
 
   constructor(
     private policyService: PolicyDashboardService,
@@ -133,6 +137,11 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  public getOptionsForField(key: string): { value: string; label: string }[] {
+    const filter = this.dynamicFilters.find((f) => f.key === key);
+    return filter ? filter.options : [];
   }
 
   public get areFiltersActive(): boolean {
@@ -254,36 +263,48 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   }
 
   private loadDropdownOptions(): void {
-    this.subscriptions.add(this.policyService.getDropdownOptions().subscribe({
-      next: (response) => {
-        this.dynamicFilters = [];
-        if (response && response.data) {
-          const responseData = response.data;
-          for (const apiOrderKey of FILTER_ORDER) {
-            const apiKey = Object.keys(API_KEY_MAPPING).find(
-              (k) => API_KEY_MAPPING[k] === apiOrderKey
-            );
+    this.subscriptions.add(
+      this.policyService.getDropdownOptions().subscribe({
+        next: (response) => {
+          this.dynamicFilters = [];
+          if (response && response.data) {
+            const responseData = response.data;
+            for (const apiOrderKey of FILTER_ORDER) {
+              const apiKey = Object.keys(API_KEY_MAPPING).find(
+                (k) => API_KEY_MAPPING[k] === apiOrderKey
+              );
 
-            if (apiKey && responseData[apiKey]) {
-              this.dynamicFilters.push({
-                key: apiOrderKey,
-                label: this.formatKeyToLabel(apiOrderKey),
-                options: responseData[apiKey].map((val: string) => ({
-                  value: val,
-                  label: val,
-                })),
-                selectedValue: '',
-              });
+              if (apiKey && responseData[apiKey]) {
+                this.dynamicFilters.push({
+                  key: apiOrderKey,
+                  label: this.formatKeyToLabel(apiOrderKey),
+                  options: responseData[apiKey].map((val: string) => ({
+                    value: val,
+                    label: val,
+                  })),
+                  selectedValue: '',
+                });
+              }
             }
           }
-        }
-        this.cdr.markForCheck();
-        this.onSearch();
-      },
-      error: (err: HttpErrorResponse) => {
-        this.handleApiError(err, 'dropdown');
-      },
-    }));
+
+          this.dynamicFilters.forEach(filter => {
+            if (this.columnConfig[filter.key] && this.columnConfig[filter.key].type === 'select') {
+              this.columnConfig[filter.key].options = filter.options;
+            }
+          });
+          
+          if (this.columnConfig['mediaStorageType']) {
+            this.columnConfig['mediaStorageType'].options = MEDIA_STORAGE_TYPE_OPTIONS;
+          }
+          this.cdr.markForCheck();
+          this.onSearch();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleApiError(err, 'dropdown');
+        },
+      })
+    );
   }
 
   public onSearchButtonClick(): void {
@@ -330,34 +351,36 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.subscriptions.add(this.policyService.getPolicies(filters).subscribe({
-      next: (response) => {
-        this.pagedPolicyData = [...response.data.content];
-        this.totalRecords = response.data.totalElements;
-        this.currentPageNumber = response.data.number;
+    this.subscriptions.add(
+      this.policyService.getPolicies(filters).subscribe({
+        next: (response) => {
+          this.pagedPolicyData = [...response.data.content];
+          this.totalRecords = response.data.totalElements;
+          this.currentPageNumber = response.data.number;
 
-        if (this.pagedPolicyData.length === 0 && !this.isInitialLoad) {
-          this.showMessage(MESSAGES.WARNING.NO_POLICIES_FOUND, 'warning');
-        }
+          if (this.pagedPolicyData.length === 0 && !this.isInitialLoad) {
+            this.showMessage(MESSAGES.WARNING.NO_POLICIES_FOUND, 'warning');
+          }
 
-        this.isLoading = false;
+          this.isLoading = false;
 
-        if (this.isInitialLoad) {
-          setTimeout(() => {
-            this.playInitialAnimations();
-            this.isInitialLoad = false;
-          });
-        }
-        this.cdr.detectChanges();
-        restoreFocus();
-      },
-      error: (err: HttpErrorResponse) => {
-        this.handleApiError(err, 'search');
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        restoreFocus();
-      },
-    }));
+          if (this.isInitialLoad) {
+            setTimeout(() => {
+              this.playInitialAnimations();
+              this.isInitialLoad = false;
+            });
+          }
+          this.cdr.detectChanges();
+          restoreFocus();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleApiError(err, 'search');
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          restoreFocus();
+        },
+      })
+    );
   }
 
   public onReset(): void {
@@ -421,32 +444,41 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     this.formErrors = {};
   }
 
+  public onDateChange(key: string, values: { date: string }): void {
+    (this.newPolicy as any)[key] = values.date;
+    if (values.date && this.formErrors[key]) {
+      delete this.formErrors[key];
+    }
+  }
+
   public onSaveAdd(): void {
     if (!this.validateForm()) {
       this.showMessage(MESSAGES.ERROR.ADD_POLICY, 'danger');
       return;
     }
     this.isLoading = true;
-    this.subscriptions.add(this.policyService.createPolicy(this.newPolicy).subscribe({
-      next: (response) => {
-        this.pagedPolicyData.unshift(response.data);
-        this.totalRecords++;
-        this.showMessage(MESSAGES.SUCCESS.POLICY_ADDED, 'success');
-        this.playHideAddFormAnimation(() => {
-          this.isAdding = false;
+    this.subscriptions.add(
+      this.policyService.createPolicy(this.newPolicy).subscribe({
+        next: (response) => {
+          this.pagedPolicyData.unshift(response.data);
+          this.totalRecords++;
+          this.showMessage(MESSAGES.SUCCESS.POLICY_ADDED, 'success');
+          this.playHideAddFormAnimation(() => {
+            this.isAdding = false;
+            this.isLoading = false;
+            this.cdr.detectChanges();
+            setTimeout(() => {
+              this.animateContainerToAutoHeight();
+              this.playSearchFormAnimation();
+            }, 0);
+          });
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleApiError(err, 'add');
           this.isLoading = false;
-          this.cdr.detectChanges();
-          setTimeout(() => {
-            this.animateContainerToAutoHeight();
-            this.playSearchFormAnimation();
-          }, 0);
-        });
-      },
-      error: (err: HttpErrorResponse) => {
-        this.handleApiError(err, 'add');
-        this.isLoading = false;
-      },
-    }));
+        },
+      })
+    );
   }
 
   private validateForm(): boolean {
@@ -591,6 +623,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
       policyParameter: '',
       mediaStorageType: '',
       expirationDate: '',
+      status: '',
     };
   }
 

@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent {
-  @Input() heading: string = 'Loading...'; // Default heading
-  @Input() message: string = 'Please wait'; // Default message
-  @Input() isVisible: boolean = false; // Control visibility dynamically
+  @Input() heading: string = 'Loading...';
+  @Input() message: string = 'Please wait';
+  @Input() isVisible: boolean = false;
 }

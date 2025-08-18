@@ -18,7 +18,7 @@ export class SelectDropdownComponent {
   @Input() customClass: string | string[] = '';
   @Input() selectedValue = '';
   @Input() readonly: boolean = false;
-  @Input() disabled: boolean = false; // ✅ Added support for disabled
+  @Input() disabled: boolean = false;
 
   @Output() selectedValueChange = new EventEmitter<string>();
   @Output() blur = new EventEmitter<void>();
