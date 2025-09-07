@@ -24,6 +24,7 @@ import { SelectDropdownComponent } from '../../../shared/select-dropdown/select-
 import { TemporalMessageComponent } from '../../../shared/temporal-message/temporal-message.component';
 import { SpinnerComponent } from '../../../shared/spinner/spinner.component';
 import { DateComponent } from '../../../shared/date/date.component';
+import { DialogComponent } from '../../../shared/dialog/dialog.component';
 
 import {
   MEDIA_STORAGE_TYPE_OPTIONS,
@@ -66,6 +67,7 @@ interface DynamicFilter {
     SpinnerComponent,
     InputComponent,
     DateComponent,
+    DialogComponent,
   ],
   templateUrl: './policy-dashboard.component.html',
   styleUrls: ['./policy-dashboard.component.css'],
@@ -76,6 +78,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   @ViewChild('section3') section3!: ElementRef;
   @ViewChild('addSection') addSection!: ElementRef;
   @ViewChild('collapsibleContent') collapsibleContent!: ElementRef;
+  @ViewChild('confirmationDialog') confirmationDialog!: DialogComponent;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -83,9 +86,6 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   public columnConfig: Record<string, ColumnConfig> = {};
   public defaultVisibleColumns: string[] = DEFAULT_VISIBLE_COLUMNS;
   public idProperty = ID_PROPERTY;
-
-  public editableRowIds = new Set<string | number>();
-  private originalRowData = new Map<string | number, TableRow>();
 
   public totalRecords: number = 0;
   public pageSize: number = INITIAL_PAGE_SIZE;
@@ -96,7 +96,8 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
 
   public dynamicFilters: DynamicFilter[] = [];
 
-  public isAdding: boolean = false;
+  public formMode: 'search' | 'add' | 'edit' = 'search';
+  private originalEditPolicy: NewPolicy | null = null;
   public newPolicy!: NewPolicy;
   public addFormFields = ADD_FORM_FIELDS;
   public isSearchCollapsed = false;
@@ -107,21 +108,11 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   public isLoading: boolean = true;
   private isInitialLoad = true;
 
-  public a_policy_columns: string[] = [
-    'jurisdiction',
-    'businessArea',
-    'inventoryType',
-    'entityType',
-    'description',
-    'retentionPeriod',
-    'effectiveDate',
-    'mediaStorageType',
-    'expirationDate',
-    'policyParameter',
-    'status',
-  ];
-
   public mediaStorageTypeOptions = MEDIA_STORAGE_TYPE_OPTIONS;
+
+  public confirmationDialogTitle = '';
+  public confirmationDialogMessage = '';
+  private pendingAction: (() => void) | null = null;
 
   constructor(
     private policyService: PolicyDashboardService,
@@ -152,55 +143,53 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     return Object.values(this.newPolicy).some((value) => !!value);
   }
 
+  public get isEditFormDirty(): boolean {
+    if (this.formMode !== 'edit' || !this.originalEditPolicy) {
+      return false;
+    }
+    return JSON.stringify(this.newPolicy) !== JSON.stringify(this.originalEditPolicy);
+  }
+
   private initializeColumnConfig(): void {
     this.columnConfig = {
       ...NEW_COLUMN_CONFIG,
       actions: {
         type: 'buttons',
         label: 'Actions',
-        buttons: (row: TableRow) => {
-          const isEditing = this.editableRowIds.has(row[this.idProperty]);
-
-          if (isEditing) {
-            return [
-              {
-                action: 'save',
-                label: 'Save',
-                spanIcon: 'td-icon-18x18-save',
-                title: 'Save changes',
-              },
-              {
-                action: 'cancel',
-                label: 'Cancel',
-                spanIcon: 'td-icon-18x18-cancel',
-                title: 'Cancel editing',
-              },
-            ];
-          }
-
-          return [
-            {
-              action: 'edit',
-              label: 'Edit',
-              spanIcon: 'td-icon-18x18-edit',
-              title: 'Edit policy',
-            },
-            {
-              action: 'approve',
-              label: 'Approve',
-              spanIcon: 'td-icon-18x18-check-circle-o',
-              title: 'Approve policy',
-            },
-            {
-              action: 'reject',
-              label: 'Reject',
-              spanIcon: 'td-icon-18x18-close-circle-o',
-              title: 'Reject policy',
-            },
-          ];
-        },
+        buttons: (row: TableRow) => [
+          {
+            action: 'edit',
+            label: 'Edit',
+            spanIcon: 'td-icon-18x18-edit',
+            title: 'Edit policy',
+          },
+          {
+            action: 'approve',
+            label: 'Approve',
+            spanIcon: 'td-icon-18x18-check-circle-o',
+            title: 'Approve policy',
+          },
+          {
+            action: 'reject',
+            label: 'Reject',
+            spanIcon: 'td-icon-18x18-close-circle-o',
+            title: 'Reject policy',
+          },
+        ],
       },
     };
+  }
+
+  private setFormMode(mode: 'search' | 'add' | 'edit'): void {
+    this.formMode = mode;
+
+    if (mode === 'edit') {
+      this.defaultVisibleColumns = DEFAULT_VISIBLE_COLUMNS.filter(
+        (col) => col !== 'actions'
+      );
+    } else {
+      this.defaultVisibleColumns = DEFAULT_VISIBLE_COLUMNS;
+    }
   }
 
   public onActionTriggered(event: { action: string; row: TableRow }): void {
@@ -209,12 +198,6 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     switch (action) {
       case 'edit':
         this.handleEdit(row);
-        break;
-      case 'cancel':
-        this.handleCancel(row);
-        break;
-      case 'save':
-        this.handleSave(row);
         break;
       case 'approve':
         this.handleApprove(row);
@@ -226,32 +209,22 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   }
 
   private handleEdit(row: TableRow): void {
-    const rowId = row[this.idProperty];
-    this.originalRowData.set(rowId, { ...row });
-    this.editableRowIds.add(rowId);
-  }
+    this.originalEditPolicy = { ...row } as NewPolicy;
+    this.newPolicy = { ...row } as NewPolicy;
+    this.formErrors = {};
+    this.setFormMode('edit');
+    this.cdr.detectChanges();
 
-  public handleCancel(row: TableRow): void {
-    const rowId = row[this.idProperty];
-    if (this.originalRowData.has(rowId)) {
-      const originalData = this.originalRowData.get(rowId)!;
-      const rowIndex = this.pagedPolicyData.findIndex(
-        (p) => p[this.idProperty] === rowId
-      );
-      if (rowIndex > -1) {
-        this.pagedPolicyData[rowIndex] = originalData;
-        this.pagedPolicyData = [...this.pagedPolicyData];
-      }
-      this.originalRowData.delete(rowId);
+    if (this.isSearchCollapsed) {
+      this.isSearchCollapsed = false;
     }
-    this.editableRowIds.delete(rowId);
-  }
 
-  private handleSave(row: TableRow): void {
-    const rowId = row[this.idProperty];
-    this.editableRowIds.delete(rowId);
-    this.originalRowData.delete(rowId);
-    this.showMessage(`Policy ${rowId} saved successfully.`, 'success');
+    setTimeout(() => {
+      const el = this.collapsibleContent.nativeElement;
+      el.style.display = 'block';
+      this.animateContainerToAutoHeight();
+      this.playAddFormAnimation();
+    }, 0);
   }
 
   private handleApprove(row: TableRow): void {
@@ -288,14 +261,18 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
             }
           }
 
-          this.dynamicFilters.forEach(filter => {
-            if (this.columnConfig[filter.key] && this.columnConfig[filter.key].type === 'select') {
+          this.dynamicFilters.forEach((filter) => {
+            if (
+              this.columnConfig[filter.key] &&
+              this.columnConfig[filter.key].type === 'select'
+            ) {
               this.columnConfig[filter.key].options = filter.options;
             }
           });
-          
+
           if (this.columnConfig['mediaStorageType']) {
-            this.columnConfig['mediaStorageType'].options = MEDIA_STORAGE_TYPE_OPTIONS;
+            this.columnConfig['mediaStorageType'].options =
+              MEDIA_STORAGE_TYPE_OPTIONS;
           }
           this.cdr.markForCheck();
           this.onSearch();
@@ -391,7 +368,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
   }
 
   public onAddPolicy(): void {
-    this.isAdding = true;
+    this.setFormMode('add');
     this.initializeNewPolicy();
     this.formErrors = {};
     this.cdr.detectChanges();
@@ -416,27 +393,15 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  public onCancelAdd(): void {
-    this.isAdding = false;
-    if (this.isSearchCollapsed) {
-      this.isSearchCollapsed = false;
+  public onCancelForm(): void {
+    if (this.isEditFormDirty) {
+      this.confirmationDialogTitle = 'Unsaved Changes';
+      this.confirmationDialogMessage = 'You have unsaved changes. Are you sure you want to cancel?';
+      this.pendingAction = () => this.proceedWithCancel();
+      this.confirmationDialog.open();
+    } else {
+      this.proceedWithCancel();
     }
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      const el = this.collapsibleContent.nativeElement;
-      el.style.display = 'block';
-      this.animateContainerToAutoHeight();
-      this.playSearchFormAnimation();
-
-      const searchForm = this.section1.nativeElement;
-      const firstFocusable = searchForm.querySelector(
-        'input, select, button, a[href], [tabindex]:not([tabindex="-1"])'
-      );
-      if (firstFocusable) {
-        (firstFocusable as HTMLElement).focus();
-      }
-    }, 0);
   }
 
   public onClearAddForm(): void {
@@ -464,7 +429,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
           this.totalRecords++;
           this.showMessage(MESSAGES.SUCCESS.POLICY_ADDED, 'success');
           this.playHideAddFormAnimation(() => {
-            this.isAdding = false;
+            this.setFormMode('search');
             this.isLoading = false;
             this.cdr.detectChanges();
             setTimeout(() => {
@@ -479,6 +444,87 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
         },
       })
     );
+  }
+
+  public onSaveEdit(): void {
+    if (this.isEditFormDirty) {
+      this.confirmationDialogTitle = 'Confirm Update';
+      this.confirmationDialogMessage = 'Are you sure you want to update this policy?';
+      this.pendingAction = () => this.proceedWithSave();
+      this.confirmationDialog.open();
+    } else {
+      this.showMessage('No changes detected to save.', 'info');
+    }
+  }
+
+  public onConfirmationYes(): void {
+    if (this.pendingAction) {
+      this.pendingAction();
+    }
+    this.pendingAction = null;
+    this.confirmationDialog.close();
+  }
+
+  public onConfirmationNo(): void {
+    this.pendingAction = null;
+    this.confirmationDialog.close();
+  }
+
+  private proceedWithCancel(): void {
+    this.setFormMode('search');
+    if (this.isSearchCollapsed) {
+      this.isSearchCollapsed = false;
+    }
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      const el = this.collapsibleContent.nativeElement;
+      el.style.display = 'block';
+      this.animateContainerToAutoHeight();
+      this.playSearchFormAnimation();
+
+      const searchForm = this.section1.nativeElement;
+      const firstFocusable = searchForm.querySelector(
+        'input, select, button, a[href], [tabindex]:not([tabindex="-1"])'
+      );
+      if (firstFocusable) {
+        (firstFocusable as HTMLElement).focus();
+      }
+    }, 0);
+  }
+
+  private proceedWithSave(): void {
+    if (!this.validateForm()) {
+      this.showMessage('Failed to update policy. Please check errors.', 'danger');
+      return;
+    }
+    this.isLoading = true;
+    const policyToUpdate = this.newPolicy as any;
+    const policyId = policyToUpdate.id;
+
+    // NOTE: Assumes your PolicyDashboardService has an `updatePolicy` method.
+    // this.policyService.updatePolicy(policyId, policyToUpdate).subscribe({ ... });
+
+    // --- MOCKED RESPONSE FOR DEMONSTRATION ---
+    // Replace this setTimeout with your actual service call
+    setTimeout(() => {
+      const index = this.pagedPolicyData.findIndex(p => p.id === policyId);
+      if (index > -1) {
+        this.pagedPolicyData[index] = policyToUpdate;
+        this.pagedPolicyData = [...this.pagedPolicyData];
+      }
+      this.showMessage('Policy updated successfully.', 'success');
+      this.playHideAddFormAnimation(() => {
+        this.setFormMode('search');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.animateContainerToAutoHeight();
+          this.playSearchFormAnimation();
+        }, 0);
+      });
+    }, 1000);
+    // --- END MOCKED RESPONSE ---
   }
 
   private validateForm(): boolean {

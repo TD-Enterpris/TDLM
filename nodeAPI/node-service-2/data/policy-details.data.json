@@ -14,15 +14,29 @@
     "mediaStorageType": "Cloud Storage",
     "retentionCode": "FIN-001",
     "retentionTrigger": "End of Fiscal Year",
-    "expirationDate": "2031-01-14",
+    "expirationDate": "2031-01-07T06:00:00.000Z",
     "createdBy": "alice.jones",
     "updatedBy": "charlie.davis",
     "createdDate": "2023-12-01",
-    "updatedDate": "2024-01-10",
+    "updatedDate": "2025-09-07",
     "description": "Initial policy for financial records.",
     "approvers": [
-      { "approvalGroup": "Legal US", "status": "Approved", "approverId": "john.doe", "created": "2025-08-14 10:00:00", "decisionDate": "2025-08-15", "comments": "Looks good." },
-      { "approvalGroup": "Compliance EU", "status": "Pending", "approverId": "jane.smith", "created": "2025-08-14 10:05:00", "decisionDate": "", "comments": "" }
+      {
+        "approvalGroup": "Legal US",
+        "status": "Approved",
+        "approverId": "john.doe",
+        "created": "2025-08-14 10:00:00",
+        "decisionDate": "2025-08-15",
+        "comments": "Looks good."
+      },
+      {
+        "approvalGroup": "Compliance EU",
+        "status": "Pending",
+        "approverId": "jane.smith",
+        "created": "2025-08-14 10:05:00",
+        "decisionDate": "",
+        "comments": ""
+      }
     ]
   },
   "PID-1124": {
@@ -47,7 +61,14 @@
     "updatedDate": "2024-02-15",
     "description": "Policy for new employee documentation.",
     "approvers": [
-      { "approvalGroup": "Records Management", "status": "Rejected", "approverId": "bob.johnson", "created": "2025-08-14 10:10:00", "decisionDate": "2025-08-16", "comments": "Retention period is too short." }
+      {
+        "approvalGroup": "Records Management",
+        "status": "Rejected",
+        "approverId": "bob.johnson",
+        "created": "2025-08-14 10:10:00",
+        "decisionDate": "2025-08-16",
+        "comments": "Retention period is too short."
+      }
     ]
   },
   "PID-1125": {
@@ -72,7 +93,14 @@
     "updatedDate": "2023-11-05",
     "description": "Policy regarding international contracts.",
     "approvers": [
-      { "approvalGroup": "Legal US", "status": "Approved", "approverId": "john.doe", "created": "2025-08-14 10:00:00", "decisionDate": "2025-08-15", "comments": "Looks good." }
+      {
+        "approvalGroup": "Legal US",
+        "status": "Approved",
+        "approverId": "john.doe",
+        "created": "2025-08-14 10:00:00",
+        "decisionDate": "2025-08-15",
+        "comments": "Looks good."
+      }
     ]
   },
   "PID-1126": {
@@ -120,7 +148,14 @@
     "updatedDate": "2024-07-20",
     "description": "Policy for marketing campaign assets.",
     "approvers": [
-        { "approvalGroup": "Compliance EU", "status": "Pending", "approverId": "jane.smith", "created": "2025-08-14 10:05:00", "decisionDate": "", "comments": "" }
+      {
+        "approvalGroup": "Compliance EU",
+        "status": "Pending",
+        "approverId": "jane.smith",
+        "created": "2025-08-14 10:05:00",
+        "decisionDate": "",
+        "comments": ""
+      }
     ]
   },
   "PID-1128": {

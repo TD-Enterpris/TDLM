@@ -128,3 +128,20 @@ export const createAccordionData = (currentPolicy: any): any[][] => {
     [historySection]
   ];
 };
+
+export const VIEW_POLICY_TEXT = {
+  loadingHeading: 'Loading Policy Details...',
+  loadingMessage: 'Fetching policy data from the server',
+  infoTableTitle: 'Policy details',
+  approversTableTitle: 'Approvers',
+  editExpirationLabel: 'Edit Expiration Date',
+  saveButton: 'Save',
+  cancelButton: 'Cancel',
+  confirmSaveTitle: 'Confirm Save',
+  confirmSaveMessage: 'Are you sure you want to save these changes?',
+  temporalSuccess: 'Expiration date updated successfully.',
+  temporalError: 'Failed to update expiration date.',
+  temporalErrorGeneric: 'Error updating expiration date.'
+};
+
+export const TEMPORAL_MESSAGE_DURATION = 2500;

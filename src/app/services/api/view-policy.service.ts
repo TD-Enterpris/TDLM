@@ -54,4 +54,9 @@ export class ViewPolicyService {
   getPolicyById(id: string): Observable<ApiResponse<PolicyDetails>> {
     return this.http.get<ApiResponse<PolicyDetails>>(`${this.apiUrl}/${id}`);
   }
+
+  updateExpirationDate(id: string, expirationDate: string): Observable<ApiResponse<PolicyDetails>> {
+    const url = `${this.apiUrl}/${id}/expiration`;
+    return this.http.put<ApiResponse<PolicyDetails>>(url, { expirationDate });
+  }
 }

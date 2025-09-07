@@ -24,7 +24,7 @@
       <div class="row justify-content-between align-items-center mt-20 mb-20">
         <div class="col-auto">
           <h1 class="h1 mb-0">
-            {{ isAdding ? 'Add Policy' : 'Policy Search' }}
+            {{ formMode === 'add' ? 'Add Policy' : formMode === 'edit' ? 'Edit Policy' : 'Policy Search' }}
           </h1>
         </div>
         <div class="col-auto">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div #collapsibleContent class="collapsible-content">
-        <div #section1 *ngIf="!isAdding">
+        <div #section1 *ngIf="formMode === 'search'">
           <div class="row mt-20 mb-10">
             <div class="col-12">
               <div class="row g-3">
@@ -90,7 +90,7 @@
             </div>
           </div>
         </div>
-        <div #addSection *ngIf="isAdding">
+        <div #addSection *ngIf="formMode === 'add' || formMode === 'edit'">
           <div class="row mt-20 mb-10">
             <div class="col-12">
               <div class="row g-3 mb-3">
@@ -209,7 +209,7 @@
               </div>
 
               <div class="row mt-20 mb-10 justify-content-end">
-                <ng-container *ngIf="isNewPolicyDirty">
+                <ng-container *ngIf="isNewPolicyDirty && formMode === 'add'">
                   <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                     <div class="ps-20">
                       <app-button
@@ -221,13 +221,27 @@
                     </div>
                   </div>
                 </ng-container>
+
+                <ng-container *ngIf="formMode === 'edit'">
+                  <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                    <div class="ps-20">
+                      <app-button
+                        buttonLabel="Cancel"
+                        (buttonClick)="onCancelForm()"
+                        buttonClass="btn td-btn-secondary-clear w-100"
+                      >
+                      </app-button>
+                    </div>
+                  </div>
+                </ng-container>
+
                 <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                   <div class="pe-20">
                     <app-button
-                      buttonLabel="Save"
-                      (buttonClick)="onSaveAdd()"
+                      [buttonLabel]="formMode === 'add' ? 'Save' : 'Update'"
+                      (buttonClick)="formMode === 'add' ? onSaveAdd() : onSaveEdit()"
                       buttonClass="btn td-btn-primary-light w-100"
-                      [disabled]="!isNewPolicyDirty"
+                      [disabled]="!isNewPolicyDirty && formMode === 'add'"
                     >
                     </app-button>
                   </div>
@@ -260,13 +274,10 @@
             (reloadRequested)="onSearch()"
             [serverSidePagination]="true"
             [showAddButton]="true"
-            [isAddingMode]="isAdding"
+            [isAddingMode]="formMode !== 'search'"
             (addClicked)="onAddPolicy()"
-            (searchClicked)="onCancelAdd()"
-            [editableRowIds]="editableRowIds"
-            [editableColumns]="a_policy_columns"
+            (searchClicked)="onCancelForm()"
             (actionTriggered)="onActionTriggered($event)"
-            (editCancelled)="handleCancel($event.row)"
             [showExpandCollapse]="false" [expandedRowTemplate]="expandedDetail"
             [showFilterColumns]="false"
             [rowClickable]="false"
@@ -285,6 +296,24 @@
     </div>
   </div>
 </div>
+
+<app-dialog #confirmationDialog [title]="confirmationDialogTitle">
+  <p>{{ confirmationDialogMessage }}</p>
+  <div modal-footer class="col-12 d-flex justify-content-end gap-2">
+    <app-button
+      buttonLabel="No"
+      (buttonClick)="onConfirmationNo()"
+      buttonClass="btn td-btn-secondary-clear"
+    >
+    </app-button>
+    <app-button
+      buttonLabel="Yes"
+      (buttonClick)="onConfirmationYes()"
+      buttonClass="btn td-btn-primary-light"
+    >
+    </app-button>
+  </div>
+</app-dialog>
 
 <ng-template #expandedDetail let-row>
   <div class="expanded-content">
