@@ -2,3 +2,25 @@
   visibility: hidden;
   opacity: 0;
 }
+
+/* Removed :host to create a more direct ::ng-deep selector that
+  can reliably style the nested chip component.
+*/
+::ng-deep .status-approved {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  cursor: unset !important;
+}
+
+::ng-deep .status-pending {
+  background-color: #ffc107 !important;
+  color: #212932 !important;
+  cursor: unset !important;
+
+}
+
+::ng-deep .status-rejected {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  cursor: unset !important;
+}

@@ -1,60 +1,31 @@
-<div
-  *ngIf="isLoading"
-  class="d-flex justify-content-center align-items-center"
-  style="height: 75vh"
->
-  <app-spinner
-    heading="Loading Policies..."
-    message="Fetching policy data from the server"
-    [isVisible]="true"
-  ></app-spinner>
+<div class="container-fluid">
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 75vh">
+  <app-spinner heading="Loading Policies..." message="Fetching policy data from the server"
+    [isVisible]="true"></app-spinner>
 </div>
 
 <div *ngIf="!isLoading">
   <div class="container-fluid" [ngClass]="{'content-to-animate': isInitialLoad, 'animate-hidden': !isAnimatedVisible}">
-    <app-temporal-message
-      *ngIf="message"
-      [message]="message"
-      [type]="messageType"
-      [duration]="5000"
-    >
+    <app-temporal-message *ngIf="message" [message]="message" [type]="messageType" [duration]="5000">
     </app-temporal-message>
 
     <div class="row">
       <div #tableSection class="col-12">
-        <app-complex-table
-          *ngIf="columnConfig"
-          title="Policies"
-          titleLevel="h1"
-          titleClass="h1"
-          [data]="pagedPolicies"
-          [columnConfig]="columnConfig"
-          [idProperty]="idProperty"
-          [defaultSelectedColumns]="defaultVisibleColumns"
-          [pageSize]="pageSize"
-          [currentPageNumber]="currentPageNumber"
-          [sortState]="sortState"
-          (sortChanged)="onSortChanged($event)"
-          (reloadRequested)="loadPolicies()"
-          (actionTriggered)="onTableAction($event)"
-          [serverSidePagination]="true"
-          [enableCheckbox]="false"
-          [showAddButton]="false"
-          [showFilterColumns]="false"
-        >
+        <app-complex-table *ngIf="columnConfig" title="Policies" titleLevel="h1" titleClass="h1" [data]="pagedPolicies"
+          [columnConfig]="columnConfig" [idProperty]="idProperty" [defaultSelectedColumns]="defaultVisibleColumns"
+          [pageSize]="pageSize" [currentPageNumber]="currentPageNumber" [sortState]="sortState"
+          (sortChanged)="onSortChanged($event)" (reloadRequested)="loadPolicies()" [rowClickable]="false"
+          (actionTriggered)="onTableAction($event)" [serverSidePagination]="true" [enableCheckbox]="false"
+          [showAddButton]="false" [showFilterColumns]="false">
         </app-complex-table>
       </div>
 
       <div #paginationSection class="col-12">
-        <app-pagination
-          [totalRecords]="totalRecords"
-          [pageSize]="pageSize"
-          [currentPageNumber]="currentPageNumber"
-          (pageChange)="onPageChange($event)"
-          (pageSizeChange)="onPageSizeChange($event)"
-        >
+        <app-pagination [totalRecords]="totalRecords" [pageSize]="pageSize" [currentPageNumber]="currentPageNumber"
+          (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
         </app-pagination>
       </div>
     </div>
   </div>
+</div>
 </div>
