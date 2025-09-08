@@ -1,1 +1,24 @@
-<p>reports works!</p>
+<div class="reports-container">
+        <app-card #cardRef [(isFlipped)]="isCardFlipped">
+        <div slot="header">
+            <h2>Card Title</h2>
+        </div>
+        <div slot="body">
+            <ul>
+                <li>This is the first bullet point.</li>
+                <li>Here is another interesting fact.</li>
+                <li>And a final point to round things out.</li>
+            </ul>
+        </div>
+        <div slot="footer" class="footer">
+            <button (click)="cardRef.flip()">Details</button>
+        </div>
+        <div slot="back-body">
+            <h2>Card Title</h2>
+            <p>This is the back of the card with more details.</p>
+        </div>
+        <div slot="back-footer" class="footer">
+            <button (click)="cardRef.flip()">Close</button>
+        </div>
+    </app-card>
+</div>

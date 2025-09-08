@@ -49,7 +49,9 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   public showTemporalMessage = false;
 
   @ViewChild('summaryTable') summaryTable!: ElementRef;
-  @ViewChild('accordionSection') accordionSection!: ElementRef;
+  @ViewChild('detailsSectionLeft') detailsSectionLeft!: ElementRef;
+  @ViewChild('detailsSectionRight') detailsSectionRight!: ElementRef;
+  @ViewChild('approversTable') approversTable!: ElementRef;
   @ViewChild('datePickerContainer') datePickerContainer!: ElementRef;
   @ViewChild('confirmationDialog', { read: ElementRef }) confirmationDialogElementRef!: ElementRef;
   @ViewChild('confirmationDialog') confirmationDialog!: DialogComponent;
@@ -92,9 +94,6 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   ) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.initializeButtonAnimations();
-    }, 50);
   }
 
   ngAfterViewChecked(): void {
@@ -147,7 +146,7 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
           this.infoData = [this.currentPolicy];
           this.isLoading = false;
           this.setupAccordionData();
-          this.playEntranceAnimation();
+          setTimeout(() => this.playEntranceAnimation());
         } else {
           this.isLoading = false;
         }
@@ -165,32 +164,29 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   }
 
   private playEntranceAnimation(): void {
-    if (this.summaryTable?.nativeElement && this.accordionSection?.nativeElement) {
+    if (
+      this.summaryTable?.nativeElement &&
+      this.detailsSectionLeft?.nativeElement &&
+      this.detailsSectionRight?.nativeElement &&
+      this.approversTable?.nativeElement
+    ) {
       const tl = gsap.timeline({
         defaults: {
           ease: ANIMATION_CONSTANTS.ease,
           duration: ANIMATION_CONSTANTS.duration,
         },
       });
-      tl.from(this.summaryTable.nativeElement, { y: ANIMATION_CONSTANTS.yDown, opacity: ANIMATION_CONSTANTS.opacityOut }, 0)
-        .from(this.accordionSection.nativeElement, { y: ANIMATION_CONSTANTS.yUp, opacity: ANIMATION_CONSTANTS.opacityOut }, 0);
-    }
-  }
 
-  private initializeButtonAnimations(): void {
-    const buttons = this.el.nativeElement.querySelectorAll('tbody .td-btn-tertiary');
-    buttons.forEach((button: HTMLElement, index: number) => {
-      const textSpan = button.querySelector('span:last-of-type');
-      if (!textSpan) return;
-        gsap.set(textSpan, { opacity: 0, x: -10, visibility: 'hidden' });
-        const timeline = gsap.timeline({ paused: true });
-        timeline
-          .to(textSpan, { opacity: 1, x: 0, visibility: 'visible', duration: 0.45, ease: 'power2.inOut' })
-          .to(button, { scale: 1.05, duration: 0.45, ease: 'power2.inOut' }, 0);
-      (button as any).animation = timeline;
-      button.addEventListener('mouseenter', () => (button as any).animation.play());
-      button.addEventListener('mouseleave', () => (button as any).animation.reverse());
-    });
+      // Section 1 - Policy details slides down
+      tl.from(this.summaryTable.nativeElement, { y: ANIMATION_CONSTANTS.yDown, opacity: ANIMATION_CONSTANTS.opacityOut }, 0);
+
+      // Section 2 - cards slide from left and right
+      tl.from(this.detailsSectionLeft.nativeElement, { x: -50, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.2);
+      tl.from(this.detailsSectionRight.nativeElement, { x: 50, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.2);
+
+      // Section 3 approvers slides up
+      tl.from(this.approversTable.nativeElement, { y: ANIMATION_CONSTANTS.yUp, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.4);
+    }
   }
 
   public onTableAction(event: { action: string; row: TableRow }): void {
@@ -259,7 +255,6 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     this.showActionsColumn = true; // Show actions column on cancel
     this.animateDatePickerOut(() => {
       this.isEditingExpirationDate = false;
-      this.initializeButtonAnimations();
     });
   }
 

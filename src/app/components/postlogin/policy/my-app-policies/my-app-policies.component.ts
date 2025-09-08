@@ -45,6 +45,8 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   private isInitialLoad = true;
 
+  public isAnimatedVisible = false;
+
   public isLoading = true;
   public pagedPolicies: Policy[] = [];
   public idProperty = ID_PROPERTY;
@@ -103,16 +105,21 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
           this.isLoading = false;
 
           if (this.isInitialLoad) {
+            this.isAnimatedVisible = false;
             setTimeout(() => this.playInitialAnimations(), 50);
             this.isInitialLoad = false;
+          } else {
+            this.isAnimatedVisible = true;
           }
         } catch {
           this.isLoading = false;
+          this.isAnimatedVisible = true;
           this.showMessage(MESSAGES.ERROR.LOAD, 'danger');
         }
       },
       error: () => {
         this.isLoading = false;
+        this.isAnimatedVisible = true;
         this.showMessage(MESSAGES.ERROR.LOAD, 'danger');
       },
     });
@@ -153,14 +160,19 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
 
   private playInitialAnimations(): void {
     if (this.tableSection && this.paginationSection) {
+      const container = this.tableSection.nativeElement.closest('.content-to-animate');
+      gsap.set(container, { opacity: 0, visibility: 'hidden' });
       const tl = gsap.timeline({
         defaults: {
           ease: ANIMATION_CONSTANTS.ease,
           duration: ANIMATION_CONSTANTS.duration,
         },
       });
-      tl.from(this.tableSection.nativeElement, { y: -50, opacity: 0 }, 0)
+      tl.set(container, { visibility: 'visible' }, 0)
+        .to(container, { opacity: 1 }, 0)
+        .from(this.tableSection.nativeElement, { y: -50, opacity: 0 }, 0)
         .from(this.paginationSection.nativeElement, { y: 50, opacity: 0 }, 0);
+      this.isAnimatedVisible = true;
     }
   }
 }

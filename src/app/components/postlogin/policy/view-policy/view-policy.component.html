@@ -54,7 +54,7 @@
 
   <div #detailsSection class="mt-4">
       <div class="row gx-4">
-        <div class="col-12 col-md-7 d-flex flex-column gap-4">
+        <div class="col-12 col-md-7 d-flex flex-column gap-4" #detailsSectionLeft>
           <app-card *ngFor="let section of policyDetailsData[0]" role="region" [attr.aria-label]="section.title" class="w-100 p-2 p-md-0 my-2 my-md-0 mx-0 mx-md-2">
             <div class="card-header px-2 py-1">
               <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">{{ section.title }}</h5>
@@ -72,7 +72,7 @@
           </app-card>
         </div>
 
-        <div class="col-12 col-md-5">
+        <div class="col-12 col-md-5" #detailsSectionRight>
           <app-card *ngFor="let section of policyDetailsData[1]" [bodyClass]="'h-100'" role="region" [attr.aria-label]="section.title" class="w-100 p-2 p-md-0 my-2 my-md-0">
             <div class="card-header px-2 py-1">
               <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">{{ section.title }}</h5>
@@ -111,7 +111,7 @@
         </div>
       </div>
 
-      <div class="row mt-3">
+      <div class="row mt-3" #approversTable>
         <div class="col-12">
             <app-complex-table
               *ngIf="approversColumnConfig"
@@ -138,7 +138,6 @@
   </div>
 </div>
 
-<!-- Confirmation Modal for Save (root level, outside all containers) -->
 <app-dialog #confirmationDialog [title]="confirmationDialogTitle" role="dialog" aria-modal="true" aria-labelledby="confirmationDialogTitle" tabindex="-1" class="w-100 w-md-50 mx-auto">
   <ng-container *ngIf="isModalLoading">
     <div class="d-flex justify-content-center align-items-center" style="height: 200px;">

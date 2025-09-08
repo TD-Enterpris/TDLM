@@ -213,7 +213,7 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   get data(): TableRow[] {
     return this._data;
   }
-  
+
   onBackClick(): void {
     this.backClicked.emit();
   }
@@ -301,33 +301,39 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
     this.textPopover?.dispose();
   }
 
-  onButtonMouseEnter(event: MouseEvent): void {
+  onButtonMouseEnter(event: MouseEvent | FocusEvent): void {
     const button = event.currentTarget as HTMLElement;
-    const textSpan = button.querySelector('span:last-of-type');
+    const textSpan = button.querySelector('span:last-of-type') as HTMLElement;
     if (textSpan) {
-      gsap.to(textSpan, {
-        width: 'auto',
-        opacity: 1,
-        duration: 0.3,
+      gsap.killTweensOf([button, textSpan]);
+      gsap.to(button, {
+        maxWidth: '120px',
+        duration: 0.35,
         ease: 'power2.out',
-        overwrite: 'auto',
-        display: 'inline-block',
-        paddingLeft: '0.3rem'
+      });
+      gsap.to(textSpan, {
+        opacity: 1,
+        delay: 0.1,
+        duration: 0.2,
+        ease: 'power1.in',
       });
     }
   }
 
-  onButtonMouseLeave(event: MouseEvent): void {
+  onButtonMouseLeave(event: MouseEvent | FocusEvent): void {
     const button = event.currentTarget as HTMLElement;
-    const textSpan = button.querySelector('span:last-of-type');
+    const textSpan = button.querySelector('span:last-of-type') as HTMLElement;
     if (textSpan) {
+      gsap.killTweensOf([button, textSpan]);
+      gsap.to(button, {
+        maxWidth: '44px',
+        duration: 0.35,
+        ease: 'power2.out',
+      });
       gsap.to(textSpan, {
-        width: 0,
         opacity: 0,
-        paddingLeft: 0,
         duration: 0.2,
-        ease: 'power2.in',
-        overwrite: 'auto',
+        ease: 'power1.out',
       });
     }
   }
@@ -752,7 +758,7 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
   scrollPrevColumn() {
     const container = this.tableContainerRef?.nativeElement;
     if (!container) return;
-    
+
     const currentScrollLeft = container.scrollLeft;
     const headerElements = this.headerCells.map(ref => ref.nativeElement);
     let targetScrollLeft = -1;
@@ -764,7 +770,7 @@ export class ComplexTableComponent implements OnChanges, AfterViewInit, OnDestro
         break;
       }
     }
-    
+
     const finalTarget = targetScrollLeft !== -1 ? targetScrollLeft : 0;
 
     gsap.to(container, {

@@ -4,6 +4,8 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
@@ -18,9 +20,20 @@ import { gsap } from 'gsap';
 export class CardComponent implements AfterViewInit {
   @Input() bodyClass: string = '';
   @Input() animate: boolean = false;
+  @Input() isFlipped: boolean = false;
+  @Output() isFlippedChange = new EventEmitter<boolean>();
+
   @ViewChild('card', { static: true }) cardEl!: ElementRef;
+  @ViewChild('cardInner', { static: true }) cardInnerEl!: ElementRef;
+
+  private tl!: gsap.core.Timeline;
 
   ngAfterViewInit() {
+    this.setupHoverAnimation();
+    this.setupFlipAnimation();
+  }
+
+  private setupHoverAnimation() {
     if (!this.animate) return;
 
     const card = this.cardEl.nativeElement;
@@ -69,4 +82,27 @@ export class CardComponent implements AfterViewInit {
       });
     });
   }
+
+  private setupFlipAnimation() {
+    // Set the transform origin to the center for a proper flip
+    gsap.set(this.cardInnerEl.nativeElement, { transformOrigin: '50% 50%' });
+    // Create a timeline for the flip animation, but keep it paused initially
+    this.tl = gsap.timeline({ paused: true });
+    this.tl.to(this.cardInnerEl.nativeElement, {
+      duration: 0.3,
+      rotationY: '+=180',
+      ease: 'power2.inOut',
+    });
+  }
+
+  flip() {
+    this.isFlipped = !this.isFlipped;
+    this.isFlippedChange.emit(this.isFlipped);
+    if (this.isFlipped) {
+      this.tl.play();
+    } else {
+      this.tl.reverse();
+    }
+  }
 }
+

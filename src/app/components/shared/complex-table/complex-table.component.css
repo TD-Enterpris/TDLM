@@ -407,3 +407,42 @@
     width: 100%;
     min-width: 150px;
 }
+
+/* --- Styles for Expandable Action Buttons (GSAP Controlled) --- */
+:host ::ng-deep .table .td-btn-tertiary {
+  display: inline-flex; /* This is the key change to align buttons side-by-side */
+  vertical-align: middle; /* Ensures proper alignment within the table cell */
+  align-items: center;
+  margin-right: 8px; /* Adds spacing between buttons */
+  max-width: 44px; /* GSAP animates from this */
+  height: 44px;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: nowrap;
+  outline-offset: 2px;
+  padding: 8px 12px;
+  gap: 0;
+  transition: none;
+}
+
+/* Removes the margin from the last button in the group */
+:host ::ng-deep .table .td-btn-tertiary:last-of-type {
+  margin-right: 0;
+}
+
+:host ::ng-deep .table .td-btn-tertiary:hover {
+  transform: none; /* Remove any old hover effects */
+}
+
+:host ::ng-deep .table .td-btn-tertiary > span:first-of-type {
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .table .td-btn-tertiary > span:last-of-type {
+  margin-left: 10px;
+  opacity: 0; /* GSAP animates from this */
+  transform: none; /* Remove any old transforms */
+}
