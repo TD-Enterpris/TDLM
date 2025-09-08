@@ -1,0 +1,62 @@
+[
+  {
+    "malcode": "MAL001",
+    "policyId": "PID-1123",
+    "assetDborCode": "ADR-45",
+    "recordType": "Financial",
+    "inventoryType": "Digital",
+    "retentionPeriod": "7 Years",
+    "effectiveDate": "2024-01-15",
+    "status": "Approved"
+  },
+  {
+    "malcode": "MAL002",
+    "policyId": "PID-1124",
+    "assetDborCode": "ADR-46",
+    "recordType": "HR",
+    "inventoryType": "Physical",
+    "retentionPeriod": "5 Years",
+    "effectiveDate": "2024-03-20",
+    "status": "Pending"
+  },
+  {
+    "malcode": "MAL003",
+    "policyId": "PID-1125",
+    "assetDborCode": "ADR-47",
+    "recordType": "Legal",
+    "inventoryType": "Digital",
+    "retentionPeriod": "10 Years",
+    "effectiveDate": "2023-11-10",
+    "status": "Rejected"
+  },
+  {
+    "malcode": "MAL004",
+    "policyId": "PID-1126",
+    "assetDborCode": "ADR-48",
+    "recordType": "IT",
+    "inventoryType": "Digital",
+    "retentionPeriod": "3 Years",
+    "effectiveDate": "2025-02-01",
+    "status": "Approved"
+  },
+  {
+    "malcode": "MAL005",
+    "policyId": "PID-1127",
+    "assetDborCode": "ADR-49",
+    "recordType": "Marketing",
+    "inventoryType": "Hybrid",
+    "retentionPeriod": "2 Years",
+    "effectiveDate": "2024-08-01",
+    "status": "Approved"
+  },
+  {
+    "malcode": "MAL006",
+    "policyId": "PID-1128",
+    "assetDborCode": "ADR-50",
+    "recordType": "Compliance",
+    "inventoryType": "Physical",
+    "retentionPeriod": "7 Years",
+    "effectiveDate": "2023-05-12",
+    "status": "Pending"
+  }
+]
