@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { gsap } from 'gsap';
@@ -43,7 +43,9 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
   @ViewChild('paginationSection') paginationSection!: ElementRef;
 
   private subscriptions = new Subscription();
-  private isInitialLoad = true;
+  public isInitialLoad = true;
+
+  public isAnimatedVisible = false;
 
   public isLoading = true;
   public pagedPolicies: Policy[] = [];
@@ -61,7 +63,8 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private policiesService: MyAppPoliciesService
+    private policiesService: MyAppPoliciesService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +91,7 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
 
   public loadPolicies(): void {
     this.isLoading = true;
+    this.cdr.detectChanges(); // Force DOM update for isLoading
     const params = {
       page: this.currentPageNumber,
       size: this.pageSize,
@@ -103,16 +107,28 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
           this.isLoading = false;
 
           if (this.isInitialLoad) {
-            setTimeout(() => this.playInitialAnimations(), 50);
+            this.isAnimatedVisible = false;
+            // By manually triggering change detection here, we ensure the *ngIf="!isLoading"
+            // block is rendered to the DOM immediately.
+            this.cdr.detectChanges();
+
+            // Now that the elements exist in the DOM (though invisible due to the CSS),
+            // we can run the animation instantly without a flicker.
+            this.playInitialAnimations();
+
             this.isInitialLoad = false;
+          } else {
+            this.isAnimatedVisible = true;
           }
         } catch {
           this.isLoading = false;
+          this.isAnimatedVisible = true;
           this.showMessage(MESSAGES.ERROR.LOAD, 'danger');
         }
       },
       error: () => {
         this.isLoading = false;
+        this.isAnimatedVisible = true;
         this.showMessage(MESSAGES.ERROR.LOAD, 'danger');
       },
     });
@@ -153,14 +169,19 @@ export class MyAppPoliciesComponent implements OnInit, OnDestroy {
 
   private playInitialAnimations(): void {
     if (this.tableSection && this.paginationSection) {
+      const container = this.tableSection.nativeElement.closest('.content-to-animate');
+      gsap.set(container, { opacity: 0, visibility: 'hidden' });
       const tl = gsap.timeline({
         defaults: {
           ease: ANIMATION_CONSTANTS.ease,
           duration: ANIMATION_CONSTANTS.duration,
         },
       });
-      tl.from(this.tableSection.nativeElement, { y: -50, opacity: 0 }, 0)
+      tl.set(container, { visibility: 'visible' }, 0)
+        .to(container, { opacity: 1 }, 0)
+        .from(this.tableSection.nativeElement, { y: -50, opacity: 0 }, 0)
         .from(this.paginationSection.nativeElement, { y: 50, opacity: 0 }, 0);
+      this.isAnimatedVisible = true;
     }
   }
 }

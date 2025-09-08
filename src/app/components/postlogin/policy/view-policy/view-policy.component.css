@@ -13,34 +13,6 @@
   color: #fff !important;
 }
 
-:host ::ng-deep .td-btn-tertiary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  /* Add a transition for a smooth hover effect on the entire button */
-  transition: transform 0.3s ease-in-out;
-}
-
-/* Initially hide the text using CSS */
-:host ::ng-deep .td-btn-tertiary span:last-of-type {
-  display: inline-block;
-  white-space: nowrap;
-  opacity: 0; /* Set initial opacity to 0 */
-  transform: translateX(-10px); /* Move text to the left */
-  /* No transition, GSAP controls animation */
-}
-
-/* On hover, show the text and reset its position */
-:host ::ng-deep .td-btn-tertiary:hover span:last-of-type {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Optional: Add a subtle scaling effect to the button on hover */
-:host ::ng-deep .td-btn-tertiary:hover {
-  transform: scale(1.05);
-}
-
 .stepper {
   position: relative;
 }
