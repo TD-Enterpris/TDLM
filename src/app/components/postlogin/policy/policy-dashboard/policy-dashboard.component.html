@@ -1,47 +1,25 @@
-<div
-  *ngIf="isLoading"
-  class="d-flex justify-content-center align-items-center"
-  style="height: 75vh"
->
-  <app-spinner
-    heading="Loading..."
-    message="Fetching policy data"
-    [isVisible]="true"
-  ></app-spinner>
+
+<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 75vh">
+  <app-spinner heading="Loading..." message="Fetching policy data" [isVisible]="true"></app-spinner>
 </div>
 
 <div *ngIf="!isLoading">
   <div class="container-fluid mt-20 mb-20">
-    <app-temporal-message
-      *ngIf="message"
-      [message]="message"
-      [type]="messageType"
-      [duration]="messageType === 'success' ? 5000 : null"
-    >
-    </app-temporal-message>
-
+    <app-temporal-message *ngIf="message" [message]="message" [type]="messageType" [duration]="messageType === 'success' ? 5000 : null"></app-temporal-message>
     <div class="search-add-container">
       <div class="row justify-content-between align-items-center mt-20 mb-20">
         <div class="col-auto">
-          <h1 class="h1 mb-0">
-            {{ formMode === 'add' ? 'Add Policy' : formMode === 'edit' ? 'Edit Policy' : 'Policy Search' }}
-          </h1>
+          <h1 class="h1 mb-0">{{ POLICY_DASHBOARD_TITLES[formMode] }}</h1>
         </div>
         <div class="col-auto">
-          <button
-            (click)="toggleSearchCollapse()"
-            class="btn btn-sm td-btn-tertiary"
-            aria-label="Toggle search and add form"
-          >
-            <span
-              class="td-icon-18x18"
-              [ngClass]="
-                isSearchCollapsed
-                  ? 'td-icon-18x18-chevron-down'
-                  : 'td-icon-18x18-chevron-up'
-              "
-            ></span>
+          <button (click)="toggleSearchCollapse()" class="btn btn-sm td-btn-tertiary" aria-label="Toggle search and add form">
+            <span class="td-icon-18x18" [ngClass]="isSearchCollapsed ? 'td-icon-18x18-chevron-down' : 'td-icon-18x18-chevron-up'"></span>
           </button>
+          <ng-container *ngIf="formMode === 'add'">
+            <button (click)="onAddPolicyParameter()" class="btn btn-sm td-btn-primary ms-2" aria-label="Add Policy Parameter">
+              {{ POLICY_DASHBOARD_BUTTONS.addPolicyParameter }}
+            </button>
+          </ng-container>
         </div>
       </div>
       <div #collapsibleContent class="collapsible-content">
@@ -51,14 +29,7 @@
               <div class="row g-3">
                 <ng-container *ngFor="let filter of dynamicFilters">
                   <div class="col-12 col-lg-4 col-md-6">
-                    <app-select-dropdown
-                      [id]="filter.key + '-filter'"
-                      [label]="filter.label"
-                      [placeholder]="'Select ' + filter.label"
-                      [options]="filter.options"
-                      [(selectedValue)]="filter.selectedValue"
-                    >
-                    </app-select-dropdown>
+                    <app-select-dropdown [id]="filter.key + '-filter'" [label]="filter.label" [placeholder]="'Select ' + filter.label" [options]="filter.options" [(selectedValue)]="filter.selectedValue"></app-select-dropdown>
                   </div>
                 </ng-container>
               </div>
@@ -66,24 +37,13 @@
                 <ng-container *ngIf="areFiltersActive">
                   <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                     <div class="ps-20">
-                      <app-button
-                        buttonLabel="Clear"
-                        (buttonClick)="onReset()"
-                        buttonClass="btn td-btn-secondary-clear w-100"
-                      >
-                      </app-button>
+                      <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.clear" (buttonClick)="onReset()" buttonClass="btn td-btn-secondary-clear w-100"></app-button>
                     </div>
                   </div>
                 </ng-container>
                 <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                   <div class="pe-20">
-                    <app-button
-                      buttonLabel="Search"
-                      (buttonClick)="onSearchButtonClick()"
-                      buttonClass="btn td-btn-primary-light w-100"
-                      [disabled]="!areFiltersActive"
-                    >
-                    </app-button>
+                    <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.search" (buttonClick)="onSearchButtonClick()" buttonClass="btn td-btn-primary-light w-100" [disabled]="!areFiltersActive"></app-button>
                   </div>
                 </div>
               </div>
@@ -95,155 +55,109 @@
             <div class="col-12">
               <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-jurisdiction"
-                    label="Jurisdiction"
-                    placeholder="Select Jurisdiction"
-                    [options]="getOptionsForField('jurisdiction')"
-                    [(selectedValue)]="newPolicy['jurisdiction']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-jurisdiction" label="Jurisdiction" placeholder="Select Jurisdiction" [options]="getOptionsForField('jurisdiction')" [(selectedValue)]="newPolicy['jurisdiction']"></app-select-dropdown>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-businessArea"
-                    label="Business Area"
-                    placeholder="Select Business Area"
-                    [options]="getOptionsForField('businessArea')"
-                    [(selectedValue)]="newPolicy['businessArea']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-businessArea" label="Business Area" placeholder="Select Business Area" [options]="getOptionsForField('businessArea')" [(selectedValue)]="newPolicy['businessArea']"></app-select-dropdown>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-inventoryType"
-                    label="Inventory Type"
-                    placeholder="Select Inventory Type"
-                    [options]="getOptionsForField('inventoryType')"
-                    [(selectedValue)]="newPolicy['inventoryType']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-inventoryType" label="Inventory Type" placeholder="Select Inventory Type" [options]="getOptionsForField('inventoryType')" [(selectedValue)]="newPolicy['inventoryType']"></app-select-dropdown>
                 </div>
               </div>
-
               <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-entityType"
-                    label="Entity Type"
-                    placeholder="Select Entity Type"
-                    [options]="getOptionsForField('entityType')"
-                    [(selectedValue)]="newPolicy['entityType']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-entityType" label="Entity Type" placeholder="Select Entity Type" [options]="getOptionsForField('entityType')" [(selectedValue)]="newPolicy['entityType']"></app-select-dropdown>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-status"
-                    label="Status"
-                    placeholder="Select Status"
-                    [options]="getOptionsForField('status')"
-                    [(selectedValue)]="newPolicy['status']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-status" label="Status" placeholder="Select Status" [options]="getOptionsForField('status')" [(selectedValue)]="newPolicy['status']"></app-select-dropdown>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-select-dropdown
-                    id="add-policyParameter"
-                    label="Policy Parameter"
-                    placeholder="Select Policy Parameter"
-                    [options]="getOptionsForField('policyParameter')"
-                    [(selectedValue)]="newPolicy['policyParameter']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-policyParameter" label="Policy Parameter" placeholder="Select Policy Parameter" [options]="getOptionsForField('policyParameter')" [(selectedValue)]="newPolicy['policyParameter']"></app-select-dropdown>
                 </div>
               </div>
-
               <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-input
-                    id="add-description"
-                    label="Description"
-                    placeholder="Enter Description"
-                    type="text"
-                    [(model)]="newPolicy['description']"
-                    [error]="formErrors['description']"
-                  ></app-input>
+                  <app-input id="add-description" label="Description" placeholder="Enter Description" type="text" [(model)]="newPolicy['description']" [error]="formErrors['description']"></app-input>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-date
-                    [mode]="'single'"
-                    label="Effective Date"
-                    placeholder="Enter Effective Date"
-                    [initialValues]="{ date: newPolicy['effectiveDate'] }"
-                    (valueChanges)="onDateChange('effectiveDate', $event)"
-                    [error]="formErrors['effectiveDate']"
-                  ></app-date>
+                  <app-date [mode]="'single'" label="Effective Date" placeholder="Enter Effective Date" [initialValues]="{ date: newPolicy['effectiveDate'] }" (valueChanges)="onDateChange('effectiveDate', $event)" [error]="formErrors['effectiveDate']"></app-date>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
-                  <app-date
-                    [mode]="'single'"
-                    label="Expiration Date"
-                    placeholder="Enter Expiration Date"
-                    [initialValues]="{ date: newPolicy['expirationDate'] }"
-                    (valueChanges)="onDateChange('expirationDate', $event)"
-                    [error]="formErrors['expirationDate']"
-                  ></app-date>
+                  <app-date [mode]="'single'" label="Expiration Date" placeholder="Enter Expiration Date" [initialValues]="{ date: newPolicy['expirationDate'] }" (valueChanges)="onDateChange('expirationDate', $event)" [error]="formErrors['expirationDate']"></app-date>
                 </div>
               </div>
-
               <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6">
-                  <app-input
-                    id="add-retentionPeriod"
-                    label="Retention Period"
-                    placeholder="Enter Retention Period"
-                    type="text"
-                    [(model)]="newPolicy['retentionPeriod']"
-                    [error]="formErrors['retentionPeriod']"
-                  ></app-input>
+                  <app-input id="add-retentionPeriod" label="Retention Period" placeholder="Enter Retention Period" type="text" [(model)]="newPolicy['retentionPeriod']" [error]="formErrors['retentionPeriod']"></app-input>
                 </div>
                 <div class="col-12 col-md-6">
-                  <app-select-dropdown
-                    id="add-mediaStorageType"
-                    label="Media Storage Type"
-                    placeholder="Select Media Storage Type"
-                    [options]="mediaStorageTypeOptions"
-                    [(selectedValue)]="newPolicy['mediaStorageType']"
-                  ></app-select-dropdown>
+                  <app-select-dropdown id="add-mediaStorageType" label="Media Storage Type" placeholder="Select Media Storage Type" [options]="mediaStorageTypeOptions" [(selectedValue)]="newPolicy['mediaStorageType']"></app-select-dropdown>
                 </div>
               </div>
-
               <div class="row mt-20 mb-10 justify-content-end">
                 <ng-container *ngIf="isNewPolicyDirty && formMode === 'add'">
                   <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                     <div class="ps-20">
-                      <app-button
-                        buttonLabel="Clear"
-                        (buttonClick)="onClearAddForm()"
-                        buttonClass="btn td-btn-secondary-clear w-100"
-                      >
-                      </app-button>
+                      <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.clear" (buttonClick)="onClearAddForm()" buttonClass="btn td-btn-secondary-clear w-100"></app-button>
                     </div>
                   </div>
                 </ng-container>
-
                 <ng-container *ngIf="formMode === 'edit'">
                   <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                     <div class="ps-20">
-                      <app-button
-                        buttonLabel="Cancel"
-                        (buttonClick)="onCancelForm()"
-                        buttonClass="btn td-btn-secondary-clear w-100"
-                      >
-                      </app-button>
+                      <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.cancel" (buttonClick)="onCancelForm()" buttonClass="btn td-btn-secondary-clear w-100"></app-button>
                     </div>
                   </div>
                 </ng-container>
-
                 <div class="col-6 col-sm-6 col-md-3 col-lg-2">
                   <div class="pe-20">
-                    <app-button
-                      [buttonLabel]="formMode === 'add' ? 'Save' : 'Update'"
-                      (buttonClick)="formMode === 'add' ? onSaveAdd() : onSaveEdit()"
-                      buttonClass="btn td-btn-primary-light w-100"
-                      [disabled]="!isNewPolicyDirty && formMode === 'add'"
-                    >
-                    </app-button>
+                    <app-button [buttonLabel]="formMode === 'add' ? POLICY_DASHBOARD_BUTTONS.save : POLICY_DASHBOARD_BUTTONS.update" (buttonClick)="formMode === 'add' ? onSaveAdd() : onSaveEdit()" buttonClass="btn td-btn-primary-light w-100" [disabled]="!isNewPolicyDirty && formMode === 'add'"></app-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div #addPolicyParameterSection *ngIf="formMode === 'addPolicyParameter'">
+          <div class="row mt-20 mb-10">
+            <div class="col-12">
+              <div *ngFor="let param of policyParameters; let i = index" class="row g-3 mb-3 align-items-end">
+                <div *ngIf="i > 0" class="col-12 col-md-2 col-lg-1">
+                  <app-select-dropdown id="and-or-{{i}}" label="And/Or" [options]="[{label: 'And', value: 'And'}, {label: 'Or', value: 'Or'}]" [(selectedValue)]="param.andOr"></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-3 col-lg-3">
+                  <app-select-dropdown id="add-parameter-name-{{i}}" label="Parameter Name" placeholder="Select Parameter Name" [options]="parameterNameOptions" [(selectedValue)]="param.parameterName"></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-3 col-lg-3">
+                  <app-select-dropdown id="add-operator-{{i}}" label="Operator" placeholder="Select Operator" [options]="param.operatorOptions || []" [(selectedValue)]="param.operator"></app-select-dropdown>
+                </div>
+                <div class="col-12 col-md-4 col-lg-4">
+                  <ng-container [ngSwitch]="param.inputType">
+                    <app-input *ngSwitchCase="'text'" id="add-value-{{i}}" label="Value" placeholder="Enter Value" type="text" [(model)]="param.value"></app-input>
+                    <app-select-dropdown *ngSwitchCase="'dropdown'" id="add-value-dropdown-{{i}}" label="Value" placeholder="Select Value" [options]="param.valueDropdownOptions || []" [(selectedValue)]="param.value"></app-select-dropdown>
+                    <app-date *ngSwitchCase="'date'" [mode]="'range'" label="Value" placeholder="Select Date Range" [initialValues]="{ date: param.value }" (valueChanges)="onParameterDateChange(i, $event)"></app-date>
+                  </ng-container>
+                </div>
+                <div class="col-12 col-md-2 col-lg-1">
+                  <button type="button" class="btn btn-sm td-btn-primary" (click)="addParameterRow()" *ngIf="i === policyParameters.length - 1">+</button>
+                </div>
+              </div>
+              <div class="row mt-20 mb-10 justify-content-end">
+                <ng-container *ngIf="isPolicyParameterFormDirty">
+                  <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                    <div class="ps-20">
+                      <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.clear" (buttonClick)="onClearPolicyParameters()" buttonClass="btn td-btn-secondary-clear w-100"></app-button>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                  <div class="ps-20">
+                    <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.cancel" (buttonClick)="onCancelPolicyParameters()" buttonClass="btn td-btn-secondary-clear w-100"></app-button>
+                  </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-3 col-lg-2">
+                  <div class="pe-20">
+                    <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.saveParameters" (buttonClick)="onSavePolicyParameter()" buttonClass="btn td-btn-primary-light w-100" [disabled]="!isPolicyParameterFormDirty"></app-button>
                   </div>
                 </div>
               </div>
@@ -252,45 +166,12 @@
         </div>
       </div>
     </div>
-
     <hr #section2 class="td-thin-divider-line-1" />
-
     <div #section3>
       <div class="row mt-10 mb-20">
         <div class="col-12">
-          <app-complex-table
-            title="Policy Results"
-            titleLevel="h2"
-            titleClass="h2"
-            [data]="pagedPolicyData"
-            [columnConfig]="columnConfig"
-            [defaultSelectedColumns]="defaultVisibleColumns"
-            [idProperty]="idProperty"
-            [pageSize]="pageSize"
-            [currentPageNumber]="currentPageNumber"
-            [enableCheckbox]="false"
-            [sortState]="sortState"
-            (sortChanged)="onSortChanged($event)"
-            (reloadRequested)="onSearch()"
-            [serverSidePagination]="true"
-            [showAddButton]="true"
-            [isAddingMode]="formMode !== 'search'"
-            (addClicked)="onAddPolicy()"
-            (searchClicked)="onCancelForm()"
-            (actionTriggered)="onActionTriggered($event)"
-            [showExpandCollapse]="false" [expandedRowTemplate]="expandedDetail"
-            [showFilterColumns]="false"
-            [rowClickable]="false"
-          >
-          </app-complex-table>
-          <app-pagination
-            [totalRecords]="totalRecords"
-            [pageSize]="pageSize"
-            [currentPageNumber]="currentPageNumber"
-            (pageChange)="onPageChange($event)"
-            (pageSizeChange)="onPageSizeChange($event)"
-          >
-          </app-pagination>
+          <app-complex-table title="Policy Results" titleLevel="h2" titleClass="h2" [data]="pagedPolicyData" [columnConfig]="columnConfig" [defaultSelectedColumns]="defaultVisibleColumns" [idProperty]="idProperty" [pageSize]="pageSize" [currentPageNumber]="currentPageNumber" [enableCheckbox]="false" [sortState]="sortState" (sortChanged)="onSortChanged($event)" (reloadRequested)="onSearch()" [serverSidePagination]="true" [showAddButton]="true" [isAddingMode]="formMode !== 'search'" (addClicked)="onAddPolicy()" (searchClicked)="onCancelForm()" (actionTriggered)="onActionTriggered($event)" [showExpandCollapse]="false" [expandedRowTemplate]="expandedDetail" [showFilterColumns]="false" [rowClickable]="false"></app-complex-table>
+          <app-pagination [totalRecords]="totalRecords" [pageSize]="pageSize" [currentPageNumber]="currentPageNumber" (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)"></app-pagination>
         </div>
       </div>
     </div>
@@ -300,33 +181,22 @@
 <app-dialog #confirmationDialog [title]="confirmationDialogTitle">
   <p>{{ confirmationDialogMessage }}</p>
   <div modal-footer class="col-12 d-flex justify-content-end gap-2">
-    <app-button
-      buttonLabel="No"
-      (buttonClick)="onConfirmationNo()"
-      buttonClass="btn td-btn-secondary-clear"
-    >
-    </app-button>
-    <app-button
-      buttonLabel="Yes"
-      (buttonClick)="onConfirmationYes()"
-      buttonClass="btn td-btn-primary-light"
-    >
-    </app-button>
+    <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.no" (buttonClick)="onConfirmationNo()" buttonClass="btn td-btn-secondary-clear"></app-button>
+    <app-button [buttonLabel]="POLICY_DASHBOARD_BUTTONS.yes" (buttonClick)="onConfirmationYes()" buttonClass="btn td-btn-primary-light"></app-button>
   </div>
 </app-dialog>
 
 <ng-template #expandedDetail let-row>
   <div class="expanded-content">
-    <h5 class="h5">Additional Policy Details</h5>
+    <h5 class="h5">{{ POLICY_DASHBOARD_LABELS.additionalDetails }}</h5>
     <p>
-      This is the expanded section for the policy in
-      <strong>{{ row.jurisdiction }}</strong
-      >. More details will be displayed here in the future.
+      {{ POLICY_DASHBOARD_LABELS.expandedSection }}
+      <strong>{{ row.jurisdiction }}</strong>. {{ POLICY_DASHBOARD_LABELS.moreDetails }}
     </p>
     <ul>
-      <li><strong>Policy ID:</strong> {{ row.id }}</li>
-      <li><strong>Current Status:</strong> {{ row.status }}</li>
-      <li><strong>Full Description:</strong> {{ row.description }}</li>
+      <li><strong>{{ POLICY_DASHBOARD_LABELS.policyId }}</strong> {{ row.id }}</li>
+      <li><strong>{{ POLICY_DASHBOARD_LABELS.currentStatus }}</strong> {{ row.status }}</li>
+      <li><strong>{{ POLICY_DASHBOARD_LABELS.fullDescription }}</strong> {{ row.description }}</li>
     </ul>
   </div>
 </ng-template>

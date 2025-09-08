@@ -1,3 +1,29 @@
+export const POLICY_DASHBOARD_TITLES: Record<FormMode, string> = {
+  add: 'Add Policy',
+  edit: 'Edit Policy',
+  addPolicyParameter: 'Add Policy Parameter',
+  search: 'Policy Search'
+};
+export const POLICY_DASHBOARD_BUTTONS = {
+  addPolicyParameter: 'Add Policy Parameter',
+  clear: 'Clear',
+  search: 'Search',
+  cancel: 'Cancel',
+  save: 'Save',
+  update: 'Update',
+  saveParameters: 'Save Parameters',
+  no: 'No',
+  yes: 'Yes'
+};
+export const POLICY_DASHBOARD_LABELS = {
+  additionalDetails: 'Additional Policy Details',
+  expandedSection: 'This is the expanded section for the policy in',
+  moreDetails: 'More details will be displayed here in the future.',
+  policyId: 'Policy ID:',
+  currentStatus: 'Current Status:',
+  fullDescription: 'Full Description:'
+};
+type FormMode = 'search' | 'add' | 'edit' | 'addPolicyParameter';
 import {
   Component,
   OnInit,
@@ -73,10 +99,14 @@ interface DynamicFilter {
   styleUrls: ['./policy-dashboard.component.css'],
 })
 export class PolicyDashboardComponent implements OnInit, OnDestroy {
+  public POLICY_DASHBOARD_TITLES = POLICY_DASHBOARD_TITLES;
+  public POLICY_DASHBOARD_BUTTONS = POLICY_DASHBOARD_BUTTONS;
+  public POLICY_DASHBOARD_LABELS = POLICY_DASHBOARD_LABELS;
   @ViewChild('section1') section1!: ElementRef;
   @ViewChild('section2') section2!: ElementRef;
   @ViewChild('section3') section3!: ElementRef;
   @ViewChild('addSection') addSection!: ElementRef;
+  @ViewChild('addPolicyParameterSection') addPolicyParameterSection!: ElementRef;
   @ViewChild('collapsibleContent') collapsibleContent!: ElementRef;
   @ViewChild('confirmationDialog') confirmationDialog!: DialogComponent;
 
@@ -96,7 +126,123 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
 
   public dynamicFilters: DynamicFilter[] = [];
 
-  public formMode: 'search' | 'add' | 'edit' = 'search';
+  public formMode: FormMode = 'search';
+  public parameterNameOptions = [
+    { label: 'Cashed', value: 'Cashed' },
+    { label: 'ContractClosureDate', value: 'ContractClosureDate' },
+    { label: 'dealerState', value: 'dealerState' },
+  ];
+  public operatorOptions: { label: string; value: string }[] = [];
+  public valueDropdownOptions: { label: string; value: string }[] = [];
+  public policyParameters: Array<any> = [
+    { parameterName: 'Cashed', operator: 'equal to', value: 'Yes', andOr: '' },
+    { parameterName: 'ContractClosureDate', operator: 'between', value: { start: '2025-09-01', end: '2025-09-08' }, andOr: 'And' },
+    { parameterName: 'dealerState', operator: 'in', value: 'MI', andOr: 'Or' }
+  ];
+  private operatorMap: { [key: string]: { label: string; value: string }[] } = {
+    Cashed: [
+      { label: 'equal to', value: 'equal to' },
+      { label: 'in', value: 'in' },
+      { label: 'between', value: 'between' },
+    ],
+    ContractClosureDate: [
+      { label: 'Between', value: 'between' },
+      { label: 'Greater than', value: 'greater than' },
+      { label: 'Greater than equal to', value: 'greater than equal to' },
+      { label: 'Less than', value: 'less than' },
+      { label: 'equal to', value: 'equal to' },
+      { label: 'in', value: 'in' },
+    ],
+    dealerState: [
+      { label: 'in', value: 'in' },
+      { label: 'Equal to', value: 'equal to' },
+      { label: 'between', value: 'between' },
+    ],
+  };
+  private valueMap: { [key: string]: { label: string; value: string }[] } = {
+    Cashed: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+    dealerState: [
+      { label: 'MI', value: 'MI' },
+      { label: 'NJ', value: 'NJ' },
+      { label: 'FL', value: 'FL' },
+    ],
+  };
+  public onAddPolicyParameter(): void {
+    this.formMode = 'addPolicyParameter';
+    this.policyParameters = [{ parameterName: '', operator: '', value: '', andOr: '' }];
+    this.operatorOptions = [];
+    this.valueDropdownOptions = [];
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.playAddPolicyParameterAnimation();
+      this.focusFirstPolicyParameterInput();
+    }, 0);
+  }
+  private focusFirstPolicyParameterInput(): void {
+    if (this.addPolicyParameterSection && this.addPolicyParameterSection.nativeElement) {
+      const el = this.addPolicyParameterSection.nativeElement;
+      const focusable = el.querySelector('select, input, [tabindex]:not([tabindex="-1"])');
+      if (focusable) (focusable as HTMLElement).focus();
+    }
+  }
+  private playAddPolicyParameterAnimation(): void {
+    if (this.addPolicyParameterSection && this.addPolicyParameterSection.nativeElement) {
+      gsap.from(this.addPolicyParameterSection.nativeElement, {
+        y: ANIMATION_CONSTANTS.yDown,
+        opacity: ANIMATION_CONSTANTS.opacityOut,
+        ease: ANIMATION_CONSTANTS.ease,
+        duration: ANIMATION_CONSTANTS.duration
+      });
+    }
+  }
+
+  
+  ngDoCheck(): void {
+    if (this.formMode === 'addPolicyParameter') {
+      this.policyParameters.forEach((paramObj) => {
+        const param = paramObj.parameterName;
+        paramObj.operatorOptions = param && this.operatorMap[param] ? this.operatorMap[param] : [];
+        paramObj.valueDropdownOptions = param && this.valueMap[param] ? this.valueMap[param] : [];
+        if (paramObj.operator === 'equal to' || paramObj.operator === 'Greater than' || paramObj.operator === 'Greater than equal to' || paramObj.operator === 'Less than') {
+          paramObj.inputType = 'text';
+        } else if (paramObj.operator === 'between') {
+          paramObj.inputType = 'date';
+        } else if (paramObj.operator === 'in') {
+          paramObj.inputType = 'dropdown';
+        } else {
+          paramObj.inputType = 'text';
+        }
+      });
+    }
+  }
+
+  public onParameterDateChange(idx: number, values: { date: string | { start: string; end: string } }): void {
+    this.policyParameters[idx].value = values.date;
+  }
+
+  public onSavePolicyParameter(): void {
+    this.showMessage('Policy parameters added!', 'success');
+    this.formMode = 'search';
+    this.cdr.detectChanges();
+  }
+
+  public onClearPolicyParameters(): void {
+    this.policyParameters = [{ parameterName: '', operator: '', value: '', andOr: '' }];
+    this.cdr.detectChanges();
+  }
+
+  public onCancelPolicyParameters(): void {
+    this.formMode = 'search';
+    this.cdr.detectChanges();
+  }
+
+  public addParameterRow(): void {
+    this.policyParameters.push({ parameterName: '', operator: '', value: '', andOr: 'And' });
+    this.cdr.detectChanges();
+  }
   private originalEditPolicy: NewPolicy | null = null;
   public newPolicy!: NewPolicy;
   public addFormFields = ADD_FORM_FIELDS;
@@ -143,6 +289,15 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     return Object.values(this.newPolicy).some((value) => !!value);
   }
 
+  public get isPolicyParameterFormDirty(): boolean {
+    if (!this.policyParameters || this.policyParameters.length === 0) {
+      return false;
+    }
+    return this.policyParameters.some(param =>
+      param.parameterName || param.operator || param.value
+    );
+  }
+
   public get isEditFormDirty(): boolean {
     if (this.formMode !== 'edit' || !this.originalEditPolicy) {
       return false;
@@ -180,7 +335,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     };
   }
 
-  private setFormMode(mode: 'search' | 'add' | 'edit'): void {
+  private setFormMode(mode: FormMode): void {
     this.formMode = mode;
 
     if (mode === 'edit') {
@@ -502,11 +657,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
     const policyToUpdate = this.newPolicy as any;
     const policyId = policyToUpdate.id;
 
-    // NOTE: Assumes your PolicyDashboardService has an `updatePolicy` method.
-    // this.policyService.updatePolicy(policyId, policyToUpdate).subscribe({ ... });
-
-    // --- MOCKED RESPONSE FOR DEMONSTRATION ---
-    // Replace this setTimeout with your actual service call
+    
     setTimeout(() => {
       const index = this.pagedPolicyData.findIndex(p => p.id === policyId);
       if (index > -1) {
@@ -524,7 +675,7 @@ export class PolicyDashboardComponent implements OnInit, OnDestroy {
         }, 0);
       });
     }, 1000);
-    // --- END MOCKED RESPONSE ---
+    
   }
 
   private validateForm(): boolean {
