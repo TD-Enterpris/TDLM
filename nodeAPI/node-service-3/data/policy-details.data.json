@@ -14,7 +14,7 @@
     "mediaStorageType": "Cloud Storage",
     "retentionCode": "FIN-001",
     "retentionTrigger": "End of Fiscal Year",
-    "expirationDate": "2031-01-08T06:00:00.000Z",
+    "expirationDate": "2031-01-16T06:00:00.000Z",
     "createdBy": "alice.jones",
     "updatedBy": "charlie.davis",
     "createdDate": "2023-12-01",

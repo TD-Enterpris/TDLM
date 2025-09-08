@@ -18,7 +18,9 @@ import {
   INFO_COLUMN_CONFIG,
   INFO_DEFAULT_VISIBLE_COLUMNS,
   VIEW_POLICY_TEXT,
-  TEMPORAL_MESSAGE_DURATION
+  TEMPORAL_MESSAGE_DURATION,
+  VIEW_POLICY_ERROR_MESSAGES,
+  ViewPolicyErrorKey
 } from './view-policy.constants';
 import { CardComponent } from '../../../shared/card/card.component';
 import { DateComponent } from '../../../shared/date/date.component';
@@ -75,6 +77,7 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
 
   confirmationDialogTitle = VIEW_POLICY_TEXT.confirmSaveTitle;
   confirmationDialogMessage = VIEW_POLICY_TEXT.confirmSaveMessage;
+  public ANIMATION_CONSTANTS = ANIMATION_CONSTANTS;
   private pendingSave = false;
 
   public showActionsColumn = true; // New property to control visibility
@@ -172,20 +175,20 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     ) {
       const tl = gsap.timeline({
         defaults: {
-          ease: ANIMATION_CONSTANTS.ease,
-          duration: ANIMATION_CONSTANTS.duration,
+          ease: this.ANIMATION_CONSTANTS.ease,
+          duration: this.ANIMATION_CONSTANTS.duration,
         },
       });
 
       // Section 1 - Policy details slides down
-      tl.from(this.summaryTable.nativeElement, { y: ANIMATION_CONSTANTS.yDown, opacity: ANIMATION_CONSTANTS.opacityOut }, 0);
+      tl.from(this.summaryTable.nativeElement, { y: this.ANIMATION_CONSTANTS.yDown, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0);
 
       // Section 2 - cards slide from left and right
-      tl.from(this.detailsSectionLeft.nativeElement, { x: -50, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.2);
-      tl.from(this.detailsSectionRight.nativeElement, { x: 50, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.2);
+      tl.from(this.detailsSectionLeft.nativeElement, { x: this.ANIMATION_CONSTANTS.xLeft ?? -50, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.2);
+      tl.from(this.detailsSectionRight.nativeElement, { x: this.ANIMATION_CONSTANTS.xRight ?? 50, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.2);
 
       // Section 3 approvers slides up
-      tl.from(this.approversTable.nativeElement, { y: ANIMATION_CONSTANTS.yUp, opacity: ANIMATION_CONSTANTS.opacityOut }, 0.4);
+      tl.from(this.approversTable.nativeElement, { y: this.ANIMATION_CONSTANTS.yUp, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.4);
     }
   }
 
@@ -266,16 +269,47 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     this.location.back();
   }
 
-  reload(): void {
+reload(): void {
     if (this.policyId) {
-      this.loadPolicyDetails(this.policyId);
+      this.isLoading = true;
+      // Add these two lines to reset the UI state
+      this.isEditingExpirationDate = false;
+      this.showActionsColumn = true;
+
+      this.viewPolicyService.getPolicyById(this.policyId).subscribe({
+        next: (response) => {
+          if (response.status === 'success' && response.data) {
+            this.currentPolicy = response.data;
+            this.policyApprovers = Array.isArray(this.currentPolicy.approvers) ? [...this.currentPolicy.approvers] : [];
+            this.expirationDate = this.currentPolicy.expirationDate;
+            this.originalExpirationDate = this.currentPolicy.expirationDate;
+            this.infoData = [this.currentPolicy];
+            this.isLoading = false;
+            this.setupAccordionData();
+            setTimeout(() => this.playEntranceAnimation());
+          } else {
+            this.isLoading = false;
+            this.saveMessageType = 'danger';
+            const msg = VIEW_POLICY_ERROR_MESSAGES[ViewPolicyErrorKey.LOAD];
+            this.saveMessage = typeof msg === 'function' ? msg() : msg;
+            this.showTemporalMessage = true;
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.saveMessageType = 'danger';
+          const msg = VIEW_POLICY_ERROR_MESSAGES[ViewPolicyErrorKey.LOAD];
+          this.saveMessage = typeof msg === 'function' ? msg() : msg;
+          this.showTemporalMessage = true;
+        }
+      });
     }
   }
 
   private animateDatePickerIn(): void {
     if (this.datePickerContainer?.nativeElement) {
-      gsap.set(this.datePickerContainer.nativeElement, { y: 20, opacity: 0 });
-      gsap.to(this.datePickerContainer.nativeElement, { y: 0, opacity: 1, duration: 0.5 });
+      gsap.set(this.datePickerContainer.nativeElement, { y: this.ANIMATION_CONSTANTS.datePickerY ?? 20, opacity: this.ANIMATION_CONSTANTS.opacityOut });
+      gsap.to(this.datePickerContainer.nativeElement, { y: 0, opacity: 1, duration: this.ANIMATION_CONSTANTS.datePickerInDuration ?? 0.5 });
       this.datePickerContainer.nativeElement.classList.add('animated');
     }
   }
@@ -283,9 +317,9 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   private animateDatePickerOut(onComplete: () => void): void {
     if (this.datePickerContainer?.nativeElement) {
       gsap.to(this.datePickerContainer.nativeElement, {
-        y: 20,
-        opacity: 0,
-        duration: 0.25,
+        y: this.ANIMATION_CONSTANTS.datePickerY ?? 20,
+        opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        duration: this.ANIMATION_CONSTANTS.datePickerOutDuration ?? 0.25,
         onComplete: () => {
           this.datePickerContainer.nativeElement.classList.remove('animated');
           onComplete();
@@ -300,8 +334,8 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     const dialogElement = this.confirmationDialogElementRef?.nativeElement?.querySelector('.modal-content');
     if (dialogElement) {
       gsap.fromTo(dialogElement,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }
+        { y: this.ANIMATION_CONSTANTS.modalYIn ?? -20, opacity: this.ANIMATION_CONSTANTS.opacityOut },
+        { y: 0, opacity: 1, duration: this.ANIMATION_CONSTANTS.modalInDuration ?? 0.3, ease: this.ANIMATION_CONSTANTS.modalEaseIn ?? 'power2.out' }
       );
     }
   }
@@ -310,7 +344,7 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     const dialogElement = this.confirmationDialogElementRef?.nativeElement?.querySelector('.modal-content');
     if (dialogElement) {
       gsap.to(dialogElement,
-        { y: 20, opacity: 0, duration: 0.3, ease: 'power2.in', onComplete: onComplete }
+        { y: this.ANIMATION_CONSTANTS.modalYOut ?? 20, opacity: this.ANIMATION_CONSTANTS.opacityOut, duration: this.ANIMATION_CONSTANTS.modalOutDuration ?? 0.3, ease: this.ANIMATION_CONSTANTS.modalEaseOut ?? 'power2.in', onComplete: onComplete }
       );
     } else {
       onComplete();

@@ -1,3 +1,54 @@
+export enum ViewPolicyErrorKey {
+  LOAD = 'LOAD',
+  SAVE = 'SAVE',
+  NO_POLICY = 'NO_POLICY',
+  NETWORK = 'NETWORK',
+  BAD_REQUEST = 'BAD_REQUEST',
+  AUTH = 'AUTH',
+  FORBIDDEN = 'FORBIDDEN',
+  NOT_FOUND = 'NOT_FOUND',
+  TIMEOUT = 'TIMEOUT',
+  CONFLICT = 'CONFLICT',
+  PAYLOAD_TOO_LARGE = 'PAYLOAD_TOO_LARGE',
+  UNSUPPORTED_MEDIA_TYPE = 'UNSUPPORTED_MEDIA_TYPE',
+  TOO_MANY_REQUESTS = 'TOO_MANY_REQUESTS',
+  INTERNAL_SERVER = 'INTERNAL_SERVER',
+  BAD_GATEWAY = 'BAD_GATEWAY',
+  SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
+  GATEWAY_TIMEOUT = 'GATEWAY_TIMEOUT',
+  GENERIC = 'GENERIC',
+  NAVIGATION_FAIL = 'NAVIGATION_FAIL',
+  BACK_BUTTON_FAIL = 'BACK_BUTTON_FAIL',
+  DATE_BIND_FAIL = 'DATE_BIND_FAIL',
+  SAVE_API_FAIL = 'SAVE_API_FAIL',
+}
+
+export type ViewPolicyErrorMessages = Record<ViewPolicyErrorKey, string | ((code?: number) => string)>;
+
+export const VIEW_POLICY_ERROR_MESSAGES: ViewPolicyErrorMessages = {
+  [ViewPolicyErrorKey.NAVIGATION_FAIL]: 'Unable to navigate to policy details. Please try again.',
+  [ViewPolicyErrorKey.BACK_BUTTON_FAIL]: 'Unable to go back. Please try again or return to the dashboard.',
+  [ViewPolicyErrorKey.DATE_BIND_FAIL]: 'Unable to bind the selected date. Please choose a valid date and try again.',
+  [ViewPolicyErrorKey.SAVE_API_FAIL]: 'Failed to save changes due to a server error. Please try again later or contact support.',
+  [ViewPolicyErrorKey.LOAD]: 'An error occurred while fetching policy details. Please try again.',
+  [ViewPolicyErrorKey.SAVE]: 'Failed to save policy details. Please try again.',
+  [ViewPolicyErrorKey.NO_POLICY]: 'No policy found.',
+  [ViewPolicyErrorKey.NETWORK]: 'Network error. Please check your internet connection or try again later.',
+  [ViewPolicyErrorKey.BAD_REQUEST]: 'Bad request. Please check your input and try again.',
+  [ViewPolicyErrorKey.AUTH]: 'Authentication required. Please log in.',
+  [ViewPolicyErrorKey.FORBIDDEN]: 'Access denied. You do not have permission to view this policy.',
+  [ViewPolicyErrorKey.NOT_FOUND]: 'Resource not found. The requested policy does not exist.',
+  [ViewPolicyErrorKey.TIMEOUT]: 'Request timeout. Please try again.',
+  [ViewPolicyErrorKey.CONFLICT]: 'Conflict detected. Please resolve any duplicate or conflicting data.',
+  [ViewPolicyErrorKey.PAYLOAD_TOO_LARGE]: 'Payload too large. Please reduce the size of your request.',
+  [ViewPolicyErrorKey.UNSUPPORTED_MEDIA_TYPE]: 'Unsupported media type. Please check your file format.',
+  [ViewPolicyErrorKey.TOO_MANY_REQUESTS]: 'Too many requests. Please wait and try again later.',
+  [ViewPolicyErrorKey.INTERNAL_SERVER]: 'Internal server error. Please try again later.',
+  [ViewPolicyErrorKey.BAD_GATEWAY]: 'Bad gateway. The server received an invalid response.',
+  [ViewPolicyErrorKey.SERVICE_UNAVAILABLE]: 'Service unavailable. Please try again later.',
+  [ViewPolicyErrorKey.GATEWAY_TIMEOUT]: 'Gateway timeout. Please try again later.',
+  [ViewPolicyErrorKey.GENERIC]: (code?: number) => `Error${code ? ' ' + code : ''}: Unable to fetch policy details.`,
+};
 import { TemplateRef } from '@angular/core';
 import { ColumnConfig, TableRow } from '../../../shared/complex-table/complex-table.component';
 
@@ -5,8 +56,19 @@ export const ANIMATION_CONSTANTS = {
   duration: 0.6,
   yDown: -50,
   yUp: 50,
+  xLeft: -50,
+  xRight: 50,
   ease: 'power3.out',
   opacityOut: 0,
+  datePickerY: 20,
+  datePickerInDuration: 0.5,
+  datePickerOutDuration: 0.25,
+  modalYIn: -20,
+  modalYOut: 20,
+  modalInDuration: 0.3,
+  modalOutDuration: 0.3,
+  modalEaseIn: 'power2.out',
+  modalEaseOut: 'power2.in',
 };
 
 export const INFO_DEFAULT_VISIBLE_COLUMNS: string[] = ['malcode', 'policyId', 'assetDborCode', 'status', 'actions'];
