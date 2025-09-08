@@ -11,7 +11,7 @@
 
     <div class="row">
       <div #tableSection class="col-12">
-        <app-complex-table *ngIf="columnConfig" title="Policies" titleLevel="h1" titleClass="h1" [data]="pagedPolicies"
+        <app-complex-table *ngIf="columnConfig" title="My App Policies" titleLevel="h1" titleClass="h1" [data]="pagedPolicies"
           [columnConfig]="columnConfig" [idProperty]="idProperty" [defaultSelectedColumns]="defaultVisibleColumns"
           [pageSize]="pageSize" [currentPageNumber]="currentPageNumber" [sortState]="sortState"
           (sortChanged)="onSortChanged($event)" (reloadRequested)="loadPolicies()" [rowClickable]="false"
