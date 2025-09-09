@@ -1,159 +1,238 @@
-
-<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center vh-100" role="status" aria-live="polite">
-    <app-spinner
-        [heading]="VIEW_POLICY_TEXT.loadingHeading"
-        [message]="VIEW_POLICY_TEXT.loadingMessage"
-        [isVisible]="true"
-        aria-label="Loading policy details"
-    ></app-spinner>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+  style="height: 74vh"
+>
+  <app-spinner
+    [heading]="VIEW_POLICY_TEXT.loadingHeading"
+    [message]="VIEW_POLICY_TEXT.loadingMessage"
+    [isVisible]="true"
+    aria-label="Loading policy details"
+  ></app-spinner>
 </div>
 
 <div *ngIf="!isLoading" role="main" aria-label="Policy Details Main Content">
-    <div class="container-fluid my-3">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <app-temporal-message
-                            *ngIf="showTemporalMessage && saveMessage"
-                            [message]="saveMessage"
-                            [type]="saveMessageType"
-                            [duration]="TEMPORAL_MESSAGE_DURATION"
-                            [showCloseButton]="true"
-                            (closed)="showTemporalMessage = false"
-                        ></app-temporal-message>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12" #summaryTable aria-label="Policy Details Table">
-                        <app-complex-table
-                            *ngIf="infoColumnConfig"
-                            [title]="VIEW_POLICY_TEXT.infoTableTitle"
-                            [data]="infoData"
-                            [columnConfig]="infoColumnConfig"
-                            [defaultSelectedColumns]="visibleInfoColumns"
-                            idProperty="policyId"
-                            [enableCheckbox]="false"
-                            [showAddButton]="false"
-                            [showFilterColumns]="false"
-                            [pageSize]="10"
-                            [isSortable]="false"
-                            [rowClickable]="false"
-                            (actionTriggered)="onTableAction($event)"
-                            [showBackButton]="true"
-                            (backClicked)="goBack()"
-                            [showReloadButton]="true"
-                            (reloadRequested)="reload()"
-                            role="table"
-                            aria-label="Policy Details"
-                        >
-                        </app-complex-table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div #detailsSection class="mt-4">
-            <div class="row gx-4">
-                <div class="col-12 col-md-7 d-flex flex-column gap-4" #detailsSectionLeft>
-                    <app-card *ngFor="let section of policyDetailsData[0]" role="region" [attr.aria-label]="section.title" class="w-100 p-2 p-md-0 my-2 my-md-0 mx-0 mx-md-2">
-                        <div class="card-header px-2 py-1">
-                            <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">{{ section.title }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div *ngFor="let field of section.fields" class="row mb-2 flex-wrap" role="listitem">
-                                <div class="col-12 col-sm-5">
-                                    <strong class="d-block d-sm-inline">{{ field.label }}</strong>
-                                </div>
-                                <div class="col-12 col-sm-7 small" tabindex="0">
-                                    {{ field.value || 'N/A' }}
-                                </div>
-                            </div>
-                        </div>
-                    </app-card>
-                </div>
-
-                <div class="col-12 col-md-5" #detailsSectionRight>
-                    <app-card *ngFor="let section of policyDetailsData[1]" [bodyClass]="'h-100'" role="region" [attr.aria-label]="section.title" class="w-100 p-2 p-md-0 my-2 my-md-0">
-                        <div class="card-header px-2 py-1">
-                            <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">{{ section.title }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="stepper" role="list" aria-label="Policy Timeline">
-                                <div *ngFor="let event of section.timelineEvents; let i = index" class="step-item d-flex flex-column flex-md-row align-items-md-center" [ngClass]="event.status" role="listitem" tabindex="0">
-                                    <div class="step-marker mb-1 mb-md-0 me-md-2">
-                                        <span *ngIf="event.status !== 'completed'" class="step-icon" [ngClass]="event.icon" aria-hidden="true"></span>
-                                        <span *ngIf="event.status === 'completed'" class="step-icon td-icon-18x18-check" aria-label="Completed"></span>
-                                    </div>
-                                    <div class="step-content">
-                                        <div class="fw-bold">{{ event.label }}</div>
-                                        <div class="small">{{ event.title }} {{ event.details }}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <ng-container *ngIf="isEditingExpirationDate">
-                                <hr class="my-3">
-                                <div #datePickerContainer class="d-flex flex-column gap-3">
-                                    <app-date
-                                        mode="single"
-                                        [label]="VIEW_POLICY_TEXT.editExpirationLabel"
-                                        [initialValues]="{ date: expirationDate }"
-                                        (valueChanges)="onDateChange($event)">
-                                    </app-date>
-                                    <div class="d-flex flex-column flex-sm-row gap-2">
-                                        <button class="btn btn-primary w-100 w-sm-auto" (click)="openSaveConfirmDialog()" [disabled]="!isDateChanged()" aria-label="Save expiration date" tabindex="0">{{ VIEW_POLICY_TEXT.saveButton }}</button>
-                                        <button class="btn btn-secondary w-100 w-sm-auto" (click)="onCancel()" aria-label="Cancel expiration date edit" tabindex="0">{{ VIEW_POLICY_TEXT.cancelButton }}</button>
-                                    </div>
-                                </div>
-                            </ng-container>
-                        </div>
-                    </app-card>
-                </div>
-            </div>
-
-            <div class="row mt-3" #approversTable>
-                <div class="col-12">
-                    <app-complex-table
-                        *ngIf="approversColumnConfig"
-                        [title]="VIEW_POLICY_TEXT.approversTableTitle"
-                        [data]="policyApprovers"
-                        [columnConfig]="approversColumnConfig"
-                        [defaultSelectedColumns]="approversDefaultVisibleColumns"
-                        idProperty="approverId"
-                        [enableCheckbox]="false"
-                        [showAddButton]="false"
-                        [showFilterColumns]="false"
-                        [pageSize]="5"
-                        [isSortable]="false"
-                        [rowClickable]="false"
-                        [showReloadButton]="false"
-                        role="table"
-                        aria-label="Approvers Table"
-                        class="w-100"
-                    >
-                    </app-complex-table>
-                </div>
-            </div>
-        </div>
+  <div class="container-fluid my-3">
+    <div class="row">
+      <div class="col-12">
+        <app-temporal-message
+          *ngIf="showTemporalMessage && saveMessage"
+          [message]="saveMessage"
+          [type]="saveMessageType"
+          [duration]="TEMPORAL_MESSAGE_DURATION"
+          [showCloseButton]="true"
+          (closed)="showTemporalMessage = false"
+        ></app-temporal-message>
+      </div>
+      <div class="col-12" #summaryTable aria-label="Policy Details Table">
+        <app-complex-table
+          *ngIf="infoColumnConfig"
+          [title]="VIEW_POLICY_TEXT.infoTableTitle"
+          [data]="infoData"
+          [columnConfig]="infoColumnConfig"
+          [defaultSelectedColumns]="visibleInfoColumns"
+          idProperty="policyId"
+          [enableCheckbox]="false"
+          [showAddButton]="false"
+          [showFilterColumns]="false"
+          [pageSize]="10"
+          [isSortable]="false"
+          [rowClickable]="false"
+          (actionTriggered)="onTableAction($event)"
+          [showBackButton]="true"
+          (backClicked)="goBack()"
+          [showReloadButton]="true"
+          (reloadRequested)="reload()"
+          role="table"
+          aria-label="Policy Details"
+        >
+        </app-complex-table>
+      </div>
     </div>
+
+    <div #detailsSection class="mt-4">
+      <div class="row gx-4">
+        <div
+          class="col-12 col-md-7 d-flex flex-column gap-4"
+          #detailsSectionLeft
+        >
+          <app-card
+            *ngFor="let section of policyDetailsData[0]"
+            role="region"
+            [attr.aria-label]="section.title"
+            class="w-100 p-2 p-md-0 my-2 my-md-0 mx-0 mx-md-2"
+          >
+            <div class="card-header px-2 py-1">
+              <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">
+                {{ section.title }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div
+                *ngFor="let field of section.fields"
+                class="row mb-2 flex-wrap"
+                role="listitem"
+              >
+                <div class="col-12 col-sm-5">
+                  <strong class="d-block d-sm-inline">{{ field.label }}</strong>
+                </div>
+                <div class="col-12 col-sm-7 small" tabindex="0">
+                  {{ field.value || "N/A" }}
+                </div>
+              </div>
+            </div>
+          </app-card>
+        </div>
+
+        <div class="col-12 col-md-5" #detailsSectionRight>
+          <app-card
+            *ngFor="let section of policyDetailsData[1]"
+            [bodyClass]="'h-100'"
+            role="region"
+            [attr.aria-label]="section.title"
+            class="w-100 p-2 p-md-0 my-2 my-md-0"
+          >
+            <div class="card-header px-2 py-1">
+              <h5 class="card-title mb-0 fs-6 fs-md-5" tabindex="0">
+                {{ section.title }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="stepper" role="list" aria-label="Policy Timeline">
+                <div
+                  *ngFor="let event of section.timelineEvents; let i = index"
+                  class="step-item d-flex flex-column flex-md-row align-items-md-center"
+                  [ngClass]="event.status"
+                  role="listitem"
+                  tabindex="0"
+                >
+                  <div class="step-marker mb-1 mb-md-0 me-md-2">
+                    <span
+                      *ngIf="event.status !== 'completed'"
+                      class="step-icon"
+                      [ngClass]="event.icon"
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      *ngIf="event.status === 'completed'"
+                      class="step-icon td-icon-18x18-check"
+                      aria-label="Completed"
+                    ></span>
+                  </div>
+                  <div class="step-content">
+                    <div class="fw-bold">{{ event.label }}</div>
+                    <div class="small">
+                      {{ event.title }} {{ event.details }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container *ngIf="isEditingExpirationDate">
+                <hr class="my-3" />
+                <div #datePickerContainer class="d-flex flex-column gap-3">
+                  <app-date
+                    mode="single"
+                    [label]="VIEW_POLICY_TEXT.editExpirationLabel"
+                    [initialValues]="{ date: expirationDate }"
+                    (valueChanges)="onDateChange($event)"
+                  >
+                  </app-date>
+                  <div class="d-flex flex-column flex-sm-row gap-2">
+                    <button
+                      class="btn btn-primary w-100 w-sm-auto"
+                      (click)="openSaveConfirmDialog()"
+                      [disabled]="!isDateChanged()"
+                      aria-label="Save expiration date"
+                      tabindex="0"
+                    >
+                      {{ VIEW_POLICY_TEXT.saveButton }}
+                    </button>
+                    <button
+                      class="btn btn-secondary w-100 w-sm-auto"
+                      (click)="onCancel()"
+                      aria-label="Cancel expiration date edit"
+                      tabindex="0"
+                    >
+                      {{ VIEW_POLICY_TEXT.cancelButton }}
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </app-card>
+        </div>
+      </div>
+
+      <div class="row mt-3" #approversTable>
+        <div class="col-12">
+          <app-complex-table
+            *ngIf="approversColumnConfig"
+            [title]="VIEW_POLICY_TEXT.approversTableTitle"
+            [data]="policyApprovers"
+            [columnConfig]="approversColumnConfig"
+            [defaultSelectedColumns]="approversDefaultVisibleColumns"
+            idProperty="approverId"
+            [enableCheckbox]="false"
+            [showAddButton]="false"
+            [showFilterColumns]="false"
+            [pageSize]="5"
+            [isSortable]="false"
+            [rowClickable]="false"
+            [showReloadButton]="false"
+            role="table"
+            aria-label="Approvers Table"
+            class="w-100"
+          >
+          </app-complex-table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<app-dialog #confirmationDialog [title]="confirmationDialogTitle" role="dialog" aria-modal="true" aria-labelledby="confirmationDialogTitle" tabindex="-1" class="w-100 w-md-50 mx-auto">
-    <ng-container *ngIf="isModalLoading">
-        <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
-            <app-spinner
-                [heading]="VIEW_POLICY_TEXT.loadingHeading"
-                [message]="VIEW_POLICY_TEXT.loadingMessage"
-                [isVisible]="true"
-            ></app-spinner>
-        </div>
+<app-dialog
+  #confirmationDialog
+  [title]="confirmationDialogTitle"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="confirmationDialogTitle"
+  tabindex="-1"
+  class="w-100 w-md-50 mx-auto"
+>
+  <div modal-body class="p-3">
+    <ng-container *ngIf="isModalLoading; else confirmBody">
+      <app-spinner
+        heading="Saving..."
+        message="Processing request"
+        [isVisible]="true"
+        role="status"
+        aria-live="polite"
+      >
+      </app-spinner>
     </ng-container>
-    <ng-container *ngIf="!isModalLoading">
-        <p>{{ confirmationDialogMessage }}</p>
-        <div modal-footer class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2">
-            <button class="btn btn-secondary w-100 w-sm-auto" (click)="onSaveConfirmNo()" aria-label="Cancel Save" tabindex="0">No</button>
-            <button class="btn btn-primary w-100 w-sm-auto" (click)="onSaveConfirmYes()" aria-label="Confirm Save" tabindex="0">Yes</button>
-        </div>
-    </ng-container>
+    <ng-template #confirmBody>
+      <p>{{ confirmationDialogMessage }}</p>
+    </ng-template>
+  </div>
+  <div modal-footer>
+    <button
+      class="btn btn-outline-secondary"
+      (click)="onSaveConfirmNo()"
+      tabindex="0"
+      (keydown.enter)="onSaveConfirmNo()"
+      (keydown.space)="onSaveConfirmNo()"
+    >
+      No
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="onSaveConfirmYes()"
+      tabindex="0"
+      (keydown.enter)="onSaveConfirmYes()"
+      (keydown.space)="onSaveConfirmYes()"
+    >
+      Yes
+    </button>
+  </div>
 </app-dialog>

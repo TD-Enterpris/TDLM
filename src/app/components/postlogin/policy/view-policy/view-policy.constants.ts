@@ -91,9 +91,9 @@ export const INFO_COLUMN_CONFIG: Record<string, ColumnConfig> = {
     type: 'buttons',
     label: 'Actions',
     buttons: () => [
-      { action: 'approve', label: 'Approve', spanIcon: 'td-icon-18x18-check-circle-o', title: 'Approve Policy' },
-      { action: 'reject', label: 'Reject', spanIcon: 'td-icon-18x18-close-circle-o', title: 'Reject Policy' },
-      { action: 'edit', label: 'Edit', spanIcon: 'td-icon-18x18-edit', title: 'Edit Policy' }
+      { action: 'approve', label: 'Approve', spanIcon: 'td-icon td-icon-colour-primary icon-regular td-icon-aproved', title: 'Approve Policy' },
+      { action: 'reject', label: 'Reject', spanIcon: 'td-icon td-icon-colour-primary icon-regular td-icon-clearButton text-td-colour-primary text-td-colour-font-6 td-icon-aproved', title: 'Reject Policy' },
+      { action: 'edit', label: 'Edit', spanIcon: 'td-icon-18x18 td-icon-colour-primary td-icon-18x18-edit', title: 'Edit Policy' }
     ]
   }
 };
@@ -115,15 +115,15 @@ export const APPROVERS_COLUMN_CONFIG: Record<string, ColumnConfig> = {
   comments: { type: 'text', label: 'Comments' }
 };
 
-export const createAccordionData = (currentPolicy: any): any[][] => {
+export const getPolicyDetailsSections = (currentPolicy: any): any[][] => {
   if (!currentPolicy) return [];
 
   const now = new Date();
   const historyEvents = [
-    { date: currentPolicy.createdDate, label: 'Created Date', details: `by ${currentPolicy.createdBy}`, icon: 'td-icon-18x18-plus-circle' },
-    { date: currentPolicy.updatedDate, label: 'Updated Date', details: `by ${currentPolicy.updatedBy}`, icon: 'td-icon-18x18-edit' },
-    { date: currentPolicy.effectiveDate, label: 'Effective Date', details: 'Policy is now in effect.', icon: 'td-icon-18x18-calendar' },
-    { date: currentPolicy.expirationDate, label: 'Expiration Date', details: 'Policy will no longer be active.', icon: 'td-icon-18x18-close-circle' }
+    { date: currentPolicy.createdDate, label: 'Created Date', details: `by ${currentPolicy.createdBy}`, icon: 'td-icon-18x18 td-icon-18x18-checkMark' },
+    { date: currentPolicy.updatedDate, label: 'Updated Date', details: `by ${currentPolicy.updatedBy}`, icon: 'td-icon-18x18 td-icon-18x18-edit' },
+    { date: currentPolicy.effectiveDate, label: 'Effective Date', details: 'Policy is now in effect.', icon: 'td-icon-18x18 td-icon-18x18-calendarAlt' },
+    { date: currentPolicy.expirationDate, label: 'Expiration Date', details: 'Policy will no longer be active.', icon: 'td-icon-18x18 td-icon-18x18-calendar' }
   ];
 
   const sortedTimelineEvents = historyEvents

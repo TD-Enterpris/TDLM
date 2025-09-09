@@ -1,4 +1,12 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, AfterViewChecked, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewChecked,
+  AfterViewInit,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { gsap } from 'gsap';
@@ -6,21 +14,25 @@ import { gsap } from 'gsap';
 import {
   ComplexTableComponent,
   ColumnConfig,
-  TableRow
+  TableRow,
 } from '../../../shared/complex-table/complex-table.component';
 import { SpinnerComponent } from '../../../shared/spinner/spinner.component';
-import { ViewPolicyService, PolicyDetails, Approver } from '../../../../services/api/view-policy.service';
+import {
+  ViewPolicyService,
+  PolicyDetails,
+  Approver,
+} from '../../../../services/api/view-policy.service';
 import {
   ANIMATION_CONSTANTS,
   APPROVERS_COLUMN_CONFIG,
   APPROVERS_DEFAULT_VISIBLE_COLUMNS,
-  createAccordionData,
+  getPolicyDetailsSections,
   INFO_COLUMN_CONFIG,
   INFO_DEFAULT_VISIBLE_COLUMNS,
   VIEW_POLICY_TEXT,
   TEMPORAL_MESSAGE_DURATION,
   VIEW_POLICY_ERROR_MESSAGES,
-  ViewPolicyErrorKey
+  ViewPolicyErrorKey,
 } from './view-policy.constants';
 import { CardComponent } from '../../../shared/card/card.component';
 import { DateComponent } from '../../../shared/date/date.component';
@@ -37,12 +49,14 @@ import { DialogComponent } from '../../../shared/dialog/dialog.component';
     CardComponent,
     DateComponent,
     TemporalMessageComponent,
-    DialogComponent
+    DialogComponent,
   ],
   templateUrl: './view-policy.component.html',
-  styleUrls: ['./view-policy.component.css']
+  styleUrls: ['./view-policy.component.css'],
 })
-export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewInit {
+export class ViewPolicyComponent
+  implements OnInit, AfterViewChecked, AfterViewInit
+{
   public VIEW_POLICY_TEXT = VIEW_POLICY_TEXT;
   public TEMPORAL_MESSAGE_DURATION = TEMPORAL_MESSAGE_DURATION;
 
@@ -55,7 +69,8 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   @ViewChild('detailsSectionRight') detailsSectionRight!: ElementRef;
   @ViewChild('approversTable') approversTable!: ElementRef;
   @ViewChild('datePickerContainer') datePickerContainer!: ElementRef;
-  @ViewChild('confirmationDialog', { read: ElementRef }) confirmationDialogElementRef!: ElementRef;
+  @ViewChild('confirmationDialog', { read: ElementRef })
+  confirmationDialogElementRef!: ElementRef;
   @ViewChild('confirmationDialog') confirmationDialog!: DialogComponent;
 
   public policyId: string | null = null;
@@ -65,13 +80,14 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   public isEditingExpirationDate = false;
 
   public infoData: PolicyDetails[] = [];
-  public policyDetailsData: ReturnType<typeof createAccordionData> = [];
+  public policyDetailsData: ReturnType<typeof getPolicyDetailsSections> = [];
   public policyApprovers: Approver[] = [];
   public expirationDate = '';
   public originalExpirationDate = '';
 
   public infoColumnConfig: Record<string, ColumnConfig> = INFO_COLUMN_CONFIG;
-  public approversColumnConfig: Record<string, ColumnConfig> = APPROVERS_COLUMN_CONFIG;
+  public approversColumnConfig: Record<string, ColumnConfig> =
+    APPROVERS_COLUMN_CONFIG;
   public infoDefaultVisibleColumns = INFO_DEFAULT_VISIBLE_COLUMNS;
   public approversDefaultVisibleColumns = APPROVERS_DEFAULT_VISIBLE_COLUMNS;
 
@@ -80,12 +96,12 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
   public ANIMATION_CONSTANTS = ANIMATION_CONSTANTS;
   private pendingSave = false;
 
-  public showActionsColumn = true; // New property to control visibility
+  public showActionsColumn = true;
 
   get visibleInfoColumns(): string[] {
     return this.showActionsColumn
       ? this.infoDefaultVisibleColumns
-      : this.infoDefaultVisibleColumns.filter(col => col !== 'actions');
+      : this.infoDefaultVisibleColumns.filter((col) => col !== 'actions');
   }
 
   constructor(
@@ -96,11 +112,14 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     private viewPolicyService: ViewPolicyService
   ) {}
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   ngAfterViewChecked(): void {
-    if (this.isEditingExpirationDate && this.datePickerContainer && !this.datePickerContainer.nativeElement.classList.contains('animated')) {
+    if (
+      this.isEditingExpirationDate &&
+      this.datePickerContainer &&
+      !this.datePickerContainer.nativeElement.classList.contains('animated')
+    ) {
       this.animateDatePickerIn();
     }
   }
@@ -143,12 +162,14 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
       next: (response) => {
         if (response.status === 'success' && response.data) {
           this.currentPolicy = response.data;
-          this.policyApprovers = Array.isArray(this.currentPolicy.approvers) ? [...this.currentPolicy.approvers] : [];
+          this.policyApprovers = Array.isArray(this.currentPolicy.approvers)
+            ? [...this.currentPolicy.approvers]
+            : [];
           this.expirationDate = this.currentPolicy.expirationDate;
           this.originalExpirationDate = this.currentPolicy.expirationDate;
           this.infoData = [this.currentPolicy];
           this.isLoading = false;
-          this.setupAccordionData();
+          this.setupPolicyDetailsSections();
           setTimeout(() => this.playEntranceAnimation());
         } else {
           this.isLoading = false;
@@ -156,13 +177,13 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
       },
       error: (err) => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
-  setupAccordionData(): void {
+  setupPolicyDetailsSections(): void {
     if (this.currentPolicy) {
-          this.policyDetailsData = createAccordionData(this.currentPolicy);
+      this.policyDetailsData = getPolicyDetailsSections(this.currentPolicy);
     }
   }
 
@@ -181,27 +202,56 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
       });
 
       // Section 1 - Policy details slides down
-      tl.from(this.summaryTable.nativeElement, { y: this.ANIMATION_CONSTANTS.yDown, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0);
+      tl.from(
+        this.summaryTable.nativeElement,
+        {
+          y: this.ANIMATION_CONSTANTS.yDown,
+          opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        },
+        0
+      );
 
       // Section 2 - cards slide from left and right
-      tl.from(this.detailsSectionLeft.nativeElement, { x: this.ANIMATION_CONSTANTS.xLeft ?? -50, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.2);
-      tl.from(this.detailsSectionRight.nativeElement, { x: this.ANIMATION_CONSTANTS.xRight ?? 50, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.2);
+      tl.from(
+        this.detailsSectionLeft.nativeElement,
+        {
+          x: this.ANIMATION_CONSTANTS.xLeft ?? -50,
+          opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        },
+        0.2
+      );
+      tl.from(
+        this.detailsSectionRight.nativeElement,
+        {
+          x: this.ANIMATION_CONSTANTS.xRight ?? 50,
+          opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        },
+        0.2
+      );
 
       // Section 3 approvers slides up
-      tl.from(this.approversTable.nativeElement, { y: this.ANIMATION_CONSTANTS.yUp, opacity: this.ANIMATION_CONSTANTS.opacityOut }, 0.4);
+      tl.from(
+        this.approversTable.nativeElement,
+        {
+          y: this.ANIMATION_CONSTANTS.yUp,
+          opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        },
+        0.4
+      );
     }
   }
 
   public onTableAction(event: { action: string; row: TableRow }): void {
     if (event.action === 'edit') {
       this.isEditingExpirationDate = true;
-      this.showActionsColumn = false; // Hide actions column on edit
+  this.showActionsColumn = false;
       this.cdr.detectChanges();
     }
   }
 
   onDateChange(event: { date: string }): void {
-    this.expirationDate = event.date;
+  this.expirationDate = event.date;
+  console.log('Expiration date in date picker:', this.expirationDate);
   }
 
   onSave(): void {
@@ -216,36 +266,40 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     }
 
     this.isModalLoading = true;
-    this.viewPolicyService.updateExpirationDate(this.policyId, this.expirationDate).subscribe({
-      next: (response) => {
-        if (response.status === 'success' && response.data) {
-          this.saveMessageType = 'success';
-          this.saveMessage = VIEW_POLICY_TEXT.temporalSuccess;
-          this.showTemporalMessage = true;
-          this.originalExpirationDate = this.expirationDate;
-          this.currentPolicy = response.data;
-          this.setupAccordionData();
-        } else {
+    this.viewPolicyService
+      .updateExpirationDate(this.policyId, this.expirationDate)
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success' && response.data) {
+            this.saveMessageType = 'success';
+            this.saveMessage = VIEW_POLICY_TEXT.temporalSuccess;
+            this.showTemporalMessage = true;
+            this.originalExpirationDate = this.expirationDate;
+            this.currentPolicy = response.data;
+            this.setupPolicyDetailsSections();
+          } else {
+            this.saveMessageType = 'danger';
+            this.saveMessage =
+              response.message || VIEW_POLICY_TEXT.temporalError;
+            this.showTemporalMessage = true;
+          }
+          this.onSaveComplete();
+        },
+        error: (error) => {
           this.saveMessageType = 'danger';
-          this.saveMessage = response.message || VIEW_POLICY_TEXT.temporalError;
+          this.saveMessage =
+            error?.error?.message || VIEW_POLICY_TEXT.temporalErrorGeneric;
           this.showTemporalMessage = true;
-        }
-        this.onSaveComplete();
-      },
-      error: (error) => {
-        this.saveMessageType = 'danger';
-        this.saveMessage = error?.error?.message || VIEW_POLICY_TEXT.temporalErrorGeneric;
-        this.showTemporalMessage = true;
-        this.onSaveComplete();
-      }
-    });
+          this.onSaveComplete();
+        },
+      });
   }
 
   private onSaveComplete(): void {
     this.animateModalOut(() => {
       this.confirmationDialog.close();
       this.isModalLoading = false;
-      this.showActionsColumn = true; // Show actions column after save
+  this.showActionsColumn = true;
       this.animateDatePickerOut(() => {
         this.isEditingExpirationDate = false;
         this.cdr.detectChanges();
@@ -255,7 +309,7 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
 
   onCancel(): void {
     this.expirationDate = this.originalExpirationDate;
-    this.showActionsColumn = true; // Show actions column on cancel
+  this.showActionsColumn = true;
     this.animateDatePickerOut(() => {
       this.isEditingExpirationDate = false;
     });
@@ -269,23 +323,25 @@ export class ViewPolicyComponent implements OnInit, AfterViewChecked, AfterViewI
     this.location.back();
   }
 
-reload(): void {
+  reload(): void {
     if (this.policyId) {
       this.isLoading = true;
-      // Add these two lines to reset the UI state
-      this.isEditingExpirationDate = false;
-      this.showActionsColumn = true;
+  // Reset the UI state
+  this.isEditingExpirationDate = false;
+  this.showActionsColumn = true;
 
       this.viewPolicyService.getPolicyById(this.policyId).subscribe({
         next: (response) => {
           if (response.status === 'success' && response.data) {
             this.currentPolicy = response.data;
-            this.policyApprovers = Array.isArray(this.currentPolicy.approvers) ? [...this.currentPolicy.approvers] : [];
+            this.policyApprovers = Array.isArray(this.currentPolicy.approvers)
+              ? [...this.currentPolicy.approvers]
+              : [];
             this.expirationDate = this.currentPolicy.expirationDate;
             this.originalExpirationDate = this.currentPolicy.expirationDate;
             this.infoData = [this.currentPolicy];
             this.isLoading = false;
-            this.setupAccordionData();
+            this.setupPolicyDetailsSections();
             setTimeout(() => this.playEntranceAnimation());
           } else {
             this.isLoading = false;
@@ -301,15 +357,22 @@ reload(): void {
           const msg = VIEW_POLICY_ERROR_MESSAGES[ViewPolicyErrorKey.LOAD];
           this.saveMessage = typeof msg === 'function' ? msg() : msg;
           this.showTemporalMessage = true;
-        }
+        },
       });
     }
   }
 
   private animateDatePickerIn(): void {
     if (this.datePickerContainer?.nativeElement) {
-      gsap.set(this.datePickerContainer.nativeElement, { y: this.ANIMATION_CONSTANTS.datePickerY ?? 20, opacity: this.ANIMATION_CONSTANTS.opacityOut });
-      gsap.to(this.datePickerContainer.nativeElement, { y: 0, opacity: 1, duration: this.ANIMATION_CONSTANTS.datePickerInDuration ?? 0.5 });
+      gsap.set(this.datePickerContainer.nativeElement, {
+        y: this.ANIMATION_CONSTANTS.datePickerY ?? 20,
+        opacity: this.ANIMATION_CONSTANTS.opacityOut,
+      });
+      gsap.to(this.datePickerContainer.nativeElement, {
+        y: 0,
+        opacity: 1,
+        duration: this.ANIMATION_CONSTANTS.datePickerInDuration ?? 0.5,
+      });
       this.datePickerContainer.nativeElement.classList.add('animated');
     }
   }
@@ -323,7 +386,7 @@ reload(): void {
         onComplete: () => {
           this.datePickerContainer.nativeElement.classList.remove('animated');
           onComplete();
-        }
+        },
       });
     } else {
       onComplete();
@@ -331,21 +394,40 @@ reload(): void {
   }
 
   private animateModalIn(): void {
-    const dialogElement = this.confirmationDialogElementRef?.nativeElement?.querySelector('.modal-content');
+    const dialogElement =
+      this.confirmationDialogElementRef?.nativeElement?.querySelector(
+        '.modal-content'
+      );
     if (dialogElement) {
-      gsap.fromTo(dialogElement,
-        { y: this.ANIMATION_CONSTANTS.modalYIn ?? -20, opacity: this.ANIMATION_CONSTANTS.opacityOut },
-        { y: 0, opacity: 1, duration: this.ANIMATION_CONSTANTS.modalInDuration ?? 0.3, ease: this.ANIMATION_CONSTANTS.modalEaseIn ?? 'power2.out' }
+      gsap.fromTo(
+        dialogElement,
+        {
+          y: this.ANIMATION_CONSTANTS.modalYIn ?? -20,
+          opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: this.ANIMATION_CONSTANTS.modalInDuration ?? 0.3,
+          ease: this.ANIMATION_CONSTANTS.modalEaseIn ?? 'power2.out',
+        }
       );
     }
   }
 
   private animateModalOut(onComplete: () => void): void {
-    const dialogElement = this.confirmationDialogElementRef?.nativeElement?.querySelector('.modal-content');
-    if (dialogElement) {
-      gsap.to(dialogElement,
-        { y: this.ANIMATION_CONSTANTS.modalYOut ?? 20, opacity: this.ANIMATION_CONSTANTS.opacityOut, duration: this.ANIMATION_CONSTANTS.modalOutDuration ?? 0.3, ease: this.ANIMATION_CONSTANTS.modalEaseOut ?? 'power2.in', onComplete: onComplete }
+    const dialogElement =
+      this.confirmationDialogElementRef?.nativeElement?.querySelector(
+        '.modal-content'
       );
+    if (dialogElement) {
+      gsap.to(dialogElement, {
+        y: this.ANIMATION_CONSTANTS.modalYOut ?? 20,
+        opacity: this.ANIMATION_CONSTANTS.opacityOut,
+        duration: this.ANIMATION_CONSTANTS.modalOutDuration ?? 0.3,
+        ease: this.ANIMATION_CONSTANTS.modalEaseOut ?? 'power2.in',
+        onComplete: onComplete,
+      });
     } else {
       onComplete();
     }
